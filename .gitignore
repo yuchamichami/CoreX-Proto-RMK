@@ -7,6 +7,8 @@ __pycache__/
 *.bin
 *.log
 *.vil
+!keymaps/coreX-Cornix-default.vil
+!keymaps/reference/cornix-default-keymap.vil
 CURRENT.UF2
 INFO_UF2.TXT
 .env
