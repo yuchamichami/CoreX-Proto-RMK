@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480">
+<title>coreX 初期配列図</title>
+<desc>Cornix 左と coreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<g font-family="Zen Maru Gothic">
+<text x="35.00" y="35.00" text-anchor="start" font-size="25" font-weight="700" fill="#20242a">初期配列</text>
+<text x="35.00" y="69.00" text-anchor="start" font-size="19" font-weight="500" fill="#606771">Cornix 左</text>
+<text x="610.00" y="69.00" text-anchor="start" font-size="19" font-weight="500" fill="#606771">coreX 右</text>
+<g transform="translate(843.390 122.000) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="1.00" text-anchor="middle" font-size="23" font-weight="500" fill="#20242a">I</text>
+<text x="0.00" y="20.00" text-anchor="middle" font-size="10" font-weight="500" fill="#535b65">長押しScroll</text>
+</g>
+<g transform="translate(779.390 129.994) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">U</text>
+</g>
+<g transform="translate(907.390 129.999) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">O</text>
+</g>
+<g transform="translate(971.390 138.001) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">P</text>
+</g>
+<g transform="translate(1035.336 138.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="3.85" text-anchor="middle" font-size="11" font-weight="500" fill="#20242a">Backspace</text>
+</g>
+<g transform="translate(715.390 138.005) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Y</text>
+</g>
+<g transform="translate(843.336 186.000) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">K</text>
+</g>
+<g transform="translate(779.347 193.982) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">J</text>
+</g>
+<g transform="translate(907.336 193.999) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">L</text>
+</g>
+<g transform="translate(971.336 202.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">\</text>
+</g>
+<g transform="translate(1035.336 202.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="6.65" text-anchor="middle" font-size="19" font-weight="500" fill="#20242a">Enter</text>
+</g>
+<g transform="translate(715.340 202.003) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">H</text>
+</g>
+<g transform="translate(843.336 250.000) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">,</text>
+</g>
+<g transform="translate(779.336 257.999) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">M</text>
+</g>
+<g transform="translate(907.336 257.999) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">.</text>
+</g>
+<g transform="translate(715.390 266.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">N</text>
+</g>
+<g transform="translate(971.336 266.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">↑</text>
+</g>
+<g transform="translate(1035.336 266.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">/</text>
+</g>
+<g transform="translate(907.336 322.001) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">←</text>
+</g>
+<g transform="translate(1035.336 330.000) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">→</text>
+</g>
+<g transform="translate(971.336 330.002) rotate(0.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">↓</text>
+</g>
+<g transform="translate(703.811 344.035) rotate(-12.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="7.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">予備</text>
+</g>
+<g transform="translate(636.922 365.837) rotate(-24.0)">
+<rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="6.65" text-anchor="middle" font-size="19" font-weight="500" fill="#20242a">Space</text>
+</g>
+<g transform="translate(642.000 248.285) rotate(0)">
+<circle cx="0.000" cy="0.000" r="28.0" fill="#fff" stroke="#89919b" stroke-width="1.5"/>
+<text x="0.00" y="1.00" text-anchor="middle" font-size="23" font-weight="500" fill="#20242a">中</text>
+<text x="0.00" y="20.00" text-anchor="middle" font-size="13" font-weight="500" fill="#535b65">クリック</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="195.000" y="3.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="224.00" y="39.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">E</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="131.000" y="19.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="160.00" y="55.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">W</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="259.000" y="19.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="288.00" y="55.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">R</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="3.000" y="35.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="32.00" y="71.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Tab</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="67.000" y="35.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="96.00" y="71.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Q</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="323.000" y="35.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="352.00" y="71.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">T</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="195.000" y="67.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="224.00" y="103.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">D</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="131.000" y="83.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="160.00" y="119.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">S</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="259.000" y="83.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="288.00" y="119.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">F</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="3.000" y="99.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="32.00" y="135.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Caps</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="67.000" y="99.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="96.00" y="135.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">A</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="323.000" y="99.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="352.00" y="135.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">G</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="195.000" y="131.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="224.00" y="167.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">C</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0)">
+<circle cx="432.000" cy="160.000" r="28.0" fill="#fff" stroke="#89919b" stroke-width="1.5"/>
+<text x="432.00" y="167.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">消音</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="131.000" y="147.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="160.00" y="183.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">X</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="259.000" y="147.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="288.00" y="183.70" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">V</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="3.000" y="166.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="32.00" y="201.85" text-anchor="middle" font-size="19" font-weight="500" fill="#20242a">Shift</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="67.000" y="166.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="96.00" y="202.90" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Z</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="323.000" y="166.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="352.00" y="202.90" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">B</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="131.000" y="214.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="160.00" y="250.90" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Alt</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="3.000" y="230.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="32.00" y="266.90" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Ctrl</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="67.000" y="230.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="96.00" y="266.90" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">Cmd</text>
+</g>
+<g transform="translate(35.000 90.000) rotate(0.0)">
+<rect x="227.000" y="235.320" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="256.00" y="265.32" text-anchor="middle" font-size="23" font-weight="500" fill="#20242a">数字</text>
+<text x="256.00" y="284.32" text-anchor="middle" font-size="13" font-weight="500" fill="#535b65">Fn</text>
+</g>
+<g transform="translate(355.000 394.000) rotate(11.93)">
+<rect x="-29.000" y="-64.200" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="0.00" y="-27.50" text-anchor="middle" font-size="22" font-weight="500" fill="#20242a">BT</text>
+</g>
+<g transform="translate(355.000 394.000) rotate(23)">
+<rect x="35.000" y="-67.400" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
+<text x="64.00" y="-31.75" text-anchor="middle" font-size="19" font-weight="500" fill="#20242a">Space</text>
+</g>
+<circle cx="806.48" cy="355.60" r="52" fill="#fafbfc" stroke="#89919b" stroke-width="1.5"/>
+<text x="806.48" y="361.60" text-anchor="middle" font-size="13" font-weight="500" fill="#20242a">トラックボール</text>
+<text x="35.00" y="438.00" text-anchor="start" font-size="17" font-weight="400" fill="#535b65">数字 / Fn：数字・記号</text>
+<text x="285.00" y="438.00" text-anchor="start" font-size="17" font-weight="400" fill="#535b65">BT：Bluetooth 設定</text>
+<text x="535.00" y="438.00" text-anchor="start" font-size="17" font-weight="400" fill="#535b65">予備：空のレイヤー6</text>
+<text x="35.00" y="466.00" text-anchor="start" font-size="17" font-weight="400" fill="#535b65">I を長押ししながらボールを回すとスクロール</text>
+</g>
+</svg>

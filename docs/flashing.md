@@ -1,6 +1,6 @@
 # ファームウェアの書き込み・更新
 
-- [coreX を v0.9.2 に更新する](#corex-を-v092-に更新する)
+- [coreX を v0.9.3 に更新する](#corex-を-v093-に更新する)
 - [純正 Cornix 左を初めて使う](#純正-cornix-左を初めて使う)
 - [純正 Cornix 左へ戻す](#純正-cornix-左へ戻す)
 
@@ -8,12 +8,14 @@
 
 ## ファイル
 
-- **右：coreX＋PAW3222、v0.9.2**
-  [coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2](../firmware/coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2)
+- **右：coreX＋PAW3222、v0.9.3**
+  [coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2](../firmware/coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2)
 - **左：純正 Cornix、v0.9.0**
   [coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2](../firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
+- **v0.9.3 の初期配列**
+  [coreX-Cornix-default.vil](../keymaps/coreX-Cornix-default.vil)
 
-GitHub のファイルページでは **Download raw file** で保存します。右 v0.9.2 と左 v0.9.0 を組み合わせて使うため、左右のバージョンは異なります。
+GitHub のファイルページでは **Download raw file** で保存します。右 v0.9.3 と左 v0.9.0 を組み合わせて使うため、左右のバージョンは異なります。
 
 **左右の UF2 は入れ替えないでください。純正 Cornix 右用のファームも、coreX 右には使えません。**
 
@@ -39,29 +41,31 @@ coreX 用と純正 Cornix 用でファイル名を分けてください。`.vil`
 
 再起動時に、OS が「ディスクが正しく取り出されませんでした」などと表示することがあります。表示の有無だけで判断せず、書き込み後のキー入力と Vial の認識を確認してください。
 
-## coreX を v0.9.2 に更新する
+## coreX を v0.9.3 に更新する
 
 左に付属の v0.9.0 が入っていれば、**右だけ**を書き換えます。
 
-1. Vial で現在の配列を保存します。
-2. 右に `coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2` を、[上の手順](#ファームウェアを書き込む)でコピーします。
-3. 再起動後、右を USB 接続した状態で動作を確認します。
+v0.9.3 では初期配列を変更しています。保存されるのは変更したキーやエンコーダの差分なので、UF2 の更新後は **保存した変更と新しい初期値が混在する場合があります**。通常の UF2 更新では、保存済み設定や Bluetooth の登録を消去しません。
 
-確認する項目は次の3つです。
+1. 更新前に右を USB 接続し、Vial の **File → Save current layout** で現在の `.vil` を保存します。
+2. 右に `coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2` を、[書き込み手順](#ファームウェアを書き込む)でコピーします。
+3. 再起動後に Vial で機器を選び、**File → Load saved layout** を開きます。
+4. 新しい初期配列を使う場合は、同梱の **`coreX-Cornix-default.vil`** を読み込みます。旧配列を使い続ける場合は、手順1で保存した `.vil` を読み込みます。
+5. 左右のキー、ボール、スクロール、エンコーダと、Vial の設定を確認します。
 
-- Vial の機器一覧に `coreX prototype coreX Pair RMK` が表示される。
-- 左右の文字キー、ボール、スクロールが動く。
-- キーの割り当てと感度・Scroll・AML の設定が残っている。
+初期配列ファイルは、キーとエンコーダの割り当てをまとめて設定します。トラックボールの設定欄も含むため、**感度2倍・Scroll標準・AML ON** が適用されます。マクロなど、配列以外の設定は変更しません。
 
-右 v0.9.0／v0.9.1 からの更新では、配列・感度・AML・接続情報を引き継ぎます。更新前に保存した `.vil` も保管してください。
+旧版の Layer 4 は引き続き Bluetooth 用ですが、初期操作は左の Caps Lock・Shift・Ctrl に変わります。初期配列を適用した後は、[新しい接続操作](usage.md#pc-と-bluetooth-接続する)を使ってください。
+
+**v0.9.3 の UF2、新しい初期配列、更新後の配列読み込みは実機未検証です。** [検証状況](validation.md)を参照してください。
 
 ## 純正 Cornix 左を初めて使う
 
 1. 純正左の `.vil` を保存します。
 2. [書き込み手順](#ファームウェアを書き込む)に沿って、左に `coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2` を書き込みます。
-3. 右に `coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
+3. 右に `coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
 4. 左右の電源を ON にし、右を PC に USB 接続します。未登録の左右は自動で接続します。
-5. 左右のキー、ボール、スクロールを試します。Bluetooth で使う場合は、続けて[PC に登録](usage.md#pc-と-bluetooth-接続する)します。
+5. Vial で `coreX-Cornix-default.vil` を読み込み、左右のキー、ボール、スクロール、エンコーダを確認します。Bluetooth で使う場合は、続けて[PC に登録](usage.md#pc-と-bluetooth-接続する)します。
 
 書き換えた左は、キー入力を右へ送る役になります。左を USB 接続すると `coreX Left Link` と表示されることがありますが、キー入力と Vial の設定には右を接続してください。
 

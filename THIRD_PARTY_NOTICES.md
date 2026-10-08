@@ -50,3 +50,7 @@ Some Apache-2.0/MIT dual-licensed crate archives omit separate license files. Fo
 ## Cornix and Vial
 
 Cornix is the original keyboard on which the left hardware and encoder presentation are based. This repository is a coreX-specific firmware configuration, not a replacement source of official Cornix releases. Vial is a separate configuration application; it is not bundled here. Screenshots in the documentation show Vial operating with the coreX definition. The project names and UI references do not imply endorsement.
+
+## 初期キーマップの参照元
+
+`keymaps/reference/cornix-default-keymap.vil` は、JezailFunderが配布しているCornixの初期設定ファイルです。取得元・ハッシュ・coreXで変更した箇所は[keymaps/README.md](keymaps/README.md)に記載しています。

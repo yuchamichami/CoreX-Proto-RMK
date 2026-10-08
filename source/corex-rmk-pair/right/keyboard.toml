@@ -20,35 +20,35 @@ map = """
 (7,0) (7,1) (7,2) (7,3) (7,4) (7,5) (7,6)
 """
 [keymap]
-layers = 5
+layers = 7
 [[keymap.layer]]
-name = "Right"
+name = "Cornix base"
 keys = """
 Y U LT(3,I) O P Backspace
-H J K L Semicolon Quote
-N M Comma Dot Slash RShift
-MO(1) Enter No Left Down Right
-User11 User26 User17 Escape
-Escape Q W E R T No
-Tab A S D F G No
+H J K L Backslash Enter
+N M Comma Dot Up Slash
+Space MO(6) No Left Down Right
+User11 User26 User17 MouseBtn3
+Tab Q W E R T No
+CapsLock A S D F G No
 LShift Z X C V B AudioMute
-LCtrl LGui LAlt MO(1) Space MO(4) No
+LCtrl LGui LAlt MO(1) MO(4) Space No
 """
-encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
 [[keymap.layer]]
-name = "Left letters"
+name = "Cornix numbers"
 keys = """
-Q W E R T Delete
-A S D F G Tab
-Z X C V B LShift
-_ _ No Home Up End
-User11 No User17 Bootloader
-Grave Kc1 Kc2 Kc3 Kc4 Kc5 No
-Tab Kc6 Kc7 Kc8 Kc9 Kc0 No
-LShift Minus Equal LeftBracket RightBracket Backslash AudioMute
-_ _ _ _ _ _ No
+Kc6 Kc7 Kc8 Kc9 Kc0 Delete
+Equal Quote No No No No
+No No No No No No
+No No No No No No
+No No No MouseBtn3
+Escape Kc1 Kc2 Kc3 Kc4 Kc5 No
+No No No No Semicolon Minus No
+No No No No No No AudioMute
+No No No No No No No
 """
-encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
 [[keymap.layer]]
 name = "Mouse"
 keys = """
@@ -56,13 +56,13 @@ _ _ _ _ _ _
 _ MouseBtn1 MouseBtn3 MouseBtn2 _ _
 _ _ _ _ _ _
 _ _ No _ _ _
-User11 No User17 _
+No No No _
 _ _ _ _ _ _ No
 _ _ _ _ _ _ No
 _ _ _ _ _ _ _
 _ _ _ _ _ _ No
 """
-encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
 [[keymap.layer]]
 name = "Scroll"
 keys = """
@@ -70,27 +70,55 @@ _ _ _ _ _ _
 _ MouseBtn1 MouseBtn3 MouseBtn2 _ _
 _ _ _ _ _ _
 _ _ No _ _ _
-User11 No User17 _
+No No No _
 _ _ _ _ _ _ No
 _ _ _ _ _ _ No
 _ _ _ _ _ _ _
 _ _ _ _ _ _ No
 """
-encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
 [[keymap.layer]]
 name = "Bluetooth"
 keys = """
-User0 User1 User2 User6 User3 User5
-_ _ _ _ _ _
-_ _ _ _ _ _
-_ _ No _ _ _
-User11 No User17 _
-User0 User1 User2 User6 User3 User5 No
-_ _ _ _ _ _ No
-_ _ _ _ _ _ _
-_ _ _ _ _ _ No
+No No No No No No
+No No No No No No
+No No No No No No
+No No No No No No
+No No No MouseBtn3
+No No No No No No No
+User0 No No No No No No
+User1 No No No No No AudioMute
+User2 No No No No No No
 """
-encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Cornix Bluetooth alternate"
+keys = """
+No No No No No No
+No No No No No No
+No No No No No No
+No No No No No No
+No No No MouseBtn3
+No No No No No No No
+User0 No No No No No No
+User1 No No No No No AudioMute
+User2 No No No No No No
+"""
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Cornix spare"
+keys = """
+No No No No No No
+No No No No No No
+No No No No No No
+No No No No No No
+No No No MouseBtn3
+No No No No No No No
+No No No No No No No
+No No No No No No AudioMute
+No No No No No No No
+"""
+encoders = [["MouseWheelDown", "MouseWheelUp"], ["AudioVolUp", "AudioVolDown"]]
 [ble]
 enabled = true
 use_2m_phy = false

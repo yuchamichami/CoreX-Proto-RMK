@@ -38,7 +38,7 @@ for COREX_HALF in right left; do
     cd "$COREX_ROOT/source/corex-rmk-pair/$COREX_HALF"
     cargo build --release --locked
     case "$COREX_HALF" in
-        right) COREX_NAME=coreX-Right-Central-PAW3222-RMK-v0.9.2 ;;
+        right) COREX_NAME=coreX-Right-Central-PAW3222-RMK-v0.9.3 ;;
         left) COREX_NAME=coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0 ;;
     esac
     COREX_ELF="$CARGO_TARGET_DIR/thumbv7em-none-eabihf/release/corex-pair-$COREX_HALF"

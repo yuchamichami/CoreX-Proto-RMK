@@ -10,4 +10,6 @@ for COREX_MODULE in paw_wire tuning_values; do
         -o "$COREX_ROOT/build/tests/$COREX_MODULE"
     "$COREX_ROOT/build/tests/$COREX_MODULE"
 done
+python3 "$COREX_ROOT/tools/default_keymap.py" --check
+python3 "$COREX_ROOT/tools/test_default_keymap.py"
 python3 "$COREX_ROOT/tools/verify_release.py"
