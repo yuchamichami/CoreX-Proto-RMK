@@ -1,0 +1,159 @@
+// Grammar for RMK keyboard.toml layer.keys string
+
+// Match Rust's `char::is_whitespace`, which alias scanning also uses.
+WHITESPACE = _{ WHITE_SPACE }
+
+// --- Helper Rules ---
+
+strict_identifier = @{ (ASCII_ALPHA | "_") ~ (ASCII_ALPHANUMERIC | "_")* }
+
+// captures anything that isn't whitespace or a specific delimiter
+loose_identifier = @{ (!( "(" | ")" | "," | "@" | WHITESPACE ) ~ ANY)+ }
+
+keycode_name = @{ loose_identifier }
+// `,` is also a valid key alias (Comma), but we only allow it in
+// contexts where it won't conflict with argument separators.
+symbol_keycode = @{ "," }
+profile_name = { strict_identifier }
+
+// Number (for layer indices)
+number = @{ ASCII_DIGIT+ }
+
+// Layer Reference (either a number or a name)
+layer_number = @{ number }
+layer_name = @{ loose_identifier }
+
+// The order is important here, as we want to match the number first 
+layer_reference = _{ layer_number | layer_name }
+
+// Modifier Names
+modifier_name = @{
+    ^"LShift" | ^"LCtrl" | ^"LAlt" | ^"LGui" |
+    ^"RShift" | ^"RCtrl" | ^"RAlt" | ^"RGui"
+}
+
+// Modifier Chain (one or more modifiers separated by '|')
+// Silent rules (_) used for delimiters we don't need in the AST.
+modifier_combination = { modifier_name ~ ("|" ~ modifier_name)* }
+
+// --- Main Action Rules ---
+
+// Rule 0: Simple Keycode (must come after more specific rules)
+simple_keycode = { keycode_name | symbol_keycode }
+
+// Rule 2: No Key
+no_action = @{ ^"No" ~ !(ASCII_ALPHANUMERIC) } // Case-insensitive "No" not followed by alphanumeric
+
+
+// Rule 3: Transparent Key
+transparent_action = @{ ("_")+ | (^"Trns" ~ !ASCII_ALPHANUMERIC) } // One or more underscores or "Trns" followed by non-alphanumeric 
+
+// Rule 1: WM(key, modifier) - Key with Modifier
+wm_action = { ^"WM" ~ "(" ~ keycode_name ~ "," ~ modifier_combination ~ ")" }
+
+// MOD(modifier) - Held Modifier Combination
+mod_action = { ^"MOD" ~ "(" ~ modifier_combination ~ ")" }
+
+// Rule 4.6: OSM(modifier) - One-Shot Modifier (requires quotes)
+osm_action = { ^"OSM" ~ "(" ~ modifier_combination ~ ")" }
+
+// Rule 4.1: DF(n) - Switch Default Layer
+df_action = { ^"DF" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.1b: PDF(n) - Switch Default Layer persistently (saved to storage)
+pdf_action = { ^"PDF" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.2: MO(n) - Momentary Layer Activate
+mo_action = { ^"MO" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.3: LM(n, modifier) - Layer Activate with Modifier
+lm_action = { ^"LM" ~ "(" ~ layer_reference ~ "," ~ modifier_combination ~ ")" }
+
+// Rule 4.4: LT(n, key) - Layer Activate or Tap Key (Tap/Hold)
+lt_action = { ^"LT" ~ "(" ~ layer_reference ~ "," ~ nestable_action ~ ("," ~ profile_name)? ~ ")" }
+
+// Rule 4.5: OSL(n) - One-Shot Layer
+osl_action = { ^"OSL" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.7: TT(n) - Layer Activate or Tap Toggle
+tt_action = { ^"TT" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.8: TG(n) - Layer Toggle
+tg_action = { ^"TG" ~ "(" ~ layer_reference ~ ")" }
+
+// Rule 4.9: TO(n) - Layer Toggle Only
+to_action = { ^"TO" ~ "(" ~ layer_reference ~ ")" }
+
+// Grouping for Layer Actions
+layer_action = _{
+    df_action | pdf_action | mo_action | lm_action | lt_action |
+    osl_action | tt_action | tg_action | to_action
+}
+
+// Actions that resolve to a single `Action` and may therefore be nested inside
+// the tap/hold slots of MT/TH/LT. Composite forms (MT/TH/LT/TT/TD/Transparent)
+// are intentionally excluded — they only exist at the top level. The bare
+// `keycode_name` fallback (not `simple_keycode`) keeps a lone `,` from being
+// accepted as a slot argument.
+nestable_action = _{
+    wm_action | mod_action | osm_action | shifted_action | trigger_macro_action |
+    df_action | pdf_action | mo_action | lm_action | osl_action | tg_action | to_action |
+    stn_action | keycode_name
+}
+
+// Rule 5: MT(key, modifier) - Modifier Tap-Hold
+mt_action = { ^"MT" ~ "(" ~ nestable_action ~ "," ~ modifier_combination ~ ("," ~ profile_name)? ~ ")" }
+
+// Rule 6: TH(key-tap, key-hold) - Generic Tap-Hold
+th_action = { ^"TH" ~ "(" ~ nestable_action ~ "," ~ nestable_action ~ ("," ~ profile_name)? ~ ")" }
+
+// Rule 7: SHIFTED(key)
+shifted_action = { ^"SHIFTED" ~ "(" ~ simple_keycode ~ ")" }
+
+// Rule 8: TD(n)/MORSE(n) - Morse index (in Vial its simplest form is known as "Tap Dance", so the TD name is used)
+morse_action = { (^"TD" | ^"MORSE") ~ "(" ~ number ~ ")" }
+
+// Rule 9: Macro(n) - Trigger Macro
+trigger_macro_action = { ^"MACRO" ~ "(" ~ number ~ ")" }
+
+// Rule 10: STN(key) - Plover HID steno key, named by its position in the chart
+stn_action = { ^"STN" ~ "(" ~ keycode_name ~ ")" }
+
+// --- Top Level Rules ---
+
+// A single key action entry in the map
+// Order is important: more specific function-like rules first, then aliases/specials, then simple keycodes.
+key_action = _{ // Consume surrounding whitespace/comments implicitly
+    wm_action | mod_action | osm_action | layer_action | mt_action | th_action | shifted_action | morse_action | trigger_macro_action | stn_action | no_action | transparent_action | simple_keycode
+}
+
+// The entire key map string: Start, zero or more key actions, End.
+key_map = { SOI ~ key_action* ~ EOI }
+
+// `[layout].map`: newline is significant, so spacing is parsed explicitly.
+
+left_hand = { ^"L" | ^"LH" | ^"Left" }
+right_hand = { ^"R" | ^"RH" | ^"Right" }
+bilateral_hand = { "*" | ^"Bilateral" }
+hand = _{ left_hand | right_hand | bilateral_hand }
+
+// Layout-map tokens (positions, shapes, gaps).
+unit = @{ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }                 // non-negative float, for [n]
+signed_unit = @{ "-"? ~ ASCII_DIGIT+ ~ ("." ~ ASCII_DIGIT+)? }   // may be negative, for [y=n]
+shape_name = @{ (ASCII_ALPHANUMERIC | "_" | ".")+ }              // stock (2u/1.5u) or custom (iso_enter)
+shape_ref = ${ "@" ~ shape_name }                                // @name into [layout.shapes]
+hws = _{ " " | "\t" }                                            // spaces/tabs between tokens (silent)
+newline = @{ "\r"? ~ "\n" }                                      // significant row break
+spacer = ${ "[" ~ hws? ~ unit ~ hws? ~ "]" }                     // gap
+vertical = ${ "[" ~ hws? ~ "y" ~ hws? ~ "=" ~ hws? ~ signed_unit ~ hws? ~ "]" } // extra y for next row
+// Rotation applies until the next [r=...]; only [r=0] may omit a pivot.
+rotation = ${ "[" ~ hws? ~ "r" ~ hws? ~ "=" ~ hws? ~ signed_unit ~ (hws? ~ "@" ~ hws? ~ "(" ~ hws? ~ signed_unit ~ hws? ~ "," ~ hws? ~ signed_unit ~ hws? ~ ")")? ~ hws? ~ "]" }
+
+// A key: (row, col[, hand][, @shape]). `hws?` between fields so `(0, 1)` parses too.
+keypos_info = ${ "(" ~ hws? ~ number ~ hws? ~ "," ~ hws? ~ number ~ (hws? ~ "," ~ hws? ~ hand)? ~ (hws? ~ "," ~ hws? ~ shape_ref)? ~ hws? ~ ")" }
+// An encoder: (e, id). A fixed 1u knob — no shape, so no `@shape`.
+encoder_info = ${ "(" ~ hws? ~ "e" ~ hws? ~ "," ~ hws? ~ number ~ hws? ~ ")" }
+
+// The whole string: significant newlines, explicit hws. Order matters:
+// vertical/rotation before spacer (all start `[`), encoder before keypos (both start `(`).
+layout_map = ${ SOI ~ (hws | newline | vertical | rotation | spacer | encoder_info | keypos_info)* ~ EOI }

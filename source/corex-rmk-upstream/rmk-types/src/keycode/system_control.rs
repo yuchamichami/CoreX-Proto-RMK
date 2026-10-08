@@ -1,0 +1,41 @@
+//! System control keycodes.
+
+use postcard::experimental::max_size::MaxSize;
+use serde::{Deserialize, Serialize};
+
+use super::hid::HidKeyCode;
+
+/// Keys in `Generic Desktop Page`, generally used for system control
+/// Ref: <https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf#page=26>
+#[non_exhaustive]
+#[repr(u8)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Serialize, Deserialize, PartialOrd, Ord, MaxSize)]
+#[cfg_attr(feature = "_codegen", derive(strum::EnumIter))]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+#[cfg_attr(feature = "wasm", derive(tsify::Tsify))]
+#[cfg_attr(feature = "wasm", tsify(into_wasm_abi, from_wasm_abi))]
+pub enum SystemControlKey {
+    No = 0x00,
+    PowerDown = 0x81,
+    Sleep = 0x82,
+    WakeUp = 0x83,
+    Restart = 0x8F,
+}
+
+impl SystemControlKey {
+    /// Host-only: list all system-control keys, in declaration order.
+    #[cfg(feature = "_codegen")]
+    pub fn all() -> impl Iterator<Item = Self> {
+        <Self as strum::IntoEnumIterator>::iter()
+    }
+
+    /// Convert SystemControlKey to the corresponding HidKeyCode
+    pub fn to_hid_keycode(&self) -> Option<HidKeyCode> {
+        match self {
+            SystemControlKey::PowerDown => Some(HidKeyCode::SystemPower),
+            SystemControlKey::Sleep => Some(HidKeyCode::SystemSleep),
+            SystemControlKey::WakeUp => Some(HidKeyCode::SystemWake),
+            _ => None,
+        }
+    }
+}

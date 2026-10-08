@@ -1,0 +1,52 @@
+{
+  "distribution": "coreX A13 PAW3222 + stock Cornix left",
+  "release": "v0.9.2",
+  "mcu": "nRF52840",
+  "rust_toolchain": "1.95.0",
+  "build_host": "x86_64-apple-darwin",
+  "target": "thumbv7em-none-eabihf",
+  "rmk_version": "0.9.0",
+  "rmk_base_commit": "8a6889854fb996be592c55075b385234133e1772",
+  "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
+  "storage_schema_hash": "0xA805CEFB",
+  "path_remapping": true,
+  "validation_scope": "Distribution rebuild and image checks. Hardware behavior was verified with the same application source before path remapping; these remapped images have not been flashed for a separate hardware test.",
+  "images": [
+    {
+      "side": "right",
+      "application_version": "0.9.2",
+      "role": "central",
+      "target": "coreX A13 PAW3222 only",
+      "filename": "coreX-A13-Right-Central-PAW3222-RMK-v0.9.2.uf2",
+      "binary_bytes": 512956,
+      "uf2_bytes": 1026048,
+      "binary_sha256": "e6dff3d614b8732b7a69a0d56036e4df5997708a6515756ff598c7c32badaba2",
+      "uf2_sha256": "6fb242aee34a9d56f40e057fe8cdc8e475457c8e0d7cc252e8a8bc90f040f1c1",
+      "flash_start": "0x26000",
+      "flash_end_exclusive": "0xa3400",
+      "application_limit_exclusive": "0xb0000",
+      "storage_range_exclusive": [
+        "0xb0000",
+        "0xd0000"
+      ]
+    },
+    {
+      "side": "left",
+      "application_version": "0.9.0",
+      "role": "peripheral",
+      "target": "stock Cornix left",
+      "filename": "coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2",
+      "binary_bytes": 335540,
+      "uf2_bytes": 671232,
+      "binary_sha256": "2a329e9e60e21c82124744c9173d73db2590003270f554ee8ed44d340053ec67",
+      "uf2_sha256": "0d19dbec808543e42899666fb45fc85824f81f99b3fefb5dbebce80b97aa0f8c",
+      "flash_start": "0x1000",
+      "flash_end_exclusive": "0x52f00",
+      "application_limit_exclusive": "0xa0000",
+      "storage_range_exclusive": [
+        "0xc0000",
+        "0xe0000"
+      ]
+    }
+  ]
+}

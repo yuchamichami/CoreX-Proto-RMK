@@ -1,0 +1,13 @@
+.DS_Store
+target/
+build/
+__pycache__/
+*.pyc
+*.elf
+*.bin
+*.log
+*.vil
+CURRENT.UF2
+INFO_UF2.TXT
+.env
+.env.*

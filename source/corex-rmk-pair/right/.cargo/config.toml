@@ -1,0 +1,8 @@
+[target.'cfg(all(target_arch = "arm", target_os = "none"))']
+linker = "flip-link"
+[build]
+target = "thumbv7em-none-eabihf"
+[env]
+DEFMT_LOG = "info"
+KEYBOARD_TOML_PATH = { value = "keyboard.toml", relative = true }
+RUST_MIN_STACK = "33554432"

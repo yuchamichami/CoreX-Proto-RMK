@@ -1,0 +1,9 @@
+p256-cortex-m4-sys 0.1.0 declares MIT in Cargo.toml and the following README statement. The binding author is Nicolas Stalder; the underlying P256-Cortex-M4 notice is reproduced in LICENSE-MIT.txt. The crate does not ship a separate root license file.
+Source: https://github.com/ycrypto/p256-cortex-m4-sys/blob/82779255af57178ca736b6d5ec034f78f048c4cf/README.md
+
+#### License
+
+<sup>P256-Cortex-M4 is licensed under [MIT][mit] (reproduced here as [LICENSE.txt](P256-Cortex-M4/LICENSE.txt)),
+as are these bindings.</sup>
+
+[mit]: https://github.com/Emill/P256-Cortex-M4/blob/master/LICENSE.txt

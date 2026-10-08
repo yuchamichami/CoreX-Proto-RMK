@@ -1,0 +1,3 @@
+void 1.0.2 declares MIT in its Cargo.toml but its crate archive and release tag omit a standalone license file. This is the copyright and MIT notice subsequently supplied by the same upstream repository, pinned to commit a6e061227f47ba8798b7e828ed0ac4e25382eb15.
+Release tag: https://github.com/reem/rust-void/tree/ab2f4dbb7c95c144ccba2fa8afd11e155aa91133
+Notice: https://github.com/reem/rust-void/blob/a6e061227f47ba8798b7e828ed0ac4e25382eb15/LICENSE-MIT

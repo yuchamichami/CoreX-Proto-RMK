@@ -1,0 +1,181 @@
+[keyboard]
+name = "coreX Pair"
+product_name = "coreX Left Link"
+vendor_id = 0x4c4b
+product_id = 0x4643
+manufacturer = "coreX prototype"
+chip = "nrf52840"
+[layout]
+rows = 8
+cols = 7
+map = """
+(3,4) (0,4) (0,3) (0,2) (0,1) (0,0)
+(1,5) (1,4) (1,3) (1,2) (1,1) (1,0)
+(2,5) (2,4) (2,3) (2,2) (2,1) (2,0)
+(3,5) (3,3) (3,6) (3,2) (3,1) (3,0)
+(0,6) (1,6) (2,6) (0,5)
+(4,0) (4,1) (4,2) (4,3) (4,4) (4,5) (4,6)
+(5,0) (5,1) (5,2) (5,3) (5,4) (5,5) (5,6)
+(6,0) (6,1) (6,2) (6,3) (6,4) (6,5) (6,6)
+(7,0) (7,1) (7,2) (7,3) (7,4) (7,5) (7,6)
+"""
+[keymap]
+layers = 5
+[[keymap.layer]]
+name = "Right"
+keys = """
+Y U LT(3,I) O P Backspace
+H J K L Semicolon Quote
+N M Comma Dot Slash RShift
+MO(1) Enter No Left Down Right
+User11 No User17 Escape
+Escape Q W E R T No
+Tab A S D F G No
+LShift Z X C V B AudioMute
+LCtrl LGui LAlt MO(1) Space MO(4) No
+"""
+encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Left letters"
+keys = """
+Q W E R T Delete
+A S D F G Tab
+Z X C V B LShift
+_ _ No Home Up End
+User11 No User17 Bootloader
+Grave Kc1 Kc2 Kc3 Kc4 Kc5 No
+Tab Kc6 Kc7 Kc8 Kc9 Kc0 No
+LShift Minus Equal LeftBracket RightBracket Backslash AudioMute
+_ _ _ _ _ _ No
+"""
+encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Mouse"
+keys = """
+_ _ _ _ _ _
+_ MouseBtn1 MouseBtn3 MouseBtn2 _ _
+_ _ _ _ _ _
+_ _ No _ _ _
+User11 No User17 _
+_ _ _ _ _ _ No
+_ _ _ _ _ _ No
+_ _ _ _ _ _ _
+_ _ _ _ _ _ No
+"""
+encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Scroll"
+keys = """
+_ _ _ _ _ _
+_ MouseBtn1 MouseBtn3 MouseBtn2 _ _
+_ _ _ _ _ _
+_ _ No _ _ _
+User11 No User17 _
+_ _ _ _ _ _ No
+_ _ _ _ _ _ No
+_ _ _ _ _ _ _
+_ _ _ _ _ _ No
+"""
+encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+[[keymap.layer]]
+name = "Bluetooth"
+keys = """
+User0 User1 User2 User6 User3 User5
+_ _ _ _ _ _
+_ _ _ _ _ _
+_ _ No _ _ _
+User11 No User17 _
+User0 User1 User2 User6 User3 User5 No
+_ _ _ _ _ _ No
+_ _ _ _ _ _ _
+_ _ _ _ _ _ No
+"""
+encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
+[ble]
+enabled = true
+use_2m_phy = false
+[chip.nrf52840]
+dcdc_reg0 = false
+dcdc_reg1 = false
+[storage]
+enabled = true
+clear_storage = false
+start_addr = 0xC0000
+num_sectors = 32
+[host]
+vial_enabled = true
+unlock_keys = [[3,4],[0,0]]
+[behavior.morse]
+hold_timeout = "200ms"
+permissive_hold = true
+
+[dependency]
+defmt_log = false
+[[behavior.auto_mouse_layer]]
+# One shared timer for both pointing devices (0=PAW3222, 1=lenoTP).
+target_layer = 2
+timeout = "700ms"
+threshold = 1
+deactivate_on_key = true
+reset_timeout_on_key = true
+
+# Explicit space for the manually registered sensor and pointing processors.
+[event.layer_change]
+subs = 4
+[event.sleep_state]
+subs = 3
+[event.pointing]
+subs = 4
+channel_size = 8
+[event.action]
+subs = 2
+
+
+[split]
+connection = "ble"
+[split.central]
+rows = 4
+cols = 7
+row_offset = 0
+col_offset = 0
+[split.central.matrix]
+row_pins = ["P0_05", "P0_30", "P1_10", "P1_11"]
+col_pins = ["P0_29", "P0_28", "P0_02", "P0_03", "P1_15", "P1_13", "P1_03"]
+row2col = false
+[[split.peripheral]]
+rows = 4
+cols = 7
+row_offset = 4
+col_offset = 0
+battery_adc_pin = "P0_05"
+adc_divider_measured = 2000
+adc_divider_total = 2806
+[split.peripheral.matrix]
+row_pins = ["P0_30", "P0_31", "P0_29", "P0_02"]
+col_pins = ["P0_28", "P0_03", "P1_10", "P1_11", "P1_13", "P0_09", "P0_10"]
+row2col = false
+[[split.peripheral.input_device.encoder]]
+pin_a = "P1_04"
+pin_b = "P1_06"
+internal_pullup = true
+phase = "resolution"
+resolution = 4
+reverse = false
+debounce_ms = 5
+# Hold the stock left RGB power/data low until its status driver is ported.
+[[split.peripheral.output]]
+pin = "P0_13"
+initial_state_active = false
+[[split.peripheral.output]]
+pin = "P0_24"
+initial_state_active = false
+
+# A13 ENC1; same four edges per wheel event as the verified ZMK build.
+[[split.central.input_device.encoder]]
+pin_a = "P0_22"
+pin_b = "P1_00"
+internal_pullup = true
+phase = "resolution"
+resolution = 4
+reverse = false
+debounce_ms = 5

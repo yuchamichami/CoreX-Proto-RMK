@@ -1,0 +1,2 @@
+License text extracted verbatim from svd/nrf52840.svd in nrf-pac 0.4.0 (crate commit 3cf1e6ffa16d4f1950217c32f1dad30cc8c3e3bb). Its README states the generated crate is licensed under the same BSD-3-Clause terms as the underlying Nordic SVD.
+Source: https://github.com/embassy-rs/nrf-pac/blob/3cf1e6ffa16d4f1950217c32f1dad30cc8c3e3bb/svd/nrf52840.svd

@@ -1,0 +1,8 @@
+[keyboard]
+usb_enable = true
+
+[storage]
+enabled = true
+start_addr = 0x100000
+
+[dfu]
