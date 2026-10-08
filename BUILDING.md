@@ -1,6 +1,6 @@
 # ファームウェアをビルドする
 
-使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[README](README.md) の書き込み手順を使ってください。右は coreX 用、左は純正 Cornix 左用です。
+使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[書き込み手順](docs/flashing.md)を使ってください。右は coreX 用、左は純正 Cornix 左用です。
 
 ## 必要なもの
 
@@ -45,22 +45,11 @@ python3 tools/verify_release.py --rebuilt  # 同梱 UF2 と再ビルドした UF
 
 ## ソース構成
 
-<!-- zen-table:start -->
-![ソース構成の表](docs/images/tables/building-table-01.png)
-
-<details>
-<summary>表をテキストで読む</summary>
-
-| 場所 | 内容 |
-| --- | --- |
-| `source/corex-rmk-pair/right/` | 右の GPIO、配列、Vial 定義、PAW3222、感度・スクロール・AML |
-| `source/corex-rmk-pair/left/` | 純正 Cornix 左の peripheral |
-| `source/corex-rmk-upstream/` | 固定した RMK 4 クレートと coreX 用差分 |
-| `tools/git-metadata/git` | RMK のストレージ互換性を維持するビルドメタデータ固定 |
-| `tools/make_uf2.py` | 左右別のアプリ領域を検証して UF2 を生成 |
-
-</details>
-<!-- zen-table:end -->
+- `source/corex-rmk-pair/right/`：右の配列、Vial定義、PAW3222、感度・スクロール・AML。
+- `source/corex-rmk-pair/left/`：純正Cornix左のファームウェア。
+- `source/corex-rmk-upstream/`：RMKの4クレートとcoreX用の変更。
+- `tools/git-metadata/git`：設定の保存形式を維持するためのビルドメタデータ固定。
+- `tools/make_uf2.py`：左右のアプリ領域を検査し、UF2を生成。
 
 左右の `Cargo.lock` を同梱し、ビルドは `--locked` で行います。キーボードのマニフェストから RMK への参照はリポジトリ内の相対パスです。公開 RMK の最新版へ自動追従しません。
 
@@ -70,19 +59,15 @@ RMK はバージョン・コミット情報・feature・設定容量等からス
 
 **直接 `cargo build` を使わず、ルートの `build.sh` を使ってください。** リポジトリを新しく commit しただけで RMK のスキーマが変わらないよう、専用の Git ラッパーを有効にします。固定するのは RMK の `git log -1 --format=%H -- .` 問い合わせだけです。それ以外の Git 操作は通常の Git に渡します。
 
-<!-- zen-table:start -->
-![既存設定との互換性の表](docs/images/tables/building-table-02.png)
+### フラッシュの割り当て
 
-<details>
-<summary>表をテキストで読む</summary>
+範囲の末尾は含みません。
 
-| 対象 | アプリ書き込み開始 | アプリ上限（含まない） | この版の設定領域 |
-| --- | --- | --- | --- |
-| 右 | `0x26000` | `0xB0000` | `0xB0000–0xD0000` |
-| 左 | `0x1000` | `0xA0000` | `0xC0000–0xE0000` |
+- **右**：アプリは `0x26000..0xB0000`、設定は `0xB0000..0xD0000`。
+- **左**：アプリは `0x1000..0xA0000`、coreXの設定は `0xC0000..0xE0000`。
+- 確認した左右のブートローダー開始位置は `0xF4000`。
 
-</details>
-<!-- zen-table:end -->
+左のcoreX設定領域は、確認した純正の設定領域 `0xA0000..0xC0000` と重ならない位置に置いています。純正へ戻した後も元の設定を読めるかは未確認です。復元には、別途保存した純正用のVial設定を使ってください。
 
 UF2 はアプリのみで、ブートローダーや設定領域を含みません。右用を左へ、左用を右へ書かないでください。スキーマ互換性の維持は同じ構成を更新するためのもので、純正ファームと coreX ファームの左右混在を保証するものではありません。
 
