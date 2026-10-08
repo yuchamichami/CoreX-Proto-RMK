@@ -1,28 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="270" viewBox="0 0 1080 270" role="img" aria-labelledby="title desc">
   <title id="title">coreX の接続</title>
   <desc id="desc">Cornix左からcoreX右へBLEで接続。右からPCへUSBまたはBluetoothで接続する。</desc>
-  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#6ac4ba" stroke-width="1.5"/></marker></defs>
-  <rect width="1080" height="270" rx="20" fill="#101a24"/>
-  <g font-family="-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo','Noto Sans JP',sans-serif" text-anchor="middle">
-    <text x="40" y="39" text-anchor="start" fill="#9caebd" font-size="14" letter-spacing="2">coreX · CONNECTION</text>
-    <rect x="36" y="74" width="252" height="145" rx="14" fill="#1c2a38" stroke="#3b4f61"/>
-    <text x="162" y="111" fill="#e9f1f6" font-size="23" font-weight="700">Cornix 左</text>
-    <text x="162" y="144" fill="#b9c8d4" font-size="17">付属の左用ファーム</text>
-    <text x="162" y="181" fill="#8eabba" font-size="15">キー入力を右へ送る</text>
-    <path d="M303 142H401" stroke="#6ac4ba" stroke-width="2.5"/>
-    <path d="M392 134L401 142L392 150" fill="none" stroke="#6ac4ba" stroke-width="2.5"/>
-    <text x="351" y="119" fill="#a6dad4" font-size="16">BLE</text>
-    <rect x="420" y="64" width="260" height="165" rx="14" fill="#163733" stroke="#69b9ae"/>
-    <text x="550" y="103" fill="#f0fffb" font-size="23" font-weight="700">coreX 右</text>
-    <text x="550" y="137" fill="#bfe0da" font-size="17">A13 ＋ PAW3222</text>
-    <text x="550" y="182" fill="#a5cec5" font-size="15">左右の入力をまとめる</text>
-    <path d="M695 142H800" stroke="#6ac4ba" stroke-width="2.5"/>
-    <path d="M791 134L800 142L791 150" fill="none" stroke="#6ac4ba" stroke-width="2.5"/>
-    <text x="746" y="104" fill="#a6dad4" font-size="15">USB または</text>
-    <text x="746" y="123" fill="#a6dad4" font-size="15">Bluetooth</text>
-    <rect x="824" y="74" width="220" height="145" rx="14" fill="#1c2a38" stroke="#3b4f61"/>
-    <text x="934" y="114" fill="#e9f1f6" font-size="23" font-weight="700">PC</text>
-    <text x="934" y="149" fill="#b9c8d4" font-size="17">Vial で設定</text>
-    <text x="934" y="181" fill="#8eabba" font-size="15">接続するのは右側</text>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#6b7280" stroke-width="1.5"/></marker></defs>
+  <rect width="1080" height="270" rx="20" fill="#ffffff"/>
+  <g font-family="Zen Maru Gothic" text-anchor="middle">
+    <text x="40" y="39" text-anchor="start" fill="#444444" font-size="19">coreX の接続</text>
+    <rect x="36" y="74" width="252" height="145" rx="14" fill="#ffffff" stroke="#d6d6d6"/>
+    <text x="162" y="111" fill="#202020" font-size="23" font-weight="700">Cornix 左</text>
+    <text x="162" y="144" fill="#444444" font-size="17">付属の左用ファーム</text>
+    <text x="162" y="181" fill="#666666" font-size="15">キー入力を右へ送る</text>
+    <path d="M303 142H401" stroke="#6b7280" stroke-width="2.5"/>
+    <path d="M392 134L401 142L392 150" fill="none" stroke="#6b7280" stroke-width="2.5"/>
+    <text x="351" y="119" fill="#555555" font-size="16">BLE</text>
+    <rect x="420" y="64" width="260" height="165" rx="14" fill="#ffffff" stroke="#b8b8b8"/>
+    <text x="550" y="103" fill="#202020" font-size="23" font-weight="700">coreX 右</text>
+    <text x="550" y="137" fill="#444444" font-size="17">PAW3222 トラックボール</text>
+    <text x="550" y="182" fill="#666666" font-size="15">左右の入力をまとめる</text>
+    <path d="M695 142H800" stroke="#6b7280" stroke-width="2.5"/>
+    <path d="M791 134L800 142L791 150" fill="none" stroke="#6b7280" stroke-width="2.5"/>
+    <text x="746" y="104" fill="#555555" font-size="15">USB または</text>
+    <text x="746" y="123" fill="#555555" font-size="15">Bluetooth</text>
+    <rect x="824" y="74" width="220" height="145" rx="14" fill="#ffffff" stroke="#d6d6d6"/>
+    <text x="934" y="114" fill="#202020" font-size="23" font-weight="700">PC</text>
+    <text x="934" y="149" fill="#444444" font-size="17">Vial で設定</text>
+    <text x="934" y="181" fill="#666666" font-size="15">接続するのは右側</text>
   </g>
 </svg>

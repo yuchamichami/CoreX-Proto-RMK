@@ -2,11 +2,11 @@
 
 **トラックボール付き coreX 右と、純正 Cornix 左を組み合わせて使うためのファームウェアです。**
 
-対象は **coreX A13 右基板＋J4 接続の PAW3222**。右から PC へ USB／Bluetooth 接続し、左右のキー・トラックボール・エンコーダを使えます。配列、ボールの感度、スクロール量、AML は Vial で変更できます。
+対象は **coreX 右基板＋J4 接続の PAW3222**。右から PC へ USB／Bluetooth 接続し、左右のキー・トラックボール・エンコーダを使えます。配列、ボールの感度、スクロール量、AML は Vial で変更できます。
 
 > このリポジトリは coreX 用の開発版です。Cornix メーカーの公式配布ファームとは別です。純正 Cornix 左には、ここで配布する左用ファームを書き込みます。
 
-![左は右へ無線接続、右はPCへUSBまたはBluetooth接続](docs/images/connection.svg)
+![左は右へ無線接続、右はPCへUSBまたはBluetooth接続](docs/images/connection.png)
 
 ## 受け取って、まず使う
 
@@ -16,6 +16,12 @@
 2. **右側を PC に USB 接続**します。左側は無線で右につながります。
 3. 左右の文字キーとボールを試します。
 
+<!-- zen-table:start -->
+![受け取って、まず使うの表](docs/images/tables/readme-table-01.png)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | やりたいこと | 初期配列での操作 |
 | --- | --- |
 | ポインター移動 | ボールを回す |
@@ -24,6 +30,9 @@
 | 普通の I を入力 | I を短く押して離す |
 | 右エンコーダ | 回転：上下スクロール、押し込み：Esc |
 | 左エンコーダ | 回転：音量、押し込み：ミュート |
+
+</details>
+<!-- zen-table:end -->
 
 ボール操作で約700 msだけクリック用のレイヤーへ切り替える **AML（Auto Mouse Layer）** が初期状態で ON です。感度・スクロールと同様に、Vial から OFF にできます。
 
@@ -45,17 +54,32 @@
 
 **円の中と下の3枠は、実物のボタンではなく設定欄です。** キー割り当てと同じ操作で値を保存します。枠を繰り返し押して増減させる仕組みではありません。
 
+<!-- zen-table:start -->
+![Vial で、自分の使いやすい設定にするの表](docs/images/tables/readme-table-02.png)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 設定 | 選べる値 | 配布初期値 |
 | --- | --- | --- |
 | 感度 | 0.5／1／1.5／2／3／4倍。縦横共通 | **2倍** |
 | Scroll | 停止／最速／速い／標準／遅い／微速。縦横共通 | **標準** |
 | AML | ON／OFF | **ON** |
 
+</details>
+<!-- zen-table:end -->
+
 変更は本体に保存され、再起動しても残ります。Scroll はボールのスクロール量にだけ効きます。OS 側のポインター速度やスクロール設定も操作感に影響します。
 
 詳しい設定方法、5つのレイヤー、Bluetooth の接続先切り替え、困ったときの確認は **[使い方](docs/usage.md)** にまとめています。
 
 ## 純正 Cornix との違い
+
+<!-- zen-table:start -->
+![純正 Cornix との違いの表](docs/images/tables/readme-table-03.png)
+
+<details>
+<summary>表をテキストで読む</summary>
 
 | 項目 | 純正 Cornix | この coreX 構成 |
 | --- | --- | --- |
@@ -67,6 +91,9 @@
 | 初期キー配列 | メーカー配列 | coreX 用5レイヤー。純正の保存配列をそのまま流用する前提ではありません |
 | 状態 LED | 接続・電池状態などの表示 | **純正の状態表示は未移植**。LEDだけで接続状態を判断しないでください |
 
+</details>
+<!-- zen-table:end -->
+
 純正の接続方法は [メーカー日本語マニュアル](https://docs.channel.io/jezailfunderjp/ja/articles/Cornix-%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%83%9E%E3%83%8B%E3%83%A5%E3%82%A2%E3%83%AB-c1160246) に基づきます。純正の無線ドングル、省電力動作、電池持ちとの同等性は確認していません。
 
 **今回の v0.9.2 はトラックボール専用です。** トラックポイント、IQS9151 タッチパッドの処理は含めていません。
@@ -75,10 +102,21 @@
 
 **[受け渡し用 ZIP をまとめてダウンロード](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest/download/coreX-firmware-hand-off.zip)** — 左右の UF2、説明画像、ソース、ライセンスを同梱しています。
 
+<!-- zen-table:start -->
+![ファームウェアを入れる・更新するの表](docs/images/tables/readme-table-04.png)
+
+関連リンク：[右用 UF2](firmware/coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2) ／ [左用 UF2](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 対象 | バージョン | ダウンロード |
 | --- | --- | --- |
-| **右：coreX A13＋PAW3222** | v0.9.2 | [右用 UF2](firmware/coreX-A13-Right-Central-PAW3222-RMK-v0.9.2.uf2) |
+| **右：coreX＋PAW3222** | v0.9.2 | [右用 UF2](firmware/coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2) |
 | **左：純正 Cornix** | v0.9.0 | [左用 UF2](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2) |
+
+</details>
+<!-- zen-table:end -->
 
 左右のバージョンが異なるのは正常です。この2つを組み合わせて使います。**左右のファイルは入れ替えないでください。** 左 v0.9.0 を導入済みなら、今回の更新は右だけです。
 
@@ -99,6 +137,14 @@
 
 通常利用は上の UF2 だけで始められます。変更・再ビルドする場合は **[BUILDING.md](BUILDING.md)** を参照してください。
 
+<!-- zen-table:start -->
+![ソースから作る・構成を知るの表](docs/images/tables/readme-table-05.png)
+
+関連リンク：[firmware/](firmware/) ／ [docs/usage.md](docs/usage.md) ／ [docs/flashing.md](docs/flashing.md) ／ [CHANGELOG.md](CHANGELOG.md) ／ [source/](source/) ／ [build.sh](build.sh) ／ [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 場所 | 内容 |
 | --- | --- |
 | [firmware/](firmware/) | 配布用 UF2、ハッシュ、バージョン情報 |
@@ -108,5 +154,8 @@
 | [source/](source/) | 左右の設定・アプリと、変更を含む RMK ソース |
 | [build.sh](build.sh) | 配布と同じ保存形式を保つビルド手順 |
 | [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) | 利用しているプロジェクトとライセンス |
+
+</details>
+<!-- zen-table:end -->
 
 本プロジェクトは [RMK](https://github.com/rmk-rs/rmk)、[Vial](https://get.vial.today/) などの成果を利用しています。コードおよび配布バイナリには、MIT／Apache-2.0 のほか各依存物の条件が適用されます。詳細は [第三者ライセンス](THIRD_PARTY_NOTICES.md) を参照してください。

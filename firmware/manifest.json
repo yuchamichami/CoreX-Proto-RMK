@@ -1,5 +1,5 @@
 {
-  "distribution": "coreX A13 PAW3222 + stock Cornix left",
+  "distribution": "coreX PAW3222 + stock Cornix left",
   "release": "v0.9.2",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
@@ -16,8 +16,8 @@
       "side": "right",
       "application_version": "0.9.2",
       "role": "central",
-      "target": "coreX A13 PAW3222 only",
-      "filename": "coreX-A13-Right-Central-PAW3222-RMK-v0.9.2.uf2",
+      "target": "coreX PAW3222 only",
+      "filename": "coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2",
       "binary_bytes": 512956,
       "uf2_bytes": 1026048,
       "binary_sha256": "e6dff3d614b8732b7a69a0d56036e4df5997708a6515756ff598c7c32badaba2",

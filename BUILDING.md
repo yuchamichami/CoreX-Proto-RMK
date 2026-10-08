@@ -1,6 +1,6 @@
 # ファームウェアをビルドする
 
-使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[README](README.md) の書き込み手順を使ってください。右は coreX A13 用、左は純正 Cornix 左用です。
+使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[README](README.md) の書き込み手順を使ってください。右は coreX 用、左は純正 Cornix 左用です。
 
 ## 必要なもの
 
@@ -25,7 +25,7 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 リポジトリのルートで実行します。
 
 ```sh
-./build.sh right  # coreX A13 右・PAW3222、v0.9.2
+./build.sh right  # coreX 右・PAW3222、v0.9.2
 ./build.sh left   # 純正 Cornix 左・peripheral、v0.9.0
 ./build.sh both   # 両方。引数省略時も両方
 ```
@@ -45,6 +45,12 @@ python3 tools/verify_release.py --rebuilt  # 同梱 UF2 と再ビルドした UF
 
 ## ソース構成
 
+<!-- zen-table:start -->
+![ソース構成の表](docs/images/tables/building-table-01.png)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 場所 | 内容 |
 | --- | --- |
 | `source/corex-rmk-pair/right/` | 右の GPIO、配列、Vial 定義、PAW3222、感度・スクロール・AML |
@@ -52,6 +58,9 @@ python3 tools/verify_release.py --rebuilt  # 同梱 UF2 と再ビルドした UF
 | `source/corex-rmk-upstream/` | 固定した RMK 4 クレートと coreX 用差分 |
 | `tools/git-metadata/git` | RMK のストレージ互換性を維持するビルドメタデータ固定 |
 | `tools/make_uf2.py` | 左右別のアプリ領域を検証して UF2 を生成 |
+
+</details>
+<!-- zen-table:end -->
 
 左右の `Cargo.lock` を同梱し、ビルドは `--locked` で行います。キーボードのマニフェストから RMK への参照はリポジトリ内の相対パスです。公開 RMK の最新版へ自動追従しません。
 
@@ -61,10 +70,19 @@ RMK はバージョン・コミット情報・feature・設定容量等からス
 
 **直接 `cargo build` を使わず、ルートの `build.sh` を使ってください。** リポジトリを新しく commit しただけで RMK のスキーマが変わらないよう、専用の Git ラッパーを有効にします。固定するのは RMK の `git log -1 --format=%H -- .` 問い合わせだけです。それ以外の Git 操作は通常の Git に渡します。
 
+<!-- zen-table:start -->
+![既存設定との互換性の表](docs/images/tables/building-table-02.png)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 対象 | アプリ書き込み開始 | アプリ上限（含まない） | この版の設定領域 |
 | --- | --- | --- | --- |
 | 右 | `0x26000` | `0xB0000` | `0xB0000–0xD0000` |
 | 左 | `0x1000` | `0xA0000` | `0xC0000–0xE0000` |
+
+</details>
+<!-- zen-table:end -->
 
 UF2 はアプリのみで、ブートローダーや設定領域を含みません。右用を左へ、左用を右へ書かないでください。スキーマ互換性の維持は同じ構成を更新するためのもので、純正ファームと coreX ファームの左右混在を保証するものではありません。
 

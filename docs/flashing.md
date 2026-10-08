@@ -4,12 +4,23 @@
 
 ## ファイルを選ぶ
 
+<!-- zen-table:start -->
+![ファイルを選ぶの表](images/tables/flashing-table-01.png)
+
+関連リンク：[`coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2`](../firmware/coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2) ／ [`coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2`](../firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 書き込む基板 | 使うファイル |
 | --- | --- |
-| **右：coreX A13＋PAW3222** | [`coreX-A13-Right-Central-PAW3222-RMK-v0.9.2.uf2`](../firmware/coreX-A13-Right-Central-PAW3222-RMK-v0.9.2.uf2) |
+| **右：coreX＋PAW3222** | [`coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2`](../firmware/coreX-Right-Central-PAW3222-RMK-v0.9.2.uf2) |
 | **左：純正 Cornix** | [`coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2`](../firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2) |
 
-左右でバージョンが違うのは正常です。左 v0.9.0 は右 v0.9.2 と組み合わせるためのファームです。**左右の UF2 は入れ替えないでください。純正 Cornix 右用のファームも、coreX A13 右には使えません。**
+</details>
+<!-- zen-table:end -->
+
+左右でバージョンが違うのは正常です。左 v0.9.0 は右 v0.9.2 と組み合わせるためのファームです。**左右の UF2 は入れ替えないでください。純正 Cornix 右用のファームも、coreX 右には使えません。**
 
 対象は、このプロジェクトで確認したブートローダー入りの基板です。すでに RESET 2回で USB ドライブが出る基板なら、SWD 書き込み器は使いません。未書き込みの裸のマイコンへ初めて導入する手順は、このページの対象外です。
 
@@ -69,15 +80,24 @@ Vial で現在の配列を開き、**File → Save current layout** で `.vil` �
 
 2026-10-08 確認時点の公式配布ページには、v1.13 の不具合に関する追記があります。「数字が最大の版」を自動的に選ばず、配布ページの案内を確認してください。公式ファイルは[メーカー GitHub](https://github.com/jezailfunder/cornix-lp)でも案内されています。
 
-**公式の `cornix-right.uf2` を coreX A13 右へ書き込まないでください。** coreX 右は純正右とは別の基板です。右を戻したい場合は、その基板用に保存した coreX の UF2 を使います。
+**公式の `cornix-right.uf2` を coreX 右へ書き込まないでください。** coreX 右は純正右とは別の基板です。右を戻したい場合は、その基板用に保存した coreX の UF2 を使います。
 
 <details>
 <summary>開発者向け：書き換え範囲と保存領域</summary>
 
+<!-- zen-table:start -->
+![純正 Cornix 左へ戻すの表](images/tables/flashing-table-02.png)
+
+<details>
+<summary>表をテキストで読む</summary>
+
 | 対象 | アプリ開始 | この構成の設定領域 | ブートローダー開始 |
 | --- | --- | --- | --- |
-| coreX A13 右 | `0x26000` | `0xB0000..0xD0000` | `0xF4000` |
+| coreX 右 | `0x26000` | `0xB0000..0xD0000` | `0xF4000` |
 | 確認済みの純正 Cornix 左 | `0x1000` | `0xC0000..0xE0000` | `0xF4000` |
+
+</details>
+<!-- zen-table:end -->
 
 付属の UF2 はアプリ更新用です。全消去やブートローダーの上書きは行いません。右の `0x26000` と左の `0x1000` は同じ nRF52840 でも異なるため、型番が同じことだけで互換と判断できません。
 
