@@ -1,29 +1,27 @@
 # CoreX Proto RMK
 
-CoreX右基板のPAW3222トラックボールと、純正Cornixの左キーボードを組み合わせるRMKファームウェアです。右側をPCにつなぎ、キー配列・感度・スクロール量をVialで変更できます。
+## ファームをダウンロード
 
-- **書き込み済みのセットを使う：** [接続と操作](docs/usage.md)
+- **[右用ファームをダウンロード — v0.10.0](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-Right-v0.10.0.uf2)**：CoreX右・PAW3222用
+- **[左用ファームをダウンロード — v0.10.0](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-Left-v0.10.0.uf2)**：純正Cornix左用
+
+**今回は左右とも更新してください。** 右用はCoreX基板専用です。左右のUF2は取り違えないでください。
+
+v0.10.0は実機確認中です。[確認済みの範囲](docs/validation.md#v0100) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+
+## 書き込み・更新
+
 - **CoreXを更新する：** [バックアップと更新手順](docs/flashing.md#corex-を更新する)
 - **純正Cornix左を初めて組み合わせる：** [左の書き換え](docs/flashing.md#純正-cornix-左を初めて使う)
+- **書き込み済みのセットを使う：** [接続と操作](docs/usage.md)
 
-![Cornix左からCoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
-
-## ダウンロード
-
-v0.10.0は実機確認中です。[確認済みの範囲](docs/validation.md#v0100)を参照してください。前版は[リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)から取得できます。
-
-| 書き込む基板 | ファーム |
-| --- | --- |
-| CoreX右・PAW3222 | [右用 v0.10.0](firmware/CoreX-Right-v0.10.0.uf2) |
-| 純正Cornix左 | [左用 v0.10.0](firmware/CoreX-Left-v0.10.0.uf2) |
-
-[説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-firmware-hand-off.zip) · [リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
-
-v0.10.0は**左右とも更新**してください。左右の再接続と登録処理を変更しています。**左右のUF2を取り違えないでください。** 純正Cornix右用のファームは、CoreX右には使えません。
-
-v0.9.5からの更新では、PCのBluetooth登録をやり直す必要はありません。v0.9.4以前から更新する場合は、電池残量の表示に対応するため、[更新手順](docs/flashing.md#corex-を更新する)に沿って一度だけ登録し直します。
+v0.9.5以降からの更新では、PCのBluetooth登録をやり直す必要はありません。v0.9.4以前から更新する場合は、電池残量の表示に対応するため、[更新手順](docs/flashing.md#corex-を更新する)に沿って一度だけ登録し直します。
 
 ## 使い始める
+
+CoreX右基板のPAW3222トラックボールと、純正Cornixの左キーボードを組み合わせるRMKファームウェアです。右側をPCにつなぎ、キー配列・感度・スクロール量をVialで変更できます。
+
+![Cornix左からCoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
 
 左右に上記のファームが入っていれば、電源をONにして**右側をPCにUSB接続**します。左は右へ自動で無線接続します。左右のキーとボールが動けば使い始められます。
 
@@ -48,6 +46,7 @@ Bluetoothでは、PCに **`Cornix TB`** を登録します。右側の電池残�
 ## 純正Cornixとの違い・対応範囲
 
 - PCにつなぐのは右側です。左側にも、このリポジトリのファームが必要です。
+- CoreX右と純正Cornix右のファームは互換性がありません。
 - 通常キーと数字・記号のFn配列は純正を基にし、トラックボール用の操作を加えています。Vialの保存ファイルは純正用と分けて管理します。
 - 右エンコーダはスクロールと中クリック、左は音量調整とミュートです。
 - 接続と電池低下を短いLED点滅で知らせます。右のLEDで左の電池低下も確認できます。[表示の意味](docs/usage.md#led表示)
