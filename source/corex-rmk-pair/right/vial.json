@@ -1844,43 +1844,43 @@
   "customKeycodes": [
     {
       "name": "BLE profile 1",
-      "title": "BLE profile 1",
-      "shortName": "profile "
+      "title": "PCの登録先1。短押しで切り替え、5秒長押しでこの登録先を消去します。",
+      "shortName": "BLE 1"
     },
     {
       "name": "BLE profile 2",
-      "title": "BLE profile 2",
-      "shortName": "profile "
+      "title": "PCの登録先2。短押しで切り替え、5秒長押しでこの登録先を消去します。",
+      "shortName": "BLE 2"
     },
     {
       "name": "BLE profile 3",
-      "title": "BLE profile 3",
-      "shortName": "profile "
+      "title": "PCの登録先3。短押しで切り替え、5秒長押しでこの登録先を消去します。",
+      "shortName": "BLE 3"
     },
     {
       "name": "BLE next profile",
-      "title": "BLE next profile",
-      "shortName": "next pro"
+      "title": "次のPC登録先へ切り替えます。1→2→3→1の順です。",
+      "shortName": "次のPC"
     },
     {
       "name": "BLE previous profile",
-      "title": "BLE previous profile",
-      "shortName": "previous"
+      "title": "前のPC登録先へ切り替えます。3→2→1→3の順です。",
+      "shortName": "前のPC"
     },
     {
       "name": "BLE clear current bond",
-      "title": "BLE clear current bond",
-      "shortName": "clear cu"
+      "title": "現在選んでいるPCの登録をキーボード側から消去します。左右の登録やキー配列は残ります。",
+      "shortName": "PC登録\n解除"
     },
     {
       "name": "USB BLE toggle",
-      "title": "USB BLE toggle",
-      "shortName": "USB togg"
+      "title": "USBとBluetoothの優先出力を切り替えます。両方接続しているときに使います。",
+      "shortName": "USB\n⇄ BLE"
     },
     {
-      "name": "Reserved",
-      "title": "Reserved",
-      "shortName": "Reserved"
+      "name": "Reset split pairing (hold 5s)",
+      "title": "5秒長押しで左右の登録を消去します。PCのBluetooth登録を消す操作とは別です。通常は使いません。",
+      "shortName": "左右登録\nリセット"
     },
     {
       "name": "Trackball sensitivity 0.5x",
@@ -1944,32 +1944,32 @@
     },
     {
       "name": "Legacy trackball scrolling 停止",
-      "shortName": "Scroll\n停止",
+      "shortName": "旧Scroll\n停止",
       "title": "旧スクロール設定の互換値：停止。新しい設定は通常のScroll項目を使用してください。"
     },
     {
       "name": "Legacy trackball scrolling 最速",
-      "shortName": "Scroll\n最速",
+      "shortName": "旧Scroll\n最速",
       "title": "旧スクロール設定の互換値：最速。新しい設定は通常のScroll項目を使用してください。"
     },
     {
       "name": "Legacy trackball scrolling 速い",
-      "shortName": "Scroll\n速い",
+      "shortName": "旧Scroll\n速い",
       "title": "旧スクロール設定の互換値：速い。新しい設定は通常のScroll項目を使用してください。"
     },
     {
       "name": "Legacy trackball scrolling 標準",
-      "shortName": "Scroll\n標準",
+      "shortName": "旧Scroll\n標準",
       "title": "旧スクロール設定の互換値：標準。新しい設定は通常のScroll項目を使用してください。"
     },
     {
       "name": "Legacy trackball scrolling 遅い",
-      "shortName": "Scroll\n遅い",
+      "shortName": "旧Scroll\n遅い",
       "title": "旧スクロール設定の互換値：遅い。新しい設定は通常のScroll項目を使用してください。"
     },
     {
       "name": "Legacy trackball scrolling 微速",
-      "shortName": "Scroll\n微速",
+      "shortName": "旧Scroll\n微速",
       "title": "旧スクロール設定の互換値：微速。新しい設定は通常のScroll項目を使用してください。"
     },
     {

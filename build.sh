@@ -37,10 +37,12 @@ for COREX_HALF in right left; do
     if [ "$COREX_SIDE" != both ] && [ "$COREX_SIDE" != "$COREX_HALF" ]; then continue; fi
     cd "$COREX_ROOT/source/corex-rmk-pair/$COREX_HALF"
     cargo build --release --locked
-    case "$COREX_HALF" in
-        right) COREX_NAME=CoreX-Right-Central-PAW3222-RMK-v0.9.5 ;;
-        left) COREX_NAME=coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0 ;;
-    esac
+    COREX_NAME=$(python3 - "$COREX_ROOT/firmware/manifest.json" "$COREX_HALF" <<'PY'
+import json, pathlib, sys
+images = json.loads(pathlib.Path(sys.argv[1]).read_text())['images']
+print(pathlib.Path(next(image['filename'] for image in images if image['side'] == sys.argv[2])).stem)
+PY
+)
     COREX_ELF="$CARGO_TARGET_DIR/thumbv7em-none-eabihf/release/corex-pair-$COREX_HALF"
     "$COREX_OBJCOPY" -O binary "$COREX_ELF" "$COREX_ROOT/build/firmware/$COREX_NAME.bin"
     python3 "$COREX_ROOT/tools/make_uf2.py" "$COREX_HALF" "$COREX_ROOT/build/firmware/$COREX_NAME.bin" "$COREX_ROOT/build/firmware/$COREX_NAME.uf2"

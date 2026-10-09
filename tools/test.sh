@@ -1,5 +1,5 @@
 #!/bin/sh
-# Host tests for the PAW wire protocol, fractional motion, and Vial settings.
+# Host tests and distribution checks; no connected hardware is accessed.
 set -eu
 COREX_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 COREX_RUSTC=$(rustup which --toolchain 1.95.0 rustc)
@@ -13,3 +13,4 @@ done
 python3 "$COREX_ROOT/tools/default_keymap.py" --check
 python3 "$COREX_ROOT/tools/test_default_keymap.py"
 python3 "$COREX_ROOT/tools/verify_release.py"
+"$COREX_ROOT/tools/test_ble.sh"

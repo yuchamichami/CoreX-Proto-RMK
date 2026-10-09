@@ -530,11 +530,81 @@ async fn run_usb_logger<D: Driver<'static>>(logger_class: CdcAcmClass<'static, D
     // The log level itself is set via the `max_level_*` feature of the log crate.
     let logger_fut =
         ::embassy_usb_logger::with_custom_style!(1024, log::LevelFilter::Trace, logger_class, |record, writer| {
-            use core::fmt::Write;
             let ms = embassy_time::Instant::now().as_millis();
-            let _ = write!(writer, "[{:>8}ms {:5}] {}\r\n", ms, record.level(), record.args());
+            write_usb_log_record(record, writer, ms);
         });
     logger_fut.await;
+}
+
+#[cfg(feature = "log")]
+fn write_usb_log_record(record: &log::Record<'_>, writer: &mut impl core::fmt::Write, ms: u64) {
+    // trouble-host 0.8 logs peer identities (including IRKs) at INFO and WARN.
+    // Its log macros use the calling module path as their target. Skip the
+    // whole security-manager family before formatting, at every log level.
+    // RMK's pairing/encryption state messages remain available for diagnosis.
+    let target = record.target();
+    if target == "trouble_host::security_manager" || target.starts_with("trouble_host::security_manager::") {
+        return;
+    }
+    let _ = write!(writer, "[{:>8}ms {:5}] {}\r\n", ms, record.level(), record.args());
+}
+
+#[cfg(all(test, feature = "log"))]
+mod log_privacy_tests {
+    use super::write_usb_log_record;
+
+    struct Secret;
+
+    impl core::fmt::Display for Secret {
+        fn fmt(&self, _: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+            panic!("sensitive log arguments must not be formatted");
+        }
+    }
+
+    #[test]
+    fn security_manager_payloads_are_never_formatted_at_any_level() {
+        let mut output = String::new();
+        for target in [
+            "trouble_host::security_manager",
+            "trouble_host::security_manager::pairing::peripheral",
+        ] {
+            for level in [
+                log::Level::Error,
+                log::Level::Warn,
+                log::Level::Info,
+                log::Level::Debug,
+                log::Level::Trace,
+            ] {
+                write_usb_log_record(
+                    &log::Record::builder()
+                        .target(target)
+                        .level(level)
+                        .args(format_args!("{}", Secret))
+                        .build(),
+                    &mut output,
+                    12,
+                );
+            }
+        }
+        assert!(output.is_empty());
+    }
+
+    #[test]
+    fn connection_and_sensor_diagnostics_keep_their_format() {
+        let mut output = String::new();
+        for target in ["rmk::ble", "corex_pair_right::paw3222", "trouble_host::gatt"] {
+            write_usb_log_record(
+                &log::Record::builder()
+                    .target(target)
+                    .level(log::Level::Info)
+                    .args(format_args!("ready"))
+                    .build(),
+                &mut output,
+                12,
+            );
+        }
+        assert_eq!(output, "[      12ms INFO ] ready\r\n".repeat(3));
+    }
 }
 
 #[cfg(any(feature = "usb_log", feature = "_dfu"))]

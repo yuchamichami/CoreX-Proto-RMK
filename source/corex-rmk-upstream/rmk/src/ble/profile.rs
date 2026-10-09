@@ -140,9 +140,9 @@ where
         for slot_num in 0..SLOTS {
             if let Ok(Some(StorageValue::BondInfo(info))) = read(StorageKey::BondInfo(slot_num as u8)).await
                 && !info.removed
-                && let Err(e) = self.bonded_devices.push(info)
+                && self.bonded_devices.push(info).is_err()
             {
-                error!("Failed to add bond info: {:?}", e);
+                error!("BLE bond slots full while loading profile {}", slot_num);
             }
         }
         debug!("Loaded {} bond info", self.bonded_devices.len());
@@ -197,7 +197,7 @@ where
         }
 
         if let Some(info) = self.active_bond_info() {
-            debug!("Add bond info of profile {}: {:?}", info.slot_num, info);
+            debug!("Add bond info of profile {}", info.slot_num);
             if let Err(e) = self.stack.add_bond_information(info.info) {
                 debug!("Add bond info error: {:?}", e);
             }
@@ -220,8 +220,8 @@ where
             self.bonded_devices[index] = profile_info.clone();
         } else {
             // If there is no bonding information with the same slot number, add it
-            if let Err(e) = self.bonded_devices.push(profile_info.clone()) {
-                error!("Failed to add bond info: {:?}", e);
+            if self.bonded_devices.push(profile_info.clone()).is_err() {
+                error!("BLE bond slots full while adding profile {}", profile_info.slot_num);
             }
         }
 

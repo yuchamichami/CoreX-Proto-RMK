@@ -41,12 +41,13 @@ def verify(image, path):
     return binary
 
 
-def verify_rebuilt_schema(root, target, manifest):
+def verify_rebuilt_schema(root, target, manifest, required=False):
     build_dir = target / 'thumbv7em-none-eabihf/release/build'
     metadata_files = [p for p in build_dir.glob('rmk-*/output')
                       if re.fullmatch(r'rmk-[0-9a-f]+', p.parent.name)]
     constants_files = list(build_dir.glob('rmk-types-*/out/constants.rs'))
     if not metadata_files or not constants_files:
+        require(not required, 'Missing rebuilt storage metadata; use --target-dir for the build cache')
         print('SKIP rebuilt schema: Cargo metadata unavailable (use --target-dir for an external cache)')
         return
     metadata = max(metadata_files, key=lambda p: p.stat().st_mtime).read_text()
@@ -73,6 +74,8 @@ def verify_rebuilt_schema(root, target, manifest):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--side', choices=['right', 'left', 'both'], default='both',
+                        help='side to verify (default: both)')
     parser.add_argument('--rebuilt', action='store_true', help='also validate build/firmware structure, bounds, paths and available schema metadata')
     parser.add_argument('--require-identical', action='store_true', help='also require rebuilt images to be byte-identical to the distribution')
     parser.add_argument('--target-dir', type=Path, help='Cargo target cache for checking rebuilt schema')
@@ -83,6 +86,8 @@ def main():
     try:
         require({image['side'] for image in manifest['images']} == {'left', 'right'}, 'Missing side')
         for image in manifest['images']:
+            if args.side != 'both' and image['side'] != args.side:
+                continue
             require(sums.get(image['filename']) == image['uf2_sha256'], 'Checksum manifest mismatch')
             verify(image, root / 'firmware' / image['filename'])
             print('PASS distribution ' + image['side'] + ': ' + image['filename'])
@@ -100,7 +105,7 @@ def main():
                     require(same, 'Rebuilt image is not byte-identical to the distribution')
         if args.rebuilt or args.require_identical:
             target = args.target_dir or Path(os.environ.get('CARGO_TARGET_DIR', str(root / 'build/target')))
-            verify_rebuilt_schema(root, target, manifest)
+            verify_rebuilt_schema(root, target, manifest, required=args.require_identical)
     except (ValueError, OSError) as error:
         parser.exit(1, 'FAIL: ' + str(error) + '\n')
 

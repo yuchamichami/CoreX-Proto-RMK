@@ -1,14 +1,14 @@
 # 説明画像
 
-接続図は[Zen Maru Gothic](https://github.com/googlefonts/zen-marugothic)と白背景で作成しています。PNGなので、読む人の環境にフォントがなくても同じ形で表示されます。
+説明図は[Zen Maru Gothic](https://github.com/googlefonts/zen-marugothic)と白背景で作成しています。PNGなので、読む人の環境にフォントがなくても同じ形で表示されます。
 
 - `connection.svg`：編集用の接続図。
 - `connection.png`：READMEに表示する接続図。
 - `default-keymap.svg`／`default-keymap.png`：初期配列ファイルから描いた配列図。実機の画面ではありません。
-- `vial-overview.png`：実機のVial画面。
-- `vial-user-settings.png`：VialのUserタブを開いた画面。
+- `vial-overview.png`：Vialの描画部品を使ったLayer 0の説明図。配布する初期配列を表示します。
+- `vial-user-settings.png`：VialのUserタブを使った設定の説明図。感度1.5倍の選択肢に、説明用の枠を付けています。
 
-Vialの画像は実機で撮影したものです。キー配列には個別の変更が含まれます。
+Vialの2枚は実機のスクリーンショットではありません。現在の `vial.json` と `CoreX-Cornix-default.vil` からオフラインで生成し、機器名や個別の保存設定を読み取る操作は行いません。ファームの版によって、設定名や見た目が異なる場合があります。
 
 ## 接続図を更新する
 
@@ -29,3 +29,15 @@ python3 tools/render_default_keymap.py --font-dir /path/to/ZenMaruGothic/fonts
 ```
 
 `keymaps/CoreX-Cornix-default.vil` と右の `vial.json` から、SVGとPNGを作ります。
+
+## Vialの説明図を更新する
+
+PyQt5、Zen Maru GothicのRegular／Medium／Boldと、[Vial GUIのソース](https://github.com/vial-kb/vial-gui)を用意します。Vial GUIはコミット `aef8222a2d0429a183b2ed692d5f9efcfd383f08` で描画を確認しています。
+
+```sh
+python3 tools/render_vial_guide.py \
+  --vial-source /path/to/vial-gui \
+  --font-dir /path/to/ZenMaruGothic/fonts
+```
+
+ウィンドウや接続中のキーボードを操作せず、2枚のPNGを更新します。Vialの描画部品を使うため、ソース側の変更で生成手順の調整が必要になる場合があります。生成後は配列とUserタブの文字が読めることを確認してください。

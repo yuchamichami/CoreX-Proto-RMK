@@ -25,30 +25,27 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 リポジトリのルートで実行します。
 
 ```sh
-./build.sh right  # CoreX 右・PAW3222、v0.9.5
+./build.sh right  # CoreX 右・PAW3222
 ./build.sh left   # 純正 Cornix 左・peripheral、v0.9.0
 ./build.sh both   # 両方。引数省略時も両方
 ```
 
-出力先は `build/firmware/`。既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
+出力先は `build/firmware/`。ファイル名は [firmware/manifest.json](firmware/manifest.json) から取得し、既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
 
 ```sh
-python3 tools/verify_release.py --rebuilt  # 同梱 UF2 と再ビルドした UF2 の検証
-./tools/test.sh              # 通信・微小移動・設定11件と、初期配列9件のホストテスト
+python3 tools/verify_release.py --rebuilt --side right  # 右だけビルドした場合
+python3 tools/verify_release.py --rebuilt  # 両方ビルドした場合
+./tools/test.sh              # 通信・設定・初期配列・電池・ログと、配布UF2をまとめて検査
+./tools/test_ble.sh          # 電池とログのテストだけを実行
 ```
 
-BLEの残量反映とサービス定義は、次のホストテストで確認します。`--target` は実行環境のホストターゲットに合わせて変更してください。
-
-```sh
-rustup run 1.95.0 cargo test \
-  --manifest-path source/corex-rmk-upstream/rmk/Cargo.toml \
-  --no-default-features --features std,log,_ble,split,vial \
-  --lib ble::battery_service --target x86_64-apple-darwin
-```
+`test.sh` は実機を操作しません。BLEのテストもPC上で実行し、ホストの種類を自動判定します。GitHub Actionsでは同じコマンドをUbuntuで実行します。初回はテスト用の依存ライブラリを取得するため、ネット接続が必要です。実機でのキー入力・電池駆動・再接続は[検証状況](docs/validation.md)に別途記録します。
 
 `verify_release.py` は同梱 UF2 の SHA-256 と、再ビルドした UF2 のターゲット・アプリ領域・ベクタテーブル・ローカルパスの混入を検査します。Cargo メタデータがあれば設定スキーマも検査します。キャッシュを外部に置いた場合は `--target-dir <CARGO_TARGET_DIRの場所>` を指定できます。`--rebuilt` を省くと同梱 UF2 だけを検査します。
 
-配布版とのハッシュ一致は参考情報として表示し、不一致だけでは失敗にしません。配布を作成した場所で厳密に照合する場合だけ `--require-identical` を付けてください。
+配布版とのハッシュ一致は参考情報として表示し、不一致だけでは失敗にしません。配布を作成した場所で厳密に照合する場合は `--require-identical` を付けます。この指定では、保存形式を確認するビルドメタデータが見つからない場合も失敗にします。対象を片側に絞る場合は `--side right` または `--side left` を指定します。
+
+同梱の左v0.9.0は実機で確認済みのファイルを継続配布しています。現在の共通ソースにはその後の修正があるため、左を再ビルドすると同梱版とは異なるファイルになります。使うだけなら、左は同梱UF2を使ってください。
 
 **別のチェックアウト場所からのビルドは確認していますが、バイナリの完全一致は保証しません。** 同一ホスト・同一ソースでもチェックアウト場所が変わると Cargo / コンパイラのメタデータ等が変化し、生成物のハッシュが異なることを確認しています。異なるホスト、C ライブラリ、追加フラグでも変化します。公開用 UF2 の照合には同梱 `SHA256SUMS` を使い、手元でビルドした UF2 のハッシュとは区別してください。
 
@@ -81,7 +78,13 @@ python3 tools/default_keymap.py --check  # 生成物の一致を確認
 
 Battery Serviceの読み出しと通知登録は暗号化前にも受け付けます。HIDとVialのアクセス条件は変更していません。
 
-v0.9.5ではGATTの構成とハンドルが変わるため、以前のファームから更新したPCは一度登録をやり直します。設定の保存形式は同じでも、PCが記憶したGATT情報と通知先は更新が必要です。[利用者向けの再登録手順](docs/usage.md#pc-の登録をやり直す)
+v0.9.5でGATTの構成とハンドルを変更しました。v0.9.4以前から更新したPCは一度登録をやり直します。v0.9.5からv0.9.6ではGATTを変更していないため、再登録は不要です。[利用者向けの更新手順](docs/flashing.md#corex-を更新する)
+
+### 診断ログ
+
+右をUSB接続すると、CDCシリアルポートからセンサーの認識・BLE接続・電池の通知状態を読めます。`PAW3222 J4 ready`はセンサー認識成功、`expected 30`はセンサーID不一致、`lost valid ID`は通信を失って再初期化している状態です。ログの正常表示だけで入力や残量表示の実機確認を代用しません。
+
+右v0.9.6では、BLEの接続用秘密情報を含む依存ライブラリのログを、文字列化する前に除外しています。旧版の右と同梱の左v0.9.0はこの修正を含まないため、公開のIssueへ未編集のログを添付しないでください。通常の問い合わせには、[報告する情報](docs/usage.md#解決しない場合)だけで十分です。
 
 ## 既存設定との互換性
 
@@ -103,6 +106,8 @@ UF2 はアプリのみで、ブートローダーや設定領域を含みませ�
 
 ## 公開バイナリの再現性
 
-配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。右v0.9.5は電池残量の取得とBLEへの反映を修正した版です。Bluetooth名は `Cornix TB`、初期配列と設定の保存形式は従来どおりです。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
+配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。Bluetooth名は `Cornix TB` です。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
 
 ライセンスと派生元は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に記載しています。
+
+次に検証する要件と、他のファーム・READMEから採用した考え方は[改善の優先順位](docs/design-review.md)にまとめています。
