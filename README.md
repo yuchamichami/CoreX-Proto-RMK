@@ -12,8 +12,8 @@ CoreX右基板のPAW3222トラックボールと、純正Cornixの左キーボ�
 
 | 書き込む基板 | ファーム |
 | --- | --- |
-| CoreX右・PAW3222 | [右用 v0.9.7](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2) |
-| 純正Cornix左 | [左用 v0.9.0](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2) |
+| CoreX右・PAW3222 | [右用 v0.9.7](firmware/CoreX-Right-v0.9.7.uf2) |
+| 純正Cornix左 | [左用 v0.9.0](firmware/CoreX-Left-v0.9.0.uf2) |
 
 [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest/download/CoreX-firmware-hand-off.zip) · [リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 

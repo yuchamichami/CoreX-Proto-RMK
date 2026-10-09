@@ -30,7 +30,7 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 ./build.sh both   # 両方。引数省略時も両方
 ```
 
-出力先は `build/firmware/`。ファイル名は [firmware/manifest.json](firmware/manifest.json) から取得し、既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
+出力先は `build/firmware/`。ファイル名は `CoreX-Right-v<版>.uf2`／`CoreX-Left-v<版>.uf2` とし、[firmware/manifest.json](firmware/manifest.json) から取得します。既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
 
 ```sh
 python3 tools/verify_release.py --rebuilt --side right  # 右だけビルドした場合

@@ -9,9 +9,9 @@
 ## ファイル
 
 - **右：CoreX＋PAW3222、v0.9.7**
-  [CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2](../firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2)
+  [CoreX-Right-v0.9.7.uf2](../firmware/CoreX-Right-v0.9.7.uf2)
 - **左：純正 Cornix、v0.9.0**
-  [coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2](../firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
+  [CoreX-Left-v0.9.0.uf2](../firmware/CoreX-Left-v0.9.0.uf2)
 - **CoreXの初期配列**
   [CoreX-Cornix-default.vil](../keymaps/CoreX-Cornix-default.vil)
 
@@ -54,7 +54,7 @@ CoreX 用と純正 Cornix 用でファイル名を分けてください。`.vil`
 | v0.9.2以前 | 下の配列移行を行い、[PCの登録を一度やり直します](usage.md#pc-の登録をやり直す)。 |
 
 1. 右をUSB接続し、Vialの **File → Save current layout** で現在の `.vil` を保存します。
-2. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2` を、[書き込み手順](#ファームウェアを書き込む)でコピーします。
+2. 右に `CoreX-Right-v0.9.7.uf2` を、[書き込み手順](#ファームウェアを書き込む)でコピーします。
 3. 再起動後にVialで `CoreX PAW3222` を選びます。v0.9.2以前からの更新では、下の配列移行を行います。それ以外では、キーや感度の割り当てが残っていることを確認します。
 4. v0.9.4以前から更新した場合は、[PCの登録をやり直します](usage.md#pc-の登録をやり直す)。v0.9.5からなら、そのまま次へ進みます。
 5. 左右のキー、ボール、クリック、スクロール、エンコーダを試します。Bluetoothで使う場合は、右のUSBを抜いて同じ操作を試します。
@@ -77,8 +77,8 @@ v0.9.5で電池残量表示のためにBluetoothの機器情報を変更しま�
 ## 純正 Cornix 左を初めて使う
 
 1. 純正左の `.vil` を保存します。
-2. [書き込み手順](#ファームウェアを書き込む)に沿って、左に `coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2` を書き込みます。
-3. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
+2. [書き込み手順](#ファームウェアを書き込む)に沿って、左に `CoreX-Left-v0.9.0.uf2` を書き込みます。
+3. 右に `CoreX-Right-v0.9.7.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
 4. 左右の電源を ON にし、右を PC に USB 接続します。未登録の左右は自動で接続します。
 5. Vial で `CoreX-Cornix-default.vil` を読み込み、左右のキー、ボール、スクロール、エンコーダを確認します。Bluetooth で使う場合は、続けて[PC に登録](usage.md#pc-と-bluetooth-接続する)します。
 
