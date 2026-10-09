@@ -10,7 +10,7 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Right v0.9.5 flashed and booted; all Vial settings preserved; existing BLE bond reconnected; macOS native client read right Battery Level 97% and subscribed. After powering left, direct BLE reads returned 100% for both services. Native Bluetooth Settings percentage remains absent. Left v0.9.0 unchanged; battery accuracy and discharge trend unverified.",
+  "validation_scope": "Final right v0.9.5 flashed and booted; full Vial settings preserved; existing bond reconnected with encryption; native macOS 15.2 Bluetooth Settings and system_profiler show right battery 98%. Same GATT configuration verified at 100% with USB unplugged, key/trackball operation and battery-only disconnect/reconnect. Left v0.9.0 unchanged; battery capacity accuracy and discharge curve not calibrated.",
   "images": [
     {
       "side": "right",
@@ -18,12 +18,12 @@
       "role": "central",
       "target": "CoreX PAW3222 only",
       "filename": "CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2",
-      "binary_bytes": 522980,
-      "uf2_bytes": 1046016,
-      "binary_sha256": "8a1fd9adaf7671e61428f4809505f9c71003df742bc74d3722c535a0b784464b",
-      "uf2_sha256": "b5b170b6967d52cd7fdbbdf034307010778840b1c733c36f78452cd87dacccd2",
+      "binary_bytes": 523172,
+      "uf2_bytes": 1046528,
+      "binary_sha256": "32c1e9f0bb4761ee22197e107ecc2c7d823a477acaa883a36330b6a9f3ca9adf",
+      "uf2_sha256": "54db84556f440b139b532aca2cea3dfdafd4ac65f70e29ec92dcd8c277343518",
       "flash_start": "0x26000",
-      "flash_end_exclusive": "0xa5b00",
+      "flash_end_exclusive": "0xa5c00",
       "application_limit_exclusive": "0xb0000",
       "storage_range_exclusive": [
         "0xb0000",
@@ -70,6 +70,8 @@
     "divider_measured": 2000,
     "divider_total": 3000,
     "measurement": "voltage-derived percentage, RMK existing battery curve",
-    "ble_service": "Battery Service (0x180F), Battery Level (0x2A19)"
+    "ble_service": "One standard Battery Service (0x180F), Battery Level (0x2A19): right battery; read/notify with CCCD only",
+    "left_service_uuid": "1dad1811-b1c4-42ae-825e-f45414fe6be4",
+    "left_service": "Peripheral measurements retained via custom GATT service; not a second standard BAS"
   }
 }

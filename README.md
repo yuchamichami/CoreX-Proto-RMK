@@ -14,7 +14,7 @@ CoreX用のRMKファームウェアです。PAW3222トラックボールを接�
 
 ![Cornix左からCoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
 
-Bluetoothで使うときは、PCに `Cornix TB` を登録します。v0.9.5から、右側の電池残量をPCへ送信します。[Bluetoothの接続と残量表示](docs/usage.md#pc-と-bluetooth-接続する)
+Bluetoothで使うときは、PCに `Cornix TB` を登録します。v0.9.5から右側の電池残量を表示でき、macOS 15.2で確認しています。旧版から更新した場合は、一度だけBluetoothの登録をやり直してください。[接続と残量表示](docs/usage.md#pc-と-bluetooth-接続する)
 
 ## トラックボールの操作
 
@@ -66,7 +66,7 @@ v0.9.2以前からの更新では、保存した変更と新しい初期値が�
 
 [書き込み・更新・純正左への復元](docs/flashing.md)
 
-v0.9.5は実機への書き込み、設定保持、BLEからの残量読み出しを確認しました。macOSのBluetooth設定画面には、まだ残量が表示されていません。[検証状況](docs/validation.md)
+v0.9.5は実機への書き込み、設定保持、macOS 15.2のBluetooth設定での残量表示を確認しました。[検証状況](docs/validation.md)
 
 ## 開発
 

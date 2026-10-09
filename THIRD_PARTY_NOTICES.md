@@ -18,6 +18,7 @@ The snapshot includes these CoreX changes to upstream runtime code:
 - `rmk-macro/src/codegen/orchestrator.rs` and `rmk/src/lib.rs`: initialize the stored keymap before creating custom pointing processors.
 - `rmk/src/keyboard/auto_mouse_layer.rs`: runtime AML enable/disable, releasing only an automatically owned layer when disabled, and associated tests.
 - `rmk/src/ble/battery_service.rs` and `rmk/src/ble/mod.rs`: refresh battery characteristics from cached measurements on connection and read; send the current level when a host subscribes or restores an encrypted connection; allow unencrypted reads and notification subscriptions for battery attributes while preserving the existing HID and Vial access requirements.
+- `rmk/src/ble/battery_service.rs`: expose the right battery through one minimal standard Battery Service; retain left battery reporting through a CoreX-specific service UUID so it is separate from the host's standard battery display.
 
 The repository's `tools/git-metadata/git` preserves the installed firmware's RMK commit identifier for storage compatibility. That identifier is a build-metadata compatibility value; this distribution also includes the modifications listed above. Vendored README/test configuration files are retained from the working source snapshot.
 

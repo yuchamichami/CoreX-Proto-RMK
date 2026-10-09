@@ -19,7 +19,13 @@ const CHARACTERISTIC_PRESENTATION_FORMAT_UINT8: u8 = 0x04;
 const CHARACTERISTIC_PRESENTATION_FORMAT_EXPONENT_ZERO: u8 = 0x00;
 const CHARACTERISTIC_PRESENTATION_FORMAT_UNIT_PERCENTAGE: u16 = 0x27AD;
 const CHARACTERISTIC_PRESENTATION_FORMAT_NAMESPACE_BLUETOOTH_SIG: u8 = 0x01;
-const CHARACTERISTIC_PRESENTATION_FORMAT_DESCRIPTION_MAIN: u16 = 0x0106;
+
+// Keep the host-facing BAS unique so macOS displays the right battery.
+// Peripheral values and notifications use this CoreX vendor service:
+// 1dad1811-b1c4-42ae-825e-f45414fe6be4.
+#[cfg(feature = "split")]
+const COREX_PERIPHERAL_BATTERY_SERVICE_UUID: Uuid =
+    Uuid::new_long(0x1dad1811_b1c4_42ae_825e_f45414fe6be4u128.to_le_bytes());
 
 const fn battery_presentation_format(description: u16) -> [u8; 7] {
     let [unit_low, unit_high] = CHARACTERISTIC_PRESENTATION_FORMAT_UNIT_PERCENTAGE.to_le_bytes();
@@ -34,9 +40,6 @@ const fn battery_presentation_format(description: u16) -> [u8; 7] {
         description_high,
     ]
 }
-
-const MAIN_BATTERY_PRESENTATION_FORMAT: [u8; 7] =
-    battery_presentation_format(CHARACTERISTIC_PRESENTATION_FORMAT_DESCRIPTION_MAIN);
 
 fn battery_characteristics<'a>(server: &'a Server<'_>) -> impl Iterator<Item = Characteristic<u8>> + 'a {
     #[cfg(feature = "split")]
@@ -106,21 +109,10 @@ pub(super) async fn notify_current_battery_levels<P: PacketPool>(
     }
 }
 
-/// Battery service
+/// Minimal standard Battery Service: one level and its notification CCCD.
 #[gatt_service(uuid = service::BATTERY)]
 pub(crate) struct BatteryService {
     /// Battery Level
-    #[descriptor(
-        uuid = descriptors::CHARACTERISTIC_PRESENTATION_FORMAT,
-        read,
-        value = MAIN_BATTERY_PRESENTATION_FORMAT
-    )]
-    #[descriptor(
-        uuid = descriptors::CHARACTERISTIC_USER_DESCRIPTION,
-        read,
-        value = crate::CENTRAL_BATTERY_USER_DESCRIPTION
-    )]
-    #[descriptor(uuid = descriptors::VALID_RANGE, read, value = [0, 100])]
     #[characteristic(uuid = characteristic::BATTERY_LEVEL, read, notify)]
     pub(crate) level: u8,
 }
@@ -161,7 +153,7 @@ fn add_peripheral_battery_level<M: embassy_sync::blocking_mutex::raw::RawMutex, 
         write: PermissionLevel::NotAllowed,
         ..Default::default()
     };
-    let mut service = table.add_service(Service::new(service::BATTERY));
+    let mut service = table.add_service(Service::new(COREX_PERIPHERAL_BATTERY_SERVICE_UUID));
     let mut level = service.add_characteristic_small(
         characteristic::BATTERY_LEVEL,
         [CharacteristicProp::Read, CharacteristicProp::Notify],
@@ -183,7 +175,18 @@ fn add_peripheral_battery_level<M: embassy_sync::blocking_mutex::raw::RawMutex, 
 
 #[cfg(feature = "split")]
 fn peripheral_battery_presentation_format(peripheral_id: usize) -> [u8; 7] {
-    let description = u16::try_from(peripheral_id + 1).expect("peripheral id exceeds GATT namespace range");
+    peripheral_battery_presentation_format_for_config(peripheral_id, &crate::SPLIT_BATTERY_PERIPHERAL_IDS)
+}
+
+#[cfg(feature = "split")]
+fn peripheral_battery_presentation_format_for_config(peripheral_id: usize, configured_ids: &[usize]) -> [u8; 7] {
+    // CoreX's single peripheral is the left half. Multiple peripherals retain
+    // unique numbered descriptions.
+    let description = if configured_ids == [peripheral_id] {
+        0x010D // Bluetooth SIG "left"
+    } else {
+        u16::try_from(peripheral_id + 1).expect("peripheral id exceeds GATT namespace range")
+    };
     battery_presentation_format(description)
 }
 
@@ -392,12 +395,12 @@ impl<P: PacketPool> Runnable for BlePeripheralBatteryServer<'_, '_, '_, P> {
 
 #[cfg(test)]
 mod cpf_tests {
-    use super::{CHARACTERISTIC_PRESENTATION_FORMAT_DESCRIPTION_MAIN, battery_presentation_format};
+    use super::battery_presentation_format;
 
     #[test]
     fn battery_presentation_format_uses_assigned_numbers() {
         assert_eq!(
-            battery_presentation_format(CHARACTERISTIC_PRESENTATION_FORMAT_DESCRIPTION_MAIN),
+            battery_presentation_format(0x0106),
             [0x04, 0x00, 0xAD, 0x27, 0x01, 0x06, 0x01]
         );
         assert_eq!(
@@ -432,6 +435,7 @@ mod cache_tests {
         // The generated server owns a one-shot StaticCell, so test the
         // permission boundary against this same real service table.
         super::permission_tests::assert_battery_permission_boundary(&server);
+        super::service_tests::assert_single_minimal_standard_bas(server.server.table(), server.battery_service.level);
         let original = BATTERY_STATUS.lock(|cache| cache.get());
 
         // A connection can begin long after this value was measured.
@@ -504,14 +508,44 @@ mod permission_tests {
     }
 }
 
+#[cfg(test)]
+mod service_tests {
+    use embassy_sync::blocking_mutex::raw::RawMutex;
+    use trouble_host::prelude::{AttributeTable, Characteristic, Uuid};
+
+    pub(super) fn assert_single_minimal_standard_bas<M: RawMutex, const N: usize>(
+        table: &AttributeTable<'_, M, N>,
+        level: Characteristic<u8>,
+    ) {
+        let mut standard_services = 0;
+        for handle in 1..=u16::try_from(table.len()).unwrap() {
+            if table.uuid(handle) == Some(Uuid::new_short(0x2800)) {
+                let mut value = [0u8; 16];
+                let len = table.read(handle, 0, &mut value).unwrap();
+                if value[..len] == [0x0f, 0x18] {
+                    standard_services += 1;
+                    assert_eq!(level.handle, handle + 2);
+                    assert_eq!(level.end_handle, handle + 3);
+                }
+            }
+        }
+        assert_eq!(standard_services, 1, "only the central battery uses standard BAS");
+        assert_eq!(table.uuid(level.handle - 1), Some(Uuid::new_short(0x2803)));
+        assert_eq!(table.uuid(level.handle), Some(Uuid::new_short(0x2a19)));
+        assert_eq!(level.cccd_handle, Some(level.handle + 1));
+        assert_eq!(table.uuid(level.end_handle), Some(Uuid::new_short(0x2902)));
+    }
+}
+
 #[cfg(all(test, feature = "split"))]
 mod tests {
     use embassy_sync::blocking_mutex::raw::{NoopRawMutex, RawMutex};
     use trouble_host::prelude::{AttributeTable, Characteristic, CharacteristicProp, characteristic};
 
     use super::{
-        BatteryService, MAIN_BATTERY_PRESENTATION_FORMAT, add_peripheral_battery_level, find_peripheral_battery_slot,
-        peripheral_battery_presentation_format,
+        BatteryService, COREX_PERIPHERAL_BATTERY_SERVICE_UUID, add_peripheral_battery_level,
+        find_peripheral_battery_slot, peripheral_battery_presentation_format,
+        peripheral_battery_presentation_format_for_config,
     };
 
     fn descriptor_value<M: RawMutex, const N: usize>(
@@ -530,15 +564,17 @@ mod tests {
     }
 
     #[test]
-    fn peripheral_battery_services_use_ids_as_unique_descriptions() {
-        let mut table: AttributeTable<'_, NoopRawMutex, 21> = AttributeTable::new();
+    fn single_standard_bas_keeps_peripheral_values_and_descriptors_available() {
+        let mut table: AttributeTable<'_, NoopRawMutex, 18> = AttributeTable::new();
         let main = BatteryService::new(&mut table);
         let peripherals = [
             add_peripheral_battery_level(&mut table, 0, "Left"),
             add_peripheral_battery_level(&mut table, 2, "Right"),
         ];
 
-        assert_eq!(table.len(), 21);
+        assert_eq!(BatteryService::ATTRIBUTE_COUNT, 4);
+        assert_eq!(table.len(), 18);
+        super::service_tests::assert_single_minimal_standard_bas(&table, main.level);
         assert_eq!(main.level.uuid, characteristic::BATTERY_LEVEL.into());
         assert!(main.level.props.any(&[CharacteristicProp::Read]));
         assert!(main.level.props.any(&[CharacteristicProp::Notify]));
@@ -548,16 +584,16 @@ mod tests {
             assert!(level.props.any(&[CharacteristicProp::Read]));
             assert!(level.props.any(&[CharacteristicProp::Notify]));
             assert!(level.cccd_handle.is_some());
+
+            let mut service_uuid = [0u8; 16];
+            assert_eq!(table.read(level.handle - 2, 0, &mut service_uuid).unwrap(), 16);
+            assert_eq!(service_uuid.as_slice(), COREX_PERIPHERAL_BATTERY_SERVICE_UUID.as_raw());
+            table.set(level, &73).unwrap();
+            let mut value = [0u8; 1];
+            assert_eq!(table.read(level.handle, 0, &mut value).unwrap(), 1);
+            assert_eq!(value, [73], "vendor service keeps the peripheral value readable");
         }
 
-        assert_eq!(
-            descriptor_value(
-                &table,
-                main.level,
-                trouble_host::prelude::descriptors::CHARACTERISTIC_PRESENTATION_FORMAT.into()
-            ),
-            MAIN_BATTERY_PRESENTATION_FORMAT.as_slice()
-        );
         assert_eq!(
             descriptor_value(
                 &table,
@@ -574,20 +610,12 @@ mod tests {
             ),
             [0x04, 0x00, 0xAD, 0x27, 0x01, 0x03, 0x00].as_slice()
         );
-        for level in core::iter::once(&main.level).chain(peripherals.iter()) {
+        for level in &peripherals {
             assert_eq!(
                 descriptor_value(&table, *level, trouble_host::prelude::descriptors::VALID_RANGE.into()),
                 [0, 100].as_slice()
             );
         }
-        assert_eq!(
-            descriptor_value(
-                &table,
-                main.level,
-                trouble_host::prelude::descriptors::CHARACTERISTIC_USER_DESCRIPTION.into()
-            ),
-            crate::CENTRAL_BATTERY_USER_DESCRIPTION.as_bytes()
-        );
         assert_eq!(
             descriptor_value(
                 &table,
@@ -612,6 +640,26 @@ mod tests {
         assert_eq!(
             peripheral_battery_presentation_format(254),
             [0x04, 0x00, 0xAD, 0x27, 0x01, 0xFF, 0x00]
+        );
+    }
+
+    #[test]
+    fn single_left_battery_uses_named_location_without_duplicate_multi_peripheral_descriptions() {
+        assert_eq!(
+            peripheral_battery_presentation_format_for_config(0, &[0]),
+            [0x04, 0x00, 0xAD, 0x27, 0x01, 0x0D, 0x01]
+        );
+        assert_eq!(
+            peripheral_battery_presentation_format_for_config(2, &[2]),
+            [0x04, 0x00, 0xAD, 0x27, 0x01, 0x0D, 0x01]
+        );
+        assert_eq!(
+            peripheral_battery_presentation_format_for_config(0, &[0, 2]),
+            [0x04, 0x00, 0xAD, 0x27, 0x01, 0x01, 0x00]
+        );
+        assert_eq!(
+            peripheral_battery_presentation_format_for_config(2, &[0, 2]),
+            [0x04, 0x00, 0xAD, 0x27, 0x01, 0x03, 0x00]
         );
     }
 
