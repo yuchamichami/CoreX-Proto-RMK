@@ -1,8 +1,8 @@
-# CoreX RMK
+# CoreX Proto RMK
 
 CoreX用のRMKファームウェアです。PAW3222トラックボールを接続した右基板と、純正Cornixの左キーボードを組み合わせて使えます。キー配列とトラックボールの設定はVialで変更できます。
 
-[使い方](docs/usage.md) · [書き込み・更新](docs/flashing.md) · [ダウンロード](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest)
+[使い方](docs/usage.md) · [書き込み・更新](docs/flashing.md) · [ダウンロード](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest)
 
 ## 接続
 
@@ -60,7 +60,7 @@ v0.9.3から、通常のキー、数字・記号のFn配列、エンコーダを
 
 - [右用 v0.9.4 — CoreX・PAW3222](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2)
 - [左用 v0.9.0 — 純正Cornix左](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
-- [説明書・ソースを含むZIP](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest/download/CoreX-firmware-hand-off.zip)
+- [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest/download/CoreX-firmware-hand-off.zip)
 
 右v0.9.4と左v0.9.0を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。**
 
