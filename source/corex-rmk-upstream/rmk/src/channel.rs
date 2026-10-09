@@ -51,6 +51,8 @@ pub(crate) async fn send_hid_report(mut report: Report) {
     let Some((transport, ch)) = active_report_channel() else {
         return;
     };
+    #[cfg(not(feature = "_no_usb"))]
+    let usb_session = (transport == ConnectionType::Usb).then(crate::usb::usb_session);
 
     loop {
         match ch.try_send(report) {
@@ -60,6 +62,12 @@ pub(crate) async fn send_hid_report(mut report: Report) {
 
         poll_fn(|cx| ch.poll_ready_to_send(cx)).await;
         if crate::state::active_transport() != Some(transport) {
+            return;
+        }
+        // A reset/re-enumeration can return to USB before this blocked sender
+        // is polled. A wake timeout also discards its retained old input.
+        #[cfg(not(feature = "_no_usb"))]
+        if usb_session.is_some_and(|session| session != crate::usb::usb_session()) {
             return;
         }
     }
@@ -74,10 +82,14 @@ pub(crate) fn try_send_hid_report(report: Report) {
     }
 }
 
-/// Drains queued reports for `transport` and leaves an all-up keyboard report
-/// for its writer. Called on active-transport flips so the previous host
-/// releases any pressed keys without replaying stale queued reports later.
+/// Drains queued reports for the previous output and schedules releases.
+/// USB also cancels an in-flight report and releases mouse/media/system controls.
 pub(crate) fn clear_and_release_report_channel(transport: ConnectionType) {
+    #[cfg(not(feature = "_no_usb"))]
+    if transport == ConnectionType::Usb {
+        crate::usb::clear_and_release_usb_reports();
+        return;
+    }
     if let Some(ch) = report_channel(transport) {
         ch.clear();
         let _ = ch.try_send(Report::KeyboardReport(KeyboardReport::default()));

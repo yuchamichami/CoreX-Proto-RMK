@@ -16,7 +16,7 @@ use rmk_types::mouse_button::MouseButtons;
 use usbd_hid::descriptor::{MediaKeyboardReport, SystemControlReport};
 
 #[cfg(feature = "_ble")]
-use crate::ble::sleep::report_activity;
+use crate::ble::sleep::report_keyboard_activity;
 use crate::channel::send_hid_report;
 use crate::core_traits::Runnable;
 #[cfg(all(feature = "split", feature = "_ble"))]
@@ -172,6 +172,10 @@ pub struct Keyboard<'a> {
         { crate::KEYBOARD_EVENT_PUB_SIZE },
     >,
 
+    /// Physical switches still down, including Fn and mouse-button bindings.
+    #[cfg(feature = "_ble")]
+    pressed_keys: crate::matrix::MatrixState,
+
     /// Buffered held keys
     pub held_buffer: HeldBuffer,
 
@@ -239,6 +243,11 @@ impl<'a> Keyboard<'a> {
         Keyboard {
             keymap,
             keyboard_event_subscriber: KeyboardEvent::subscriber(),
+            #[cfg(feature = "_ble")]
+            pressed_keys: {
+                let (rows, cols, _) = keymap.get_keymap_config();
+                crate::matrix::MatrixState::new(rows, cols)
+            },
             last_press_time: Instant::now(),
             osl_state: OneShotState::default(),
             osl_deadline: None,
@@ -379,9 +388,12 @@ impl<'a> Keyboard<'a> {
         #[cfg(feature = "host_lock")]
         self.keymap.update_matrix_state(&event);
 
-        // Report activity for sleep management
+        // A long hold is activity even without further press/release events.
         #[cfg(feature = "_ble")]
-        report_activity();
+        {
+            self.pressed_keys.update(&event);
+            report_keyboard_activity(self.pressed_keys.any_pressed());
+        }
 
         // Capture the event time once per event and thread it through.
         let event_time = Instant::now();

@@ -12,7 +12,7 @@ CoreX右基板のPAW3222トラックボールと、純正Cornixの左キーボ�
 
 | 書き込む基板 | ファーム |
 | --- | --- |
-| CoreX右・PAW3222 | [右用 v0.9.6](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.6.uf2) |
+| CoreX右・PAW3222 | [右用 v0.9.7](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.7.uf2) |
 | 純正Cornix左 | [左用 v0.9.0](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2) |
 
 [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest/download/CoreX-firmware-hand-off.zip) · [リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
@@ -34,6 +34,8 @@ Bluetoothでは、PCに **`Cornix TB`** を登録します。右側の電池残�
 - **スクロール：** Iを長押ししながらボールを回します。Iを短く押すと文字のIを入力します。
 
 ボール操作後は、J・K・Lが約0.7秒間クリック用に切り替わります。この自動切り替えをAMLと呼び、VialでON／OFFを選べます。[初期配列と操作の詳細](docs/usage.md#初期配列)
+
+5分間操作しないと、Bluetooth接続を保ったまま省電力の待機に入ります。キーやボールで復帰します。[スリープと復帰](docs/usage.md#スリープと復帰)
 
 ## Vialで調整する
 

@@ -1,3 +1,5 @@
+use core::cell::RefCell;
+
 #[cfg(feature = "subrating")]
 use bt_hci::cmd::le::LeSubrateRequest;
 use bt_hci::cmd::le::{LeReadLocalSupportedFeatures, LeSetPhy, LeSetScanParams};
@@ -6,7 +8,7 @@ use embassy_futures::select::{Either, Either3, select, select3};
 use embassy_sync::blocking_mutex::raw::NoopRawMutex;
 use embassy_sync::channel::Channel;
 use embassy_sync::signal::Signal;
-use embassy_time::{Duration, Timer, with_timeout};
+use embassy_time::{Duration, Instant, Timer, with_timeout};
 use trouble_host::prelude::*;
 
 use super::GattSplitMessage;
@@ -14,7 +16,10 @@ use crate::ble::adv::Adv;
 use crate::ble::scan::{SPLIT_CENTRAL_SCAN_WINDOW, scan_config, start_scan};
 use crate::ble::sleep::report_activity;
 use crate::ble::{update_ble_phy, update_conn_params, wait_for_stack_started};
-use crate::event::{EventSubscriber, SleepStateEvent, SubscribableEvent};
+use crate::event::{
+    EventSubscriber, KeyboardEvent, SleepStateEvent, SubscribableEvent, publish_event_async,
+};
+use crate::matrix::MatrixState;
 use crate::split::ble::PeerAddress;
 use crate::split::driver::{PeripheralManager, SplitDriverError, SplitReader, SplitWriter, set_peripheral_connected};
 use crate::split::{PeripheralMatrixConfig, SPLIT_MESSAGE_MAX_SIZE, SplitMessage};
@@ -23,6 +28,7 @@ use crate::storage::{StorageItem, StorageKey, StorageValue, read, store_unchecke
 static PERIPHERAL_FOUND: Signal<crate::RawMutex, (u8, BdAddr)> = Signal::new();
 
 /// One peripheral link's lifecycle, owned by [`scan_and_connect_peripherals`].
+#[derive(Debug, PartialEq, Eq)]
 enum SlotState {
     /// Unknown address: discover the peripheral by scanning.
     NoAddr,
@@ -31,6 +37,38 @@ enum SlotState {
     /// The link is up and handed to the slot's session task.
     Connected([u8; 6]),
 }
+
+impl SlotState {
+    fn connect_timed_out(&mut self, sleeping: bool) {
+        if !sleeping && matches!(self, Self::Disconnected(_)) {
+            *self = Self::NoAddr;
+        }
+    }
+
+    fn restore_saved_peer(&mut self, peer: &PeerAddress) -> bool {
+        if peer.is_valid && matches!(self, Self::NoAddr) {
+            *self = Self::Disconnected(peer.address);
+            true
+        } else {
+            false
+        }
+    }
+
+    fn adopt_discovered_peer(&mut self, address: [u8; 6], sleeping: bool) -> bool {
+        if !sleeping && matches!(self, Self::NoAddr) {
+            *self = Self::Disconnected(address);
+            true
+        } else {
+            false
+        }
+    }
+}
+
+// A sleeping central must still hear its known half wake and advertise. Two
+// seconds of the usual 30ms/100ms scan, then four seconds without scanning, bounds
+// the retry duty cycle without opening discovery to another keyboard set.
+const SLEEP_RECONNECT_WINDOW: Duration = Duration::from_secs(2);
+const SLEEP_RECONNECT_PAUSE: Duration = Duration::from_secs(4);
 
 // The split service and its two characteristics, declared by `#[gatt_service]`
 // in `split::ble::peripheral` and discovered by UUID here.
@@ -51,13 +89,7 @@ pub(crate) async fn scan_and_connect_peripherals<'a, C: Controller + ControllerC
 ) {
     // Load each peripheral's stored address first.
     let mut peripheral_slots: [SlotState; crate::SPLIT_PERIPHERALS_NUM] = core::array::from_fn(|_| SlotState::NoAddr);
-    for (id, slot) in peripheral_slots.iter_mut().enumerate() {
-        if let Ok(Some(StorageValue::PeerAddress(peer))) = read(StorageKey::PeerAddress(id as u8)).await
-            && peer.is_valid
-        {
-            *slot = SlotState::Disconnected(peer.address);
-        }
-    }
+    restore_saved_peers(&mut peripheral_slots).await;
 
     let mut central = stack.central();
     wait_for_stack_started().await;
@@ -89,8 +121,14 @@ pub(crate) async fn scan_and_connect_peripherals<'a, C: Controller + ControllerC
                     ..scan_config(SPLIT_CENTRAL_SCAN_WINDOW)
                 },
             };
-            info!("Start connecting, {} peripheral(s) pending", pending.len());
-            let connected = match with_timeout(Duration::from_secs(15), central.connect(&config)).await {
+            let started_asleep = crate::state::current_sleep_state();
+            let timeout = if started_asleep {
+                SLEEP_RECONNECT_WINDOW
+            } else {
+                Duration::from_secs(15)
+            };
+            debug!("Start connecting, {} peripheral(s) pending", pending.len());
+            let connected = match with_timeout(timeout, central.connect(&config)).await {
                 Ok(Ok(conn)) => {
                     let peer = conn.peer_address();
                     if let Some(&(id, addr)) = pending.iter().find(|(_, addr)| Address::random(*addr) == peer) {
@@ -111,56 +149,93 @@ pub(crate) async fn scan_and_connect_peripherals<'a, C: Controller + ControllerC
                 }
                 Err(_) => {
                     // None answered.
-                    if crate::state::current_sleep_state() {
-                        warn!("Connect timeout while asleep, keeping {} address(es)", pending.len());
-                    } else {
-                        warn!("Connect timeout, clearing {} address(es)", pending.len());
-                        for &(id, _) in &pending {
-                            peripheral_slots[id] = SlotState::NoAddr;
-                        }
+                    // A wake racing the timeout must not turn a short sleep
+                    // retry into permission to forget the established peer.
+                    let keep_peer = started_asleep || crate::state::current_sleep_state();
+                    for &(id, _) in &pending {
+                        peripheral_slots[id].connect_timed_out(keep_peer);
                     }
+                    debug!("Connect timeout, keeping known addresses: {}", keep_peer);
                     false
                 }
             };
-            // If connecting to the peripheral failed, and the central is sleeping,
-            // don't keep connecting, just wait.
             if !connected {
-                wait_until_wakeup(ended).await;
+                // Bounded pause, not an indefinite local-key wait: the left
+                // half can now rejoin even when nobody touches the right.
+                wait_before_sleep_retry(ended).await;
             }
         } else if peripheral_slots.iter().all(|s| matches!(s, SlotState::Connected(_))) {
             // All peripherals are connected: wait until a session ends.
             ended.ready_to_receive().await;
         } else if crate::state::current_sleep_state() {
-            // There's empty peripheral slot, and the central is sleeping,
-            // don't scanning, just wait.
-            wait_until_wakeup(ended).await;
+            // An awake connect timeout may already have cleared the RAM slot.
+            // Recover its saved address before sleeping, so a left-only wake
+            // still has a known target. Explicitly cleared peers stay absent.
+            if !restore_saved_peers(&mut peripheral_slots).await {
+                wait_until_wakeup(ended).await;
+            }
         } else {
             // Place the `NoAddr` peripherals by scanning for them.
             info!("Start scanning peripherals");
             let session = start_scan(stack, SPLIT_CENTRAL_SCAN_WINDOW, &[]).await;
             let event = with_timeout(
                 Duration::from_secs(30),
-                select(PERIPHERAL_FOUND.wait(), ended.ready_to_receive()),
+                select3(PERIPHERAL_FOUND.wait(), ended.ready_to_receive(), wait_until_sleep()),
             )
             .await;
             // Wait until the controller has confirmed the stop: it refuses an
             // initiator until then.
             session.stop().await;
             info!("Stop scanning");
-            if let Ok(Either::First((id, addr))) = event {
-                // The id comes off the air — bounds-check it. Keep the first
-                // address seen for a slot; an occupied slot is cleared only
-                // when connecting to it times out.
-                match peripheral_slots.get_mut(id as usize) {
-                    Some(slot) if matches!(slot, SlotState::NoAddr) => {
-                        let addr = addr.into_inner();
-                        info!("Scanned new peripheral {:?}", addr);
-                        *slot = SlotState::Disconnected(addr);
-                        store_unchecked(StorageItem::PeerAddress(PeerAddress::new(id, true, addr))).await;
-                    }
-                    _ => {}
+            if let Ok(Either3::First((id, addr))) = event {
+                // A report racing sleep must not replace the saved peer. The
+                // advertised id is untrusted, so still bounds-check the slot.
+                let addr = addr.into_inner();
+                if let Some(slot) = peripheral_slots.get_mut(id as usize)
+                    && slot.adopt_discovered_peer(addr, crate::state::current_sleep_state())
+                {
+                    info!("Scanned new peripheral {:?}", addr);
+                    store_unchecked(StorageItem::PeerAddress(PeerAddress::new(id, true, addr))).await;
                 }
             }
+        }
+    }
+}
+
+async fn restore_saved_peers(slots: &mut [SlotState]) -> bool {
+    let mut restored = false;
+    for (id, slot) in slots.iter_mut().enumerate() {
+        if matches!(slot, SlotState::NoAddr)
+            && let Ok(Some(StorageValue::PeerAddress(peer))) = read(StorageKey::PeerAddress(id as u8)).await
+        {
+            restored |= slot.restore_saved_peer(&peer);
+        }
+    }
+    restored
+}
+
+// Avoid another permanent subscriber: only discovery needs to watch sleep,
+// and its one-second check stops an already-running scan promptly.
+async fn wait_until_sleep() {
+    while !crate::state::current_sleep_state() {
+        Timer::after_secs(1).await;
+    }
+}
+
+async fn wait_before_sleep_retry(
+    ended: &Channel<NoopRawMutex, usize, { crate::SPLIT_PERIPHERALS_NUM }>,
+) {
+    let deadline = Instant::now() + SLEEP_RECONNECT_PAUSE;
+    while crate::state::current_sleep_state() && Instant::now() < deadline {
+        let remaining = deadline.saturating_duration_since(Instant::now());
+        if with_timeout(
+            remaining.min(Duration::from_secs(1)),
+            ended.ready_to_receive(),
+        )
+        .await
+        .is_ok()
+        {
+            break;
         }
     }
 }
@@ -218,18 +293,49 @@ pub(crate) async fn run_peripheral_session<
     loop {
         let conn = conns.receive().await;
         set_peripheral_connected(id, true);
-        if let Err(e) = run_central_manager_task(id, stack, &conn, matrix_config).await {
+        let pressed_keys = RefCell::new(MatrixState::new(
+            matrix_config.rows.into(),
+            matrix_config.cols.into(),
+        ));
+        if let Err(e) =
+            run_central_manager_task(id, stack, &conn, matrix_config, &pressed_keys).await
+        {
             #[cfg(feature = "defmt")]
             let e = defmt::Debug2Format(&e);
             error!("BLE central error: {:?}", e);
         }
         set_peripheral_connected(id, false);
+        release_disconnected_keys(&pressed_keys, matrix_config).await;
         // Dropping the last handle files a disconnect request that the stack
         // runner serves on its own; the pause lets that finish and lets the
         // peripheral advertise again, so the reconnect finds a clean state.
         drop(conn);
         Timer::after_millis(500).await;
         ended.send(id).await;
+    }
+}
+
+// A missing key-up must not leave a modifier, mouse button, or sleep hold
+// latched after a radio drop. Release only this half's recorded down switches.
+async fn release_disconnected_keys(
+    pressed_keys: &RefCell<MatrixState>,
+    matrix: PeripheralMatrixConfig,
+) {
+    for row in 0..matrix.rows {
+        for col in 0..matrix.cols {
+            let pressed = pressed_keys.borrow().read(row, col);
+            if pressed {
+                publish_event_async(KeyboardEvent::key(
+                    row + matrix.row_offset,
+                    col + matrix.col_offset,
+                    false,
+                ))
+                .await;
+                pressed_keys
+                    .borrow_mut()
+                    .update(&KeyboardEvent::key(row, col, false));
+            }
+        }
     }
 }
 
@@ -402,6 +508,7 @@ async fn run_central_manager_task<
     stack: &'b Stack<'s, C, P>,
     conn: &Connection<'b, P>,
     matrix_config: PeripheralMatrixConfig,
+    pressed_keys: &RefCell<MatrixState>,
 ) -> Result<(), BleHostError<C::Error>> {
     let client = GattClient::<C, P, 10>::new(stack, conn).await?;
 
@@ -413,7 +520,7 @@ async fn run_central_manager_task<
 
     let (Either3::First(e) | Either3::Second(e) | Either3::Third(e)) = select3(
         ble_central_task(&client, conn),
-        discover_and_run_manager(id, &client, matrix_config),
+        discover_and_run_manager(id, &client, matrix_config, pressed_keys),
         update_conn_params_on_sleep_change(stack, conn),
     )
     .await;
@@ -447,6 +554,7 @@ async fn discover_and_run_manager<C: Controller + ControllerCmdAsync<LeSetPhy>, 
     id: usize,
     client: &GattClient<'_, C, P, 10>,
     matrix_config: PeripheralMatrixConfig,
+    pressed_keys: &RefCell<MatrixState>,
 ) -> Result<(), BleHostError<C::Error>> {
     let services = client
         .services_by_uuid(&Uuid::new_long(SPLIT_SERVICE_UUID.to_le_bytes()))
@@ -468,6 +576,7 @@ async fn discover_and_run_manager<C: Controller + ControllerCmdAsync<LeSetPhy>, 
         listener,
         message_to_peripheral,
         client,
+        pressed_keys,
     };
     #[cfg(not(feature = "custom_message"))]
     PeripheralManager::new(split_ble_driver, id, matrix_config).run().await;
@@ -546,6 +655,7 @@ struct BleSplitCentralDriver<'a, 'b, 'c, C: Controller + ControllerCmdAsync<LeSe
     listener: NotificationListener<'b, { trouble_host::config::GATT_CLIENT_NOTIFICATION_MTU }>,
     message_to_peripheral: Characteristic<GattSplitMessage>,
     client: &'c GattClient<'a, C, P, 10>,
+    pressed_keys: &'c RefCell<MatrixState>,
 }
 
 impl<'a, 'b, 'c, C: Controller + ControllerCmdAsync<LeSetPhy>, P: PacketPool> SplitReader
@@ -556,6 +666,9 @@ impl<'a, 'b, 'c, C: Controller + ControllerCmdAsync<LeSetPhy>, P: PacketPool> Sp
         let message = postcard::from_bytes(data.as_ref()).map_err(|_| SplitDriverError::DeserializeError)?;
         debug!("Received split message: {:?}", message);
 
+        if let SplitMessage::Key(event) = message {
+            self.pressed_keys.borrow_mut().update(&event);
+        }
         // Key events from the peripheral count as activity for sleep management
         if matches!(message, SplitMessage::Key(_) | SplitMessage::Pointing(_)) {
             report_activity();
@@ -639,5 +752,129 @@ async fn update_conn_params_on_sleep_change<
         }
 
         sleeping = sleep_events.next_event().await.0;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use core::sync::atomic::Ordering;
+
+    use super::*;
+    use crate::ble::sleep::SLEEPING_STATE;
+    use crate::test_support::test_block_on as block_on;
+
+    #[test]
+    fn sleeping_timeout_keeps_the_known_peer_out_of_discovery() {
+        let address = [1, 2, 3, 4, 5, 6];
+        let mut slot = SlotState::Disconnected(address);
+        for _ in 0..3 {
+            slot.connect_timed_out(true);
+            assert_eq!(slot, SlotState::Disconnected(address));
+        }
+        let mut connected = SlotState::Connected(address);
+        connected.connect_timed_out(true);
+        assert_eq!(connected, SlotState::Connected(address));
+    }
+
+    #[test]
+    fn sleep_restores_a_saved_peer_after_an_awake_timeout() {
+        let address = [1, 2, 3, 4, 5, 6];
+        let mut slot = SlotState::Disconnected(address);
+        slot.connect_timed_out(false);
+        assert_eq!(slot, SlotState::NoAddr);
+        assert!(slot.restore_saved_peer(&PeerAddress::new(0, true, address)));
+        assert_eq!(slot, SlotState::Disconnected(address));
+
+        let mut cleared = SlotState::NoAddr;
+        assert!(!cleared.restore_saved_peer(&PeerAddress::new(0, false, address)));
+        assert_eq!(cleared, SlotState::NoAddr, "explicit peer reset must stay reset");
+        assert!(!slot.restore_saved_peer(&PeerAddress::new(0, true, [9; 6])));
+        assert_eq!(slot, SlotState::Disconnected(address));
+    }
+
+    #[test]
+    fn an_advertisement_racing_sleep_cannot_replace_the_saved_peer() {
+        let address = [1, 2, 3, 4, 5, 6];
+        let mut slot = SlotState::NoAddr;
+        assert!(!slot.adopt_discovered_peer([9; 6], true));
+        assert!(slot.restore_saved_peer(&PeerAddress::new(0, true, address)));
+        assert_eq!(slot, SlotState::Disconnected(address));
+        assert!(!slot.adopt_discovered_peer([9; 6], false));
+    }
+
+    #[test]
+    fn sleep_stops_an_already_running_discovery_wait() {
+        block_on(async {
+            SLEEPING_STATE.store(false, Ordering::Release);
+            let started = Instant::now();
+            let sleep = async {
+                Timer::after_millis(100).await;
+                SLEEPING_STATE.store(true, Ordering::Release);
+                core::future::pending::<()>().await;
+            };
+            select(wait_until_sleep(), sleep).await;
+            assert!(started.elapsed() <= Duration::from_millis(1001));
+        });
+    }
+
+    #[test]
+    fn sleeping_reconnect_pause_expires_without_a_right_key() {
+        block_on(async {
+            SLEEPING_STATE.store(true, Ordering::Release);
+            let ended = Channel::new();
+            let started = Instant::now();
+            wait_before_sleep_retry(&ended).await;
+            assert!(started.elapsed() >= SLEEP_RECONNECT_PAUSE);
+            assert!(started.elapsed() < SLEEP_RECONNECT_PAUSE + Duration::from_millis(1));
+            assert!(
+                crate::state::current_sleep_state(),
+                "retrying must not wake the keyboard"
+            );
+        });
+    }
+
+    #[test]
+    fn a_right_key_interrupts_the_reconnect_pause() {
+        block_on(async {
+            SLEEPING_STATE.store(true, Ordering::Release);
+            let ended = Channel::new();
+            let started = Instant::now();
+            let wake = async {
+                Timer::after_millis(100).await;
+                SLEEPING_STATE.store(false, Ordering::Release);
+                core::future::pending::<()>().await;
+            };
+            select(wait_before_sleep_retry(&ended), wake).await;
+            assert!(started.elapsed() <= Duration::from_millis(1001));
+        });
+    }
+
+    #[test]
+    fn disconnect_releases_only_held_keys_from_that_half() {
+        block_on(async {
+            let matrix = PeripheralMatrixConfig {
+                rows: 2,
+                cols: 3,
+                row_offset: 4,
+                col_offset: 6,
+            };
+            let keys = RefCell::new(MatrixState::new(2, 3));
+            keys.borrow_mut().update(&KeyboardEvent::key(0, 1, true));
+            keys.borrow_mut().update(&KeyboardEvent::key(1, 2, true));
+            keys.borrow_mut().update(&KeyboardEvent::key(1, 0, true));
+            keys.borrow_mut().update(&KeyboardEvent::key(1, 0, false));
+            let mut events = KeyboardEvent::subscriber();
+            release_disconnected_keys(&keys, matrix).await;
+            assert_eq!(
+                events.next_message_pure().await,
+                KeyboardEvent::key(4, 7, false)
+            );
+            assert_eq!(
+                events.next_message_pure().await,
+                KeyboardEvent::key(5, 8, false)
+            );
+            assert!(events.try_next_message_pure().is_none());
+            assert!(!keys.borrow().any_pressed());
+        });
     }
 }

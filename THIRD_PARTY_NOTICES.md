@@ -21,6 +21,15 @@ The snapshot includes these CoreX changes to upstream runtime code:
 - `rmk/src/ble/battery_service.rs`: expose the right battery through one minimal standard Battery Service; retain left battery reporting through a CoreX-specific service UUID so it is separate from the host's standard battery display.
 - `rmk/src/usb/mod.rs` and `rmk/src/ble/profile.rs`: exclude security-manager identity payloads before USB log formatting and avoid logging full stored bond records, while retaining connection and sensor diagnostics.
 
+Additional sleep/wake changes in v0.9.7:
+
+- `rmk/src/ble/sleep.rs`, `keyboard.rs`, `matrix.rs`: postpone sleep while physical keys remain held, with sleep/wake regression tests.
+- `rmk/src/split/ble/central.rs`: bounded reconnect attempts to a saved peripheral during sleep, stop unknown-peer discovery during sleep, release that half's held keys on disconnect.
+- `rmk/src/usb/mod.rs`, `channel.rs`: retain the first suspended report, discard stale input across USB sessions and transport changes, bound waits for an unresponsive host, and release HID state after a timeout.
+- `rmk/src/keymap.rs`: signal assignment changes to the CoreX pointing controller without a polling timer.
+- `rmk/src/input_device/pointing.rs`: count sub-pixel movement as activity without sending an empty cursor HID report.
+- Host regression tests and `test_support.rs`: allow the CoreX runner's per-test process isolation alongside upstream's nextest runner.
+
 The repository's `tools/git-metadata/git` preserves the installed firmware's RMK commit identifier for storage compatibility. That identifier is a build-metadata compatibility value; this distribution also includes the modifications listed above. Vendored README/test configuration files are retained from the working source snapshot.
 
 The unused STM32 maintenance utility `rmk-config/src/gen_usb_map.py` also accepts its data directory as a command-line argument instead of a developer's hardcoded local path. This utility is not part of the nRF52840 build.

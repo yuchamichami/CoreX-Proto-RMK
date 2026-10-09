@@ -592,6 +592,9 @@ impl<'a> PointingProcessor<'a> {
                 // modes that generate mouse reports
                 let mouse_report = match self.current_mode {
                     PointingMode::Cursor(cursor_config) => {
+                        // Sub-pixel movement can wake the keyboard without
+                        // producing HID movement. Activity was reported above.
+                        if x == 0 && y == 0 { return; }
                         let out_x = x.saturating_mul(cursor_config.multiplier_x as i16);
                         let out_y = y.saturating_mul(cursor_config.multiplier_y as i16);
                         let out_x = if cursor_config.invert_x { -out_x } else { out_x };
@@ -1496,6 +1499,58 @@ mod tests {
     }
 
     // === Integration tests for PointingProcessor ===
+
+    #[cfg(all(feature = "_ble", not(feature = "_no_usb")))]
+    #[test]
+    fn zero_cursor_motion_wakes_without_hid_and_preserves_first_delta() {
+        use embassy_futures::select::select;
+        use rmk_types::action::KeyAction;
+        use rmk_types::connection::UsbState;
+
+        use crate::channel::USB_REPORT_CHANNEL;
+        use crate::config::{BehaviorConfig, PositionalConfig};
+        use crate::event::{AxisEvent, AxisValType};
+        use crate::keymap::KeymapData;
+
+        crate::test_support::reset_connection_status();
+        crate::state::set_usb_state(UsbState::Configured);
+        USB_REPORT_CHANNEL.clear();
+        let mut data = KeymapData::<1, 1, 1>::new([[[KeyAction::No]]]);
+        let mut behavior = BehaviorConfig::default();
+        let positional = PositionalConfig::<1, 1>::default();
+        let keymap = block_on(KeyMap::new(&mut data, &mut behavior, &positional));
+        let mut processor = PointingProcessor::new(&keymap, PointingProcessorConfig::default());
+        let motion = |x, y| PointingEvent {
+            device_id: 0,
+            axes: [
+                AxisEvent { typ: AxisValType::Rel, axis: Axis::X, value: x },
+                AxisEvent { typ: AxisValType::Rel, axis: Axis::Y, value: y },
+                AxisEvent { typ: AxisValType::Rel, axis: Axis::Z, value: 0 },
+            ],
+        };
+
+        block_on(async {
+            select(
+                crate::ble::sleep::run_sleep_manager_for_test(Duration::from_millis(100)),
+                async {
+                    Timer::after_millis(110).await;
+                    assert!(crate::state::current_sleep_state());
+                    processor.on_pointing_event(motion(0, 0)).await;
+                    Timer::after_millis(1).await;
+                    assert!(!crate::state::current_sleep_state(), "sub-pixel activity must wake sleep");
+                    assert!(USB_REPORT_CHANNEL.try_receive().is_err(), "zero movement must not send HID");
+
+                    processor.on_pointing_event(motion(1, -1)).await;
+                    let Report::MouseReport(report) = USB_REPORT_CHANNEL.try_receive().unwrap() else {
+                        panic!("expected the first cursor report");
+                    };
+                    assert_eq!((report.x, report.y), (1, -1));
+                    assert_eq!((report.buttons, report.wheel, report.pan), (0, 0, 0));
+                    assert!(USB_REPORT_CHANNEL.try_receive().is_err(), "first delta must be sent once");
+                },
+            ).await;
+        });
+    }
 
     #[test]
     fn test_pointing_processor_mode_selection() {

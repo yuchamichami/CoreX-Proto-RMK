@@ -72,7 +72,8 @@ pub fn test_block_on<F: Future>(fut: F) -> F::Output {
 // virtual-time kill switch above. Fail the first mock-clock test with a pointer
 // to the right runner instead of making the user wait for that timeout.
 fn require_nextest() {
-    if std::env::var_os("NEXTEST").is_none() {
+    // CoreX's small runner also launches exactly one test per fresh process.
+    if std::env::var_os("NEXTEST").is_none() && std::env::var_os("RMK_TEST_PROCESS_ISOLATED").is_none() {
         panic!(
             "\nrmk tests must run under cargo-nextest (embassy-time's MockDriver \
              is a process-global singleton and needs per-test process isolation).\n\

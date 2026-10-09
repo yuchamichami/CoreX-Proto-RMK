@@ -1,10 +1,13 @@
-use crate::paw_wire::{PawWire, Scale, Wire};
+use crate::paw_wire::{PawWire, Wire};
+use crate::paw3222_schedule::{MotionSchedule, Wait};
 use embassy_nrf::gpio::{Flex, Input, Output, OutputDrive, Pull};
-use embassy_time::{Instant, Timer};
+use embassy_time::{Duration, Instant, Timer};
+use rmk::embassy_futures::select::{Either, select};
 use rmk::event::{
-    Axis, AxisEvent, AxisValType, LayerChangeEvent, PointingEvent, SleepStateEvent, publish_event,
+    Axis, AxisEvent, AxisValType, EventSubscriber, PointingEvent, SleepStateEvent, publish_event,
 };
 use rmk::macros::processor;
+use rmk::processor::{PollingProcessor, Processor};
 
 pub struct GpioWire {
     pub sck: Output<'static>,
@@ -40,10 +43,9 @@ impl Wire for GpioWire {
     }
 }
 
-#[processor(subscribe = [SleepStateEvent, LayerChangeEvent], poll_interval = 15)]
+#[processor(subscribe = [SleepStateEvent])]
 pub struct Paw3222<'a> {
     keymap: &'a rmk::keymap::KeyMap<'a>,
-    tuning: crate::tuning::Tuning,
     bus: PawWire<GpioWire>,
     motion: Input<'static>,
     _aux: Output<'static>,
@@ -54,10 +56,9 @@ pub struct Paw3222<'a> {
     ready: bool,
     retry_at: Instant,
     attempts: u8,
-    scale: Scale,
-    scrolling: bool,
     polls: u32,
-    last_check: Instant,
+    sleeping: bool,
+    schedule: MotionSchedule,
 }
 impl<'a> Paw3222<'a> {
     pub fn new(
@@ -72,7 +73,6 @@ impl<'a> Paw3222<'a> {
     ) -> Self {
         Self {
             keymap,
-            tuning: crate::tuning::Tuning::default(),
             bus: PawWire(bus),
             motion,
             _aux: aux,
@@ -83,30 +83,22 @@ impl<'a> Paw3222<'a> {
             ready: false,
             retry_at: Instant::now() + embassy_time::Duration::from_millis(500),
             attempts: 0,
-            scale: Scale::default(),
-            scrolling: false,
             polls: 0,
-            last_check: Instant::MIN,
+            sleeping: false,
+            schedule: MotionSchedule::new(embassy_time::TICK_HZ),
         }
     }
-    async fn on_layer_change_event(&mut self, e: LayerChangeEvent) {
-        let scroll = e.0 == 3;
-        if scroll != self.scrolling {
-            self.scale.reset();
-            self.scrolling = scroll;
-        }
-    }
-    async fn on_sleep_state_event(&mut self, _: SleepStateEvent) {
-        // Sensor's own sleep1/2 settings are retained, as in the verified ZMK build.
-        // No shared 3V3 power switching is performed.
+    async fn on_sleep_state_event(&mut self, event: SleepStateEvent) {
+        self.sleeping = event.0;
+        // Keep rest modes, power and motion detection alive. With NCS tied LOW,
+        // forcing power-down can strand the sensor until its supply is cut.
+        // A normal wake must NOT reset the sensor or drain its first movement.
+        log::info!(
+            "PAW3222 {}: motion IRQ armed, sensor power retained",
+            if event.0 { "idle" } else { "awake" }
+        );
     }
     async fn poll(&mut self) {
-        let tuning = crate::tuning::read(self.keymap);
-        if tuning != self.tuning {
-            self.scale.reset();
-            self.tuning = tuning;
-            log::info!("PAW tuning cursor={}/5 scroll=1/{} (both axes)",tuning.cursor,tuning.scroll);
-        }
         if !self.ready {
             if Instant::now() < self.retry_at {
                 return;
@@ -141,18 +133,14 @@ impl<'a> Paw3222<'a> {
                 return;
             }
             self.ready = true;
-            log::info!("CoreX RMK PAW3222 J4 ready: ID=30, 15ms poll, SDIO released for reads");
+            self.schedule.on_ready(Instant::now().as_ticks());
+            log::info!("CoreX RMK PAW3222 J4 ready: ID=30, motion IRQ, 15ms active interval");
             return;
         }
-        // Level check avoids a lost falling edge; sparse fallback also checks a stuck HIGH IRQ.
-        if self.motion.is_high() && self.last_check.elapsed().as_millis() < 500 {
-            return;
-        }
-        self.last_check = Instant::now();
+        self.schedule.on_sample(Instant::now().as_ticks());
         let status = self.bus.read(0x02);
         if status == 0xff && self.bus.read(0x00) != 0x30 {
             self.ready = false;
-            self.scale.reset();
             self.attempts = 0;
             self.retry_at = Instant::now() + embassy_time::Duration::from_millis(100);
             log::warn!("PAW3222 lost valid ID; motion suppressed until reinitialization");
@@ -166,26 +154,24 @@ impl<'a> Paw3222<'a> {
         if dx == 0 && dy == 0 {
             return;
         }
-        let (x, y) = if self.scrolling {
-            (dx, dy)
-        } else {
-            self.scale.cursor_with_gain(dx, dy, self.tuning.cursor, self.tuning.cursor)
-        };
-        if x == 0 && y == 0 {
-            return;
-        }
+        // Publish raw counts. The output controller selects the mode and
+        // applies gain once, so a queued layer change cannot reinterpret
+        // already-scaled cursor data as scrolling (or the reverse).
+        // Apply Vial's persisted AML setting before any motion subscriber sees
+        // this sample. No 50ms settings timer is needed while the ball is idle.
+        rmk::set_auto_mouse_layer_enabled(crate::tuning::aml_enabled(self.keymap));
         publish_event(PointingEvent {
             device_id: 0,
             axes: [
                 AxisEvent {
                     typ: AxisValType::Rel,
                     axis: Axis::X,
-                    value: x,
+                    value: dx,
                 },
                 AxisEvent {
                     typ: AxisValType::Rel,
                     axis: Axis::Y,
-                    value: y,
+                    value: dy,
                 },
                 AxisEvent {
                     typ: AxisValType::Rel,
@@ -198,6 +184,58 @@ impl<'a> Paw3222<'a> {
         // Sparse summary: no per-frame logging on the input hot path.
         if self.polls % 128 == 1 {
             log::info!("PAW3222 motion reports={}, last raw={dx},{dy}", self.polls);
+        }
+    }
+}
+
+impl PollingProcessor for Paw3222<'_> {
+    fn interval(&self) -> Duration {
+        Duration::from_millis(15)
+    }
+
+    async fn update(&mut self) {
+        self.poll().await;
+    }
+
+    // register_processor(poll) calls this override. There is no fixed ticker:
+    // idle is a GPIO level wait with a sparse communication-health deadline.
+    async fn polling_loop(&mut self) -> ! {
+        let mut events = Self::subscriber();
+        loop {
+            if !self.ready {
+                match select(events.next_event(), Timer::at(self.retry_at)).await {
+                    Either::First(event) => self.process(event).await,
+                    Either::Second(_) => self.poll().await,
+                }
+                continue;
+            }
+            let pending = self.schedule.wait(
+                Instant::now().as_ticks(),
+                self.sleeping,
+                self.motion.is_low(),
+            );
+            let wait = async {
+                match pending {
+                    Wait::Until(deadline) => {
+                        Timer::at(Instant::from_ticks(deadline)).await;
+                        false // Recheck IRQ after pacing; no need to read if HIGH.
+                    }
+                    Wait::MotionOrHealth { deadline } => {
+                        let _ = select(
+                            self.motion.wait_for_low(),
+                            Timer::at(Instant::from_ticks(deadline)),
+                        )
+                        .await;
+                        true
+                    }
+                    Wait::Read => true,
+                }
+            };
+            match select(events.next_event(), wait).await {
+                Either::First(event) => self.process(event).await,
+                Either::Second(true) => self.poll().await,
+                Either::Second(false) => {}
+            }
         }
     }
 }

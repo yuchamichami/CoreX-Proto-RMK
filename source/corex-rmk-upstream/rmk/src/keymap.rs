@@ -20,6 +20,15 @@ use crate::matrix::MatrixState;
 
 pub(crate) const HOLD_BUFFER_SIZE: usize = 16;
 
+// One consumer can refresh accessory settings after host remapping without
+// periodically inspecting the keymap. Notifications coalesce during bulk edits.
+static KEYMAP_CHANGED: embassy_sync::signal::Signal<crate::RawMutex, ()> = embassy_sync::signal::Signal::new();
+
+/// Wait for host changes to key assignments (single accessory consumer).
+pub async fn wait_for_keymap_change() {
+    KEYMAP_CHANGED.wait().await;
+}
+
 /// All allocated data needed to build a [`KeyMap`].
 pub struct KeymapData<const ROW: usize, const COL: usize, const NUM_LAYER: usize, const NUM_ENCODER: usize = 0> {
     /// Per-layer key actions
@@ -489,6 +498,7 @@ impl<'a> KeyMap<'a> {
 
     pub(crate) fn set_action_at(&self, pos: KeyboardEventPos, layer: usize, action: KeyAction) {
         self.inner.borrow_mut().set_action_at(pos, layer, action);
+        KEYMAP_CHANGED.signal(());
     }
 
     pub(crate) fn activate_layer(&self, layer_num: u8) {
@@ -861,6 +871,62 @@ mod test {
         fill_vec(&mut forks);
 
         assert_eq!(forks.len(), FORK_MAX_NUM);
+    }
+
+    #[test]
+    fn key_assignment_change_notifies_a_waiting_consumer() {
+        use embassy_futures::join::join;
+        use embassy_time::Timer;
+
+        use super::{KEYMAP_CHANGED, KeyMap, KeymapData, wait_for_keymap_change};
+        use crate::config::{BehaviorConfig, PositionalConfig};
+        use crate::event::KeyboardEventPos;
+        use crate::test_support::test_block_on as block_on;
+
+        KEYMAP_CHANGED.reset();
+        let mut data = KeymapData::<1, 1, 1>::new([[[k!(A)]]]);
+        let mut behavior = BehaviorConfig::default();
+        let positional = PositionalConfig::<1, 1>::default();
+        let keymap = KeyMap::build(&mut data, &mut behavior, &positional);
+        let position = KeyboardEventPos::key_pos(0, 0);
+
+        block_on(join(wait_for_keymap_change(), async {
+            Timer::after_millis(1).await;
+            keymap.set_action_at(position, 0, k!(B));
+        }));
+        assert_eq!(keymap.get_action_at(position, 0), k!(B));
+    }
+
+    #[test]
+    fn bulk_key_assignment_changes_coalesce_and_keep_latest_values() {
+        use embassy_futures::select::{Either, select};
+        use embassy_time::Timer;
+
+        use super::{KEYMAP_CHANGED, KeyMap, KeymapData, wait_for_keymap_change};
+        use crate::config::{BehaviorConfig, PositionalConfig};
+        use crate::event::KeyboardEventPos;
+        use crate::test_support::test_block_on as block_on;
+
+        KEYMAP_CHANGED.reset();
+        let mut data = KeymapData::<1, 2, 1>::new([[[k!(A), k!(B)]]]);
+        let mut behavior = BehaviorConfig::default();
+        let positional = PositionalConfig::<1, 2>::default();
+        let keymap = KeyMap::build(&mut data, &mut behavior, &positional);
+        let first = KeyboardEventPos::key_pos(0, 0);
+        let second = KeyboardEventPos::key_pos(1, 0);
+        keymap.set_action_at(first, 0, k!(C));
+        keymap.set_action_at(second, 0, k!(D));
+        keymap.set_action_at(first, 0, k!(E));
+
+        block_on(async {
+            wait_for_keymap_change().await;
+            assert_eq!(keymap.get_action_at(first, 0), k!(E));
+            assert_eq!(keymap.get_action_at(second, 0), k!(D));
+            assert!(matches!(
+                select(wait_for_keymap_change(), Timer::after_millis(1)).await,
+                Either::Second(())
+            ), "bulk edits must leave only one pending notification");
+        });
     }
 
     #[test]

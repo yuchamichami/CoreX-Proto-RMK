@@ -1,5 +1,8 @@
+use core::cell::Cell;
+
 use embassy_futures::join::join5;
 use embassy_futures::select::{Either, select};
+use embassy_sync::blocking_mutex::Mutex;
 use embassy_sync::signal::Signal;
 #[cfg(feature = "usb_log")]
 use embassy_usb::class::cdc_acm::CdcAcmClass;
@@ -45,6 +48,167 @@ use vial as host_usb;
 
 pub(crate) static USB_REMOTE_WAKEUP: Signal<RawMutex, ()> = Signal::new();
 
+// One consumer: the HID writer. Keep a generation as well as a signal, since
+// disconnect + re-enumeration can finish before the writer is polled again.
+static USB_WRITER_EVENT: Signal<RawMutex, ()> = Signal::new();
+static USB_SESSION: Mutex<RawMutex, Cell<u32>> = Mutex::new(Cell::new(0));
+static USB_RELEASE_PENDING: Mutex<RawMutex, Cell<bool>> = Mutex::new(Cell::new(false));
+
+pub(crate) fn usb_session() -> u32 {
+    USB_SESSION.lock(Cell::get)
+}
+
+fn discard_usb_input() -> u32 {
+    let session = USB_SESSION.lock(|generation| {
+        let next = generation.get().wrapping_add(1);
+        generation.set(next);
+        next
+    });
+    // Invalidate both queued reports and producers waiting for queue space.
+    USB_REPORT_CHANNEL.clear();
+    USB_REMOTE_WAKEUP.reset();
+    USB_RELEASE_PENDING.lock(|pending| pending.set(false));
+    session
+}
+
+/// Stop input retained for the old USB output, but still release its held
+/// controls when that host resumes. One marker suffices even for a small queue.
+pub(crate) fn clear_and_release_usb_reports() {
+    discard_usb_input();
+    USB_RELEASE_PENDING.lock(|pending| pending.set(true));
+    let _ = USB_REPORT_CHANNEL.try_send(Report::KeyboardReport(KeyboardReport::default()));
+    USB_WRITER_EVENT.signal(());
+}
+
+fn update_usb_writer_state(state: UsbState, new_session: bool) {
+    if new_session {
+        discard_usb_input();
+    }
+    set_usb_state(state);
+    USB_WRITER_EVENT.signal(());
+}
+
+// A host may disallow remote wakeup or never service an IN endpoint. Bound the
+// retained input, then drain it until resume so a full queue cannot stall input
+// processing or a later switch to BLE. This is a deadline, not periodic polling.
+const USB_REPORT_WAIT: embassy_time::Duration = embassy_time::Duration::from_secs(5);
+
+#[derive(Debug, PartialEq)]
+enum UsbWriteResult {
+    Sent,
+    SessionEnded,
+    TimedOut,
+    Failed(HidError),
+}
+
+async fn write_usb_report<W: HidWriterTrait<ReportType = Report>>(
+    writer: &mut W,
+    report: &Report,
+    session: u32,
+) -> UsbWriteResult {
+    let send = async {
+        loop {
+            if usb_session() != session {
+                return UsbWriteResult::SessionEnded;
+            }
+            match current_usb_state() {
+                UsbState::Suspended => {
+                    USB_REMOTE_WAKEUP.signal(());
+                    USB_WRITER_EVENT.wait().await;
+                }
+                UsbState::Configured => {
+                    // State notifications take priority over endpoint readiness:
+                    // never replay a retained report across reset/re-enumeration.
+                    match select(USB_WRITER_EVENT.wait(), writer.write_report(report)).await {
+                        Either::First(()) => continue,
+                        Either::Second(Ok(_)) => return UsbWriteResult::Sent,
+                        Either::Second(Err(HidError::UsbEndpointError(EndpointError::Disabled))) => {
+                            // Some controllers disable IN before the suspend
+                            // callback. Wait for the USB event, not a fixed delay.
+                            USB_REMOTE_WAKEUP.signal(());
+                            USB_WRITER_EVENT.wait().await;
+                        }
+                        Either::Second(Err(e)) => return UsbWriteResult::Failed(e),
+                    }
+                }
+                _ => return UsbWriteResult::SessionEnded,
+            }
+        }
+    };
+    embassy_time::with_timeout(USB_REPORT_WAIT, send)
+        .await
+        .unwrap_or(UsbWriteResult::TimedOut)
+}
+
+/// After an unsuccessful wake, discard input while the bus remains suspended.
+/// Do not leave producers blocked behind a full queue for an unresponsive PC.
+async fn discard_until_usb_ready(session: u32) -> bool {
+    loop {
+        if usb_session() != session {
+            return false;
+        }
+        match current_usb_state() {
+            UsbState::Configured => return true,
+            UsbState::Suspended => {
+                if let Either::Second(_) = select(USB_WRITER_EVENT.wait(), USB_REPORT_CHANNEL.receive()).await {
+                    USB_REMOTE_WAKEUP.signal(());
+                }
+            }
+            _ => return false,
+        }
+    }
+}
+
+async fn release_usb_controls<W: HidWriterTrait<ReportType = Report>>(writer: &mut W, session: u32) -> UsbWriteResult {
+    let releases = [
+        Report::KeyboardReport(KeyboardReport::default()),
+        Report::MouseReport(crate::hid::MouseReport::default()),
+        Report::MediaKeyboardReport(usbd_hid::descriptor::MediaKeyboardReport { usage_id: 0 }),
+        Report::SystemControlReport(usbd_hid::descriptor::SystemControlReport { usage_id: 0 }),
+    ];
+    for release in releases {
+        let result = write_usb_report(writer, &release, session).await;
+        if result != UsbWriteResult::Sent {
+            return result;
+        }
+    }
+    UsbWriteResult::Sent
+}
+
+async fn run_usb_writer<W: HidWriterTrait<ReportType = Report>>(writer: &mut W) -> ! {
+    loop {
+        let report = USB_REPORT_CHANNEL.receive().await;
+        let session = usb_session();
+        let release_pending = USB_RELEASE_PENDING.lock(|pending| pending.replace(false));
+        let result = if release_pending {
+            release_usb_controls(writer, session).await
+        } else {
+            write_usb_report(writer, &report, session).await
+        };
+        match result {
+            UsbWriteResult::Sent | UsbWriteResult::SessionEnded => {}
+            UsbWriteResult::Failed(e) => error!("Failed to send report: {:?}", e),
+            UsbWriteResult::TimedOut => {
+                warn!("USB host did not resume or read input; discarding queued reports");
+                // A disconnect may have raced the deadline. Its callback has
+                // already cleared the old queue; do not clear a new session's.
+                if usb_session() != session {
+                    continue;
+                }
+                let session = discard_usb_input();
+                if discard_until_usb_ready(session).await {
+                    // A release may have been among the discarded reports.
+                    // Release every held HID control before accepting new input.
+                    let _ = release_usb_controls(writer, session).await;
+                }
+            }
+        }
+    }
+}
+
+#[cfg(test)]
+mod wake_tests;
+
 /// Serves one framed session over the USB byte stream: the keyboard's Vial or
 /// Rynk service, the dongle's router, or `()` in a build that serves none.
 /// Which one is a type parameter of [`UsbTransport`], so only the attached one
@@ -73,32 +237,7 @@ pub(crate) struct UsbKeyboardWriter<'a, 'd, D: Driver<'d>> {
 
 impl<'d, D: Driver<'d>> UsbKeyboardWriter<'_, 'd, D> {
     pub(crate) async fn run_writer(&mut self) -> ! {
-        loop {
-            let report = USB_REPORT_CHANNEL.receive().await;
-
-            // EndpointError::Disabled never fires on non-OTG STM32/GD32
-            // peripherals during suspend, so signal wakeup proactively when a
-            // USB report is pending and the bus is suspended.
-            if current_usb_state() == UsbState::Suspended {
-                USB_REMOTE_WAKEUP.signal(());
-                continue;
-            }
-
-            if let Err(e) = self.write_report(&report).await {
-                error!("Failed to send report: {:?}", e);
-
-                // Belt-and-braces for OTG peripherals where Disabled is the
-                // correct suspend indicator: signal wakeup, give the host a
-                // moment, then retry the same report once.
-                if let HidError::UsbEndpointError(EndpointError::Disabled) = e {
-                    USB_REMOTE_WAKEUP.signal(());
-                    embassy_time::Timer::after_millis(500).await;
-                    if let Err(e) = self.write_report(&report).await {
-                        error!("Failed to send report after wakeup: {:?}", e);
-                    }
-                }
-            }
-        }
+        run_usb_writer(self).await
     }
 
     async fn write_composite<R: AsInputReport>(
@@ -753,15 +892,16 @@ impl Handler for UsbDeviceHandler {
     fn enabled(&mut self, enabled: bool) {
         if enabled {
             info!("Device enabled");
-            set_usb_state(UsbState::Enabled);
+            update_usb_writer_state(UsbState::Enabled, true);
         } else {
             info!("Device disabled");
-            set_usb_state(UsbState::Disabled);
+            update_usb_writer_state(UsbState::Disabled, true);
         }
     }
 
     fn reset(&mut self) {
         info!("Bus reset, the Vbus current limit is 100mA");
+        update_usb_writer_state(UsbState::Enabled, true);
     }
 
     fn addressed(&mut self, addr: u8) {
@@ -770,10 +910,10 @@ impl Handler for UsbDeviceHandler {
 
     fn configured(&mut self, configured: bool) {
         if configured {
-            set_usb_state(UsbState::Configured);
+            update_usb_writer_state(UsbState::Configured, true);
             info!("Device configured, it may now draw up to the configured current from Vbus.")
         } else {
-            set_usb_state(UsbState::Enabled);
+            update_usb_writer_state(UsbState::Enabled, true);
             info!("Device is no longer configured, the Vbus current limit is 100mA.");
         }
     }
@@ -792,7 +932,7 @@ impl Handler for UsbDeviceHandler {
             let live = current_usb_state();
             if live == UsbState::Configured {
                 self.pre_suspend = live;
-                set_usb_state(UsbState::Suspended);
+                update_usb_writer_state(UsbState::Suspended, false);
                 info!(
                     "Device suspended, the Vbus current limit is 500µA (or 2.5mA for high-power devices with remote wakeup enabled)."
                 );
@@ -803,7 +943,7 @@ impl Handler for UsbDeviceHandler {
             // Only restore from Suspended; if we're somehow not in Suspended (out-of-order
             // callbacks), don't overwrite — `configured()`/`enabled()` will resync.
             if current_usb_state() == UsbState::Suspended {
-                set_usb_state(self.pre_suspend);
+                update_usb_writer_state(self.pre_suspend, false);
             }
             info!(
                 "Device resumed, the Vbus current limit is 500µA (or 2.5mA for high-power devices with remote wakeup enabled)."

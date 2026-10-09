@@ -5,6 +5,9 @@ vendor_id = 0x4c4b
 product_id = 0x4643
 manufacturer = "CoreX"
 chip = "nrf52840"
+[rmk]
+# CoreX default; Cornix documents the behavior, not its exact idle duration.
+split_central_sleep_timeout_seconds = 300
 [layout]
 rows = 8
 cols = 7

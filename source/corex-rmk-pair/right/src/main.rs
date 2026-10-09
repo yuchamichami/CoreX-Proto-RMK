@@ -1,6 +1,7 @@
 #![no_std]
 #![no_main]
 mod paw3222;
+mod paw3222_schedule;
 mod paw_wire;
 mod pointing_mode;
 mod tuning;
@@ -28,16 +29,6 @@ mod keyboard {
             Output::new(p.P1_09, Level::Low, OutputDrive::Standard),
             battery_enable,
             Input::new(p.P0_21, Pull::Up),
-        )
-    }
-    #[register_processor(event)]
-    fn motion_output() -> rmk::input_device::pointing::PointingProcessor<'static> {
-        rmk::input_device::pointing::PointingProcessor::new(
-            &keymap,
-            rmk::input_device::pointing::PointingProcessorConfig {
-                device_id: 0,
-                ..Default::default()
-            },
         )
     }
     #[register_processor(poll)]
