@@ -2,12 +2,10 @@
 
 ## 1. ファームをダウンロードする
 
-- **[右用ファーム — v0.10.2](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.2/CoreX-Right-v0.10.2.uf2)**：CoreX右・PAW3222用
+- **[右用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Right-v0.10.1.uf2)**：CoreX右・PAW3222用
 - **[左用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Left-v0.10.1.uf2)**：純正Cornix左用
 
-**右v0.10.2と左v0.10.1を組み合わせます。v0.10.1からの更新は右だけです。** 右用はCoreX基板専用です。
-
-v0.10.2は、ボール操作中の読み取り間隔を15msから8msにした版です。USBでの動作を確認しています。電池持ちは未測定です。[確認済みの範囲](docs/validation.md#v0102) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.2/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+右用はCoreX基板専用です。純正Cornix右には使えません。
 
 **これから基板を交換する場合は、[組み立てガイド](docs/assembly.md)から進めてください。** ケースを閉じる前に、右の書き込みとトラックボールの動作を確認します。
 
@@ -17,15 +15,13 @@ v0.10.2は、ボール操作中の読み取り間隔を15msから8msにした版
 
 以下は、RESETを素早く2回押すとUSBドライブが出る基板向けの手順です。未書き込みのマイコンへの初回導入は含みません。
 
-左にv0.10.1が入っている場合は、手順3の右だけを書き換えます。
+すでにv0.10.1が入っている側は、書き換え不要です。旧版からの移行は[更新手順](docs/flashing.md#corex-を更新する)を参照してください。
 
 1. **左だけ**をデータ通信できるUSBケーブルでPCにつなぎ、RESETを素早く2回押します。
 2. 表示されたUSBドライブに **`CoreX-Left-v0.10.1.uf2`** をコピーします。自動で再起動してドライブが消えたら、左のUSBを抜きます。
-3. **右だけ**をPCにつなぎ、RESETを素早く2回押します。表示されたUSBドライブに **`CoreX-Right-v0.10.2.uf2`** をコピーし、右のUSBはそのままつないでおきます。
+3. **右だけ**をPCにつなぎ、RESETを素早く2回押します。表示されたUSBドライブに **`CoreX-Right-v0.10.1.uf2`** をコピーし、右のUSBはそのままつないでおきます。
 
 ドライブ名は `NO NAME`、`NRF52BOOT` など個体によって異なります。左右のファイルを取り違えないでください。[書き込みの詳細・旧版からの更新](docs/flashing.md)
-
-v0.9.2以前からの更新では、続けて[配列移行](docs/flashing.md#v092以前からの配列移行)も行います。
 
 ## 3. 左右をペアリングする
 
@@ -79,7 +75,7 @@ v0.9.2以前からの更新では、続けて[配列移行](docs/flashing.md#v09
 
 PCにつなぐのはCoreX右で、左側にもこのリポジトリのファームが必要です。通常キーと数字・記号のFn配列は純正を基にしています。CoreX右と純正Cornix右のファームは互換性がありません。
 
-対象は右のJ4に接続したPAW3222です。トラックポイントとタッチパッドには対応していません。純正の無線ドングルとの接続や電池持ちは未確認です。[検証状況](docs/validation.md)
+対象は右のJ4に接続したPAW3222です。トラックポイントとタッチパッドには対応していません。PCには右のUSBまたはBluetoothで接続します。純正の無線ドングルとの接続は未確認です。
 
 ## 困ったとき
 
@@ -90,8 +86,8 @@ PCにつなぐのはCoreX右で、左側にもこのリポジトリのファー�
 - [純正Cornix左のファームへ戻す](docs/flashing.md#純正-cornix-左へ戻す)
 - [不具合を報告する](docs/usage.md#解決しない場合)
 
-## 開発・資料
+## 資料
 
-[ビルド手順](BUILDING.md) · [変更履歴](CHANGELOG.md) · [ライセンスと使用ライブラリ](THIRD_PARTY_NOTICES.md)
+[開発資料](docs/development.md) · [ライセンスと使用ライブラリ](THIRD_PARTY_NOTICES.md)
 
 [RMK](https://github.com/rmk-rs/rmk)をベースにしています。Cornixメーカーの公式ファームウェアではありません。
