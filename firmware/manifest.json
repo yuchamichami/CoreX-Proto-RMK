@@ -10,7 +10,7 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Right v0.9.4 name change build; storage schema and unchanged keymap verification. Hardware verification pending. Left v0.9.0 unchanged.",
+  "validation_scope": "Right v0.9.4 flashed and USB product/manufacturer plus Vial name read back. All 392 keycodes, 28 encoder assignments and full native Vial settings preserved. Build, 20 tests, UF2 and storage-schema checks passed. BLE advertised name over the air, reconnection and physical input remain untested on v0.9.4. Left v0.9.0 unchanged.",
   "images": [
     {
       "side": "right",
