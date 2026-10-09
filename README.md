@@ -9,6 +9,8 @@
 
 v0.10.1はBLE送信出力を上げた版です。USBを抜いた状態で、左右のキー入力とトラックボールの動作を確認しています。[確認済みの範囲](docs/validation.md#v0101) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 
+**これから基板を交換する場合は、[組み立てガイド](docs/assembly.md)から進めてください。** ケースを閉じる前に、右の書き込みとトラックボールの動作を確認します。
+
 ## 2. 左右に書き込む
 
 書き換える前に、[Vial](https://get.vial.today/)の **File → Save current layout** で今の配列を保存します。CoreXを更新する場合は右を、純正Cornix左を初めて書き換える場合は純正左をUSB接続して保存してください。
