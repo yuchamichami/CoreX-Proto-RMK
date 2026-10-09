@@ -25,7 +25,7 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 リポジトリのルートで実行します。
 
 ```sh
-./build.sh right  # CoreX 右・PAW3222、v0.9.4
+./build.sh right  # CoreX 右・PAW3222、v0.9.5
 ./build.sh left   # 純正 Cornix 左・peripheral、v0.9.0
 ./build.sh both   # 両方。引数省略時も両方
 ```
@@ -37,7 +37,16 @@ python3 tools/verify_release.py --rebuilt  # 同梱 UF2 と再ビルドした UF
 ./tools/test.sh              # 通信・微小移動・設定11件と、初期配列9件のホストテスト
 ```
 
-このコマンドは同梱 UF2 の SHA-256 と、再ビルドした UF2 のターゲット・アプリ領域・ベクタテーブル・ローカルパスの混入を検査します。Cargo メタデータがあれば設定スキーマも検査します。キャッシュを外部に置いた場合は `--target-dir <CARGO_TARGET_DIRの場所>` を指定できます。`--rebuilt` を省くと同梱 UF2 だけを検査します。
+BLEの残量反映は、別のホストテスト5件で確認します。`--target` は実行環境のホストターゲットに合わせて変更してください。
+
+```sh
+rustup run 1.95.0 cargo test \
+  --manifest-path source/corex-rmk-upstream/rmk/Cargo.toml \
+  --no-default-features --features std,log,_ble,split,vial \
+  --lib ble::battery_service --target x86_64-apple-darwin
+```
+
+`verify_release.py` は同梱 UF2 の SHA-256 と、再ビルドした UF2 のターゲット・アプリ領域・ベクタテーブル・ローカルパスの混入を検査します。Cargo メタデータがあれば設定スキーマも検査します。キャッシュを外部に置いた場合は `--target-dir <CARGO_TARGET_DIRの場所>` を指定できます。`--rebuilt` を省くと同梱 UF2 だけを検査します。
 
 配布版とのハッシュ一致は参考情報として表示し、不一致だけでは失敗にしません。配布を作成した場所で厳密に照合する場合だけ `--require-identical` を付けてください。
 
@@ -62,6 +71,14 @@ python3 tools/default_keymap.py --check  # 生成物の一致を確認
 
 左右の `Cargo.lock` を同梱し、ビルドは `--locked` で行います。キーボードのマニフェストから RMK への参照はリポジトリ内の相対パスです。公開 RMK の最新版へ自動追従しません。
 
+### 電池残量の取得
+
+右の `keyboard.toml` の `[split.central]` で、電圧の入力を `P0_04`、分圧比を `2000 / 3000` に設定しています。`main.rs` で `P0_31` をHighにし、分圧回路が安定するまで350 ms待ってから測定を始めます。電圧から推定した残量を、BLE Battery Serviceの主バッテリーとして送信します。
+
+接続時、残量の読み出し時、通知の購読開始時にも保存済みの測定値を反映します。PCが後から通知を購読した場合も、残量が次に変わるまで待つ必要がないようにしています。左の残量用サービスは従来どおりです。
+
+Battery Serviceの読み出しと通知登録は暗号化前にも受け付けます。HIDとVialのアクセス条件は変更していません。
+
 ## 既存設定との互換性
 
 RMK はバージョン・コミット情報・feature・設定容量等からストレージスキーマを計算します。変更するとキーマップやペアリング情報の再初期化が起きます。この版は元の RMK コミット `8a6889854fb996be592c55075b385234133e1772` と既存 feature を保持し、スキーマを **`0xA805CEFB`** に揃えています。
@@ -82,6 +99,6 @@ UF2 はアプリのみで、ブートローダーや設定領域を含みませ�
 
 ## 公開バイナリの再現性
 
-配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。右v0.9.4はBluetooth名を `Cornix TB` に変更した版です。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。設定の保存形式は維持しています。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
+配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。右v0.9.5は電池残量の取得とBLEへの反映を修正した版です。Bluetooth名は `Cornix TB`、初期配列と設定の保存形式は従来どおりです。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
 
 ライセンスと派生元は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に記載しています。

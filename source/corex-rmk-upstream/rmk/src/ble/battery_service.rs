@@ -38,6 +38,74 @@ const fn battery_presentation_format(description: u16) -> [u8; 7] {
 const MAIN_BATTERY_PRESENTATION_FORMAT: [u8; 7] =
     battery_presentation_format(CHARACTERISTIC_PRESENTATION_FORMAT_DESCRIPTION_MAIN);
 
+fn battery_characteristics<'a>(server: &'a Server<'_>) -> impl Iterator<Item = Characteristic<u8>> + 'a {
+    #[cfg(feature = "split")]
+    let peripherals = server.peripheral_battery_services.levels.iter().copied();
+    #[cfg(not(feature = "split"))]
+    let peripherals = core::iter::empty();
+    core::iter::once(server.battery_service.level).chain(peripherals)
+}
+
+/// The exemption covers only each Battery Level value and its descriptors,
+/// using that characteristic's own bounds, never a span across services.
+pub(super) fn is_battery_read_handle(server: &Server<'_>, handle: u16) -> bool {
+    battery_characteristics(server).any(|level| (level.handle..=level.end_handle).contains(&handle))
+}
+
+pub(super) fn is_battery_cccd_handle(server: &Server<'_>, handle: u16) -> bool {
+    battery_characteristics(server).any(|level| level.cccd_handle == Some(handle))
+}
+
+fn cached_battery_levels<'a>(server: &'a Server<'_>) -> impl Iterator<Item = (Characteristic<u8>, u8)> + 'a {
+    let central = core::iter::once((
+        server.battery_service.level,
+        crate::input_device::battery::current_battery_status(),
+    ));
+    #[cfg(feature = "split")]
+    let peripherals = crate::SPLIT_BATTERY_PERIPHERAL_IDS
+        .iter()
+        .copied()
+        .enumerate()
+        .filter_map(|(slot, id)| {
+            crate::split::driver::current_peripheral_battery_status(id)
+                .map(|status| (server.peripheral_battery_services.levels[slot], status))
+        });
+    #[cfg(not(feature = "split"))]
+    let peripherals = core::iter::empty();
+    central
+        .chain(peripherals)
+        .filter_map(|(characteristic, status)| match status {
+            BatteryStatus::Available { level: Some(level), .. } => Some((characteristic, level)),
+            _ => None,
+        })
+}
+
+/// Reads must reflect the latest measurement even before notifications are
+/// enabled or while the normal notification task is waiting for key activity.
+pub(super) fn refresh_battery_levels(server: &Server<'_>) {
+    for (characteristic, level) in cached_battery_levels(server) {
+        if let Err(e) = server.set(&characteristic, &level) {
+            error!("Failed to refresh battery level: {:?}", e);
+        }
+    }
+}
+
+/// A host may subscribe after the first report, without any later percentage
+/// change. Send the current snapshot once its subscription is accepted (and
+/// again when a bonded connection becomes encrypted).
+pub(super) async fn notify_current_battery_levels<P: PacketPool>(
+    server: &Server<'_>,
+    conn: &GattConnection<'_, '_, P>,
+) {
+    for (characteristic, level) in cached_battery_levels(server) {
+        if characteristic.should_notify(conn)
+            && let Err(e) = characteristic.notify(conn, &level, true).await
+        {
+            error!("Failed to notify current battery level: {:?}", e);
+        }
+    }
+}
+
 /// Battery service
 #[gatt_service(uuid = service::BATTERY)]
 pub(crate) struct BatteryService {
@@ -134,10 +202,12 @@ pub(crate) struct BleBatteryServer<'stack, 'server, 'conn, P: PacketPool> {
 
 impl<'stack, 'server, 'conn, P: PacketPool> BleBatteryServer<'stack, 'server, 'conn, P> {
     pub(crate) fn new(server: &Server, conn: &'conn GattConnection<'stack, 'server, P>) -> Self {
+        let sub = BatteryStatusEvent::subscriber();
+        refresh_battery_levels(server);
         Self {
             battery_level: server.battery_service.level,
             conn,
-            sub: BatteryStatusEvent::subscriber(),
+            sub,
         }
     }
 }
@@ -346,6 +416,91 @@ mod cpf_tests {
             battery_presentation_format(0x000F),
             [0x04, 0x00, 0xAD, 0x27, 0x01, 0x0F, 0x00]
         );
+    }
+}
+
+#[cfg(test)]
+mod cache_tests {
+    use rmk_types::battery::{BatteryStatus, ChargeState};
+
+    use super::{Server, refresh_battery_levels};
+    use crate::input_device::battery::BATTERY_STATUS;
+
+    #[test]
+    fn gatt_read_tracks_cached_level_without_waiting_for_a_new_event() {
+        let server = Server::new_default("battery-test").unwrap();
+        // The generated server owns a one-shot StaticCell, so test the
+        // permission boundary against this same real service table.
+        super::permission_tests::assert_battery_permission_boundary(&server);
+        let original = BATTERY_STATUS.lock(|cache| cache.get());
+
+        // A connection can begin long after this value was measured.
+        BATTERY_STATUS.lock(|cache| {
+            cache.set(BatteryStatus::Available {
+                charge_state: ChargeState::Discharging,
+                level: Some(67),
+            })
+        });
+        refresh_battery_levels(&server);
+        assert_eq!(server.get(&server.battery_service.level).unwrap(), 67);
+
+        // A host that reads again, or subscribes late, need not wait for a
+        // percentage-change event. The cached value remains available.
+        refresh_battery_levels(&server);
+        assert_eq!(server.get(&server.battery_service.level).unwrap(), 67);
+
+        // Refresh bypasses notification throttling while the keyboard is idle.
+        BATTERY_STATUS.lock(|cache| {
+            cache.set(BatteryStatus::Available {
+                charge_state: ChargeState::Discharging,
+                level: Some(66),
+            })
+        });
+        refresh_battery_levels(&server);
+        assert_eq!(server.get(&server.battery_service.level).unwrap(), 66);
+
+        BATTERY_STATUS.lock(|cache| cache.set(original));
+    }
+}
+
+#[cfg(test)]
+mod permission_tests {
+    use super::{Server, battery_characteristics, is_battery_cccd_handle, is_battery_read_handle};
+
+    pub(super) fn assert_battery_permission_boundary(server: &Server<'_>) {
+        for level in battery_characteristics(server) {
+            for handle in level.handle..=level.end_handle {
+                assert!(is_battery_read_handle(server, handle));
+                assert_eq!(
+                    is_battery_cccd_handle(server, handle),
+                    level.cccd_handle == Some(handle)
+                );
+            }
+            assert!(!is_battery_read_handle(server, level.handle - 1));
+        }
+
+        let hid = &server.hid_service;
+        for handle in [
+            hid.input_keyboard.handle,
+            hid.output_keyboard.handle,
+            hid.report_map.handle,
+            hid.mouse_report.handle,
+            hid.input_keyboard.cccd_handle.unwrap(),
+        ] {
+            assert!(!is_battery_read_handle(server, handle));
+            assert!(!is_battery_cccd_handle(server, handle));
+        }
+        #[cfg(feature = "vial")]
+        for handle in [
+            server.vial_service.input_data.handle,
+            server.vial_service.output_data.handle,
+            server.vial_service.input_data.cccd_handle.unwrap(),
+        ] {
+            assert!(!is_battery_read_handle(server, handle));
+            assert!(!is_battery_cccd_handle(server, handle));
+        }
+        assert!(!is_battery_read_handle(server, u16::MAX));
+        assert!(!is_battery_cccd_handle(server, u16::MAX));
     }
 }
 

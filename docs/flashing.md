@@ -1,6 +1,6 @@
 # ファームウェアの書き込み・更新
 
-- [CoreX を v0.9.4 に更新する](#corex-を-v094-に更新する)
+- [CoreX を v0.9.5 に更新する](#corex-を-v095-に更新する)
 - [純正 Cornix 左を初めて使う](#純正-cornix-左を初めて使う)
 - [純正 Cornix 左へ戻す](#純正-cornix-左へ戻す)
 
@@ -8,14 +8,14 @@
 
 ## ファイル
 
-- **右：CoreX＋PAW3222、v0.9.4**
-  [CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2](../firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2)
+- **右：CoreX＋PAW3222、v0.9.5**
+  [CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2](../firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2)
 - **左：純正 Cornix、v0.9.0**
   [coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2](../firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
-- **v0.9.4 の初期配列**
+- **v0.9.5 の初期配列**
   [CoreX-Cornix-default.vil](../keymaps/CoreX-Cornix-default.vil)
 
-GitHub のファイルページでは **Download raw file** で保存します。右 v0.9.4 と左 v0.9.0 を組み合わせて使うため、左右のバージョンは異なります。
+GitHub のファイルページでは **Download raw file** で保存します。右 v0.9.5 と左 v0.9.0 を組み合わせて使うため、左右のバージョンは異なります。
 
 **左右の UF2 は入れ替えないでください。純正 Cornix 右用のファームも、CoreX 右には使えません。**
 
@@ -41,29 +41,30 @@ CoreX 用と純正 Cornix 用でファイル名を分けてください。`.vil`
 
 再起動時に、OS が「ディスクが正しく取り出されませんでした」などと表示することがあります。表示の有無だけで判断せず、書き込み後のキー入力と Vial の認識を確認してください。
 
-## CoreX を v0.9.4 に更新する
+## CoreX を v0.9.5 に更新する
 
-左に付属の v0.9.0 が入っていれば、**右だけ**を書き換えます。v0.9.4 は表示名を `Cornix TB` に変更した版で、キー配列は v0.9.3 と同じです。
+左に付属の v0.9.0 が入っていれば、**右だけ**を書き換えます。v0.9.5 は右の電池残量をBluetoothで送信する版です。表示名は `Cornix TB`、キー配列は v0.9.3 と同じです。
 
 v0.9.3 で初期配列を変更しました。v0.9.2 以前から更新するときは、次の点に注意してください。保存されるのは変更したキーやエンコーダの差分なので、UF2 の更新後は **保存した変更と新しい初期値が混在する場合があります**。通常の UF2 更新では、保存済み設定や Bluetooth の登録を消去しません。
 
 1. 更新前に右を USB 接続し、Vial の **File → Save current layout** で現在の `.vil` を保存します。
-2. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2` を、[書き込み手順](#ファームウェアを書き込む)でコピーします。
-3. 再起動後に Vial で `CoreX Cornix TB` を選びます。v0.9.3 の配列をそのまま使う場合は、手順5へ進みます。配列を読み込む場合は **File → Load saved layout** を開きます。
+2. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2` を、[書き込み手順](#ファームウェアを書き込む)でコピーします。
+3. 再起動後に Vial で `CoreX Cornix TB` を選びます。v0.9.3以降の配列をそのまま使う場合は、手順5へ進みます。配列を読み込む場合は **File → Load saved layout** を開きます。
 4. 新しい初期配列を使う場合は、同梱の **`CoreX-Cornix-default.vil`** を読み込みます。旧配列を使い続ける場合は、手順1で保存した `.vil` を読み込みます。
 5. 左右のキー、ボール、スクロール、エンコーダと、Vial の設定を確認します。
+6. Bluetoothで接続し直し、PCが残量表示に対応していれば `Cornix TB` の電池残量を確認します。通常の更新では登録を消す必要はありません。
 
 初期配列ファイルは、キーとエンコーダの割り当てをまとめて設定します。トラックボールの設定欄も含むため、**感度2倍・Scroll標準・AML ON** が適用されます。マクロなど、配列以外の設定は変更しません。
 
 旧版の Layer 4 は引き続き Bluetooth 用ですが、初期操作は左の Caps Lock・Shift・Ctrl に変わります。初期配列を適用した後は、[新しい接続操作](usage.md#pc-と-bluetooth-接続する)を使ってください。
 
-v0.9.4 は実機への書き込みと、USB・Vial の表示名、更新前後の設定保持を確認しています。更新後のキー・ボール操作と Bluetooth の再接続は未確認です。[検証状況](validation.md)を参照してください。
+v0.9.5は実機への書き込み、設定保持、既存の登録先へのBLE再接続と、残量の直接読み出しを確認しています。macOSのBluetooth設定画面には、まだ残量が表示されていません。[検証状況](validation.md)を参照してください。
 
 ## 純正 Cornix 左を初めて使う
 
 1. 純正左の `.vil` を保存します。
 2. [書き込み手順](#ファームウェアを書き込む)に沿って、左に `coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2` を書き込みます。
-3. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
+3. 右に `CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2` を書き込みます。左右は1台ずつ接続し、[書き込み手順](#ファームウェアを書き込む)を繰り返します。
 4. 左右の電源を ON にし、右を PC に USB 接続します。未登録の左右は自動で接続します。
 5. Vial で `CoreX-Cornix-default.vil` を読み込み、左右のキー、ボール、スクロール、エンコーダを確認します。Bluetooth で使う場合は、続けて[PC に登録](usage.md#pc-と-bluetooth-接続する)します。
 

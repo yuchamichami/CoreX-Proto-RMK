@@ -14,7 +14,7 @@ CoreX用のRMKファームウェアです。PAW3222トラックボールを接�
 
 ![Cornix左からCoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
 
-Bluetoothで使うときは、PCに `Cornix TB` を登録します。[Bluetoothの接続手順](docs/usage.md#pc-と-bluetooth-接続する)
+Bluetoothで使うときは、PCに `Cornix TB` を登録します。v0.9.5から、右側の電池残量をPCへ送信します。[Bluetoothの接続と残量表示](docs/usage.md#pc-と-bluetooth-接続する)
 
 ## トラックボールの操作
 
@@ -34,7 +34,7 @@ v0.9.3から、通常のキー、数字・記号のFn配列、エンコーダを
 
 左の親指キーは左からFn、Bluetooth、Spaceです。右はSpaceと予備レイヤーのキーです。純正の右MO(2)の位置にはトラックボールがあります。[初期配列の図](docs/usage.md#初期配列)
 
-旧版からの更新では、保存した変更と新しい初期値が混在する場合があります。配列全体を揃えるには、[初期配列ファイル](keymaps/CoreX-Cornix-default.vil)をVialで読み込みます。[バックアップと適用手順](docs/flashing.md#corex-を-v094-に更新する)
+v0.9.2以前からの更新では、保存した変更と新しい初期値が混在する場合があります。配列全体を揃えるには、[初期配列ファイル](keymaps/CoreX-Cornix-default.vil)をVialで読み込みます。[バックアップと適用手順](docs/flashing.md#corex-を-v095-に更新する)
 
 ## Vialで設定する
 
@@ -58,15 +58,15 @@ v0.9.3から、通常のキー、数字・記号のFn配列、エンコーダを
 
 ## ファームウェア
 
-- [右用 v0.9.4 — CoreX・PAW3222](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2)
+- [右用 v0.9.5 — CoreX・PAW3222](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2)
 - [左用 v0.9.0 — 純正Cornix左](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
 - [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest/download/CoreX-firmware-hand-off.zip)
 
-右v0.9.4と左v0.9.0を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。**
+右v0.9.5と左v0.9.0を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。**
 
 [書き込み・更新・純正左への復元](docs/flashing.md)
 
-v0.9.4は、実機への書き込み、USB・Vialの表示名、更新前後の設定保持を確認しています。更新後のキー・ボール操作とBluetoothの再接続は未確認です。[検証状況](docs/validation.md)
+v0.9.5は実機への書き込み、設定保持、BLEからの残量読み出しを確認しました。macOSのBluetooth設定画面には、まだ残量が表示されていません。[検証状況](docs/validation.md)
 
 ## 開発
 

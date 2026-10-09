@@ -162,6 +162,10 @@ subs = 2
 [split]
 connection = "ble"
 [split.central]
+# VSENSE: P0.04 = VBAT * 2M / (1M + 2M); P0.31 enables the divider.
+battery_adc_pin = "P0_04"
+adc_divider_measured = 2000
+adc_divider_total = 3000
 rows = 4
 cols = 7
 row_offset = 0

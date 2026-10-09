@@ -1,6 +1,6 @@
 # Cornix準拠の初期キーマップ
 
-[CoreX-Cornix-default.vil](CoreX-Cornix-default.vil)は、CoreX右v0.9.4用の初期配列です。Vialの **File → Load saved layout** で読み込みます。現在の配列は、先に **Save current layout** で保存してください。
+[CoreX-Cornix-default.vil](CoreX-Cornix-default.vil)は、CoreX右v0.9.5用の初期配列です。配列はv0.9.3から変更していません。Vialの **File → Load saved layout** で読み込みます。現在の配列は、先に **Save current layout** で保存してください。
 
 このプリセットはキーとエンコーダの割り当てを変更します。感度は2倍、Scrollは標準、AMLはONになります。マクロ・コンボ・タップダンスと、Bluetoothの登録は変更しません。
 

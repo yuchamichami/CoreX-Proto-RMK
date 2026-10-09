@@ -1,6 +1,6 @@
 {
   "distribution": "CoreX PAW3222 + stock Cornix left",
-  "release": "v0.9.4",
+  "release": "v0.9.5",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
   "build_host": "x86_64-apple-darwin",
@@ -10,20 +10,20 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Right v0.9.4 flashed and USB product/manufacturer plus Vial name read back. All 392 keycodes, 28 encoder assignments and full native Vial settings preserved. Build, 20 tests, UF2 and storage-schema checks passed. BLE advertised name over the air, reconnection and physical input remain untested on v0.9.4. Left v0.9.0 unchanged.",
+  "validation_scope": "Right v0.9.5 flashed and booted; all Vial settings preserved; existing BLE bond reconnected; macOS native client read right Battery Level 97% and subscribed. After powering left, direct BLE reads returned 100% for both services. Native Bluetooth Settings percentage remains absent. Left v0.9.0 unchanged; battery accuracy and discharge trend unverified.",
   "images": [
     {
       "side": "right",
-      "application_version": "0.9.4",
+      "application_version": "0.9.5",
       "role": "central",
       "target": "CoreX PAW3222 only",
-      "filename": "CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2",
-      "binary_bytes": 514068,
-      "uf2_bytes": 1028608,
-      "binary_sha256": "38f7a686a45d41ab5e381e68d4d6c6f693acf16c694469709db4384b570ecd93",
-      "uf2_sha256": "bedb58b5438ace70ab8d98e6031ebd6e4777ebd091d538374c539f441ccc0fdc",
+      "filename": "CoreX-Right-Central-PAW3222-RMK-v0.9.5.uf2",
+      "binary_bytes": 522980,
+      "uf2_bytes": 1046016,
+      "binary_sha256": "8a1fd9adaf7671e61428f4809505f9c71003df742bc74d3722c535a0b784464b",
+      "uf2_sha256": "b5b170b6967d52cd7fdbbdf034307010778840b1c733c36f78452cd87dacccd2",
       "flash_start": "0x26000",
-      "flash_end_exclusive": "0xa3900",
+      "flash_end_exclusive": "0xa5b00",
       "application_limit_exclusive": "0xb0000",
       "storage_range_exclusive": [
         "0xb0000",
@@ -61,5 +61,15 @@
     "right_bluetooth": "Cornix TB",
     "right_usb_product": "Cornix TB",
     "right_usb_manufacturer": "CoreX"
+  },
+  "battery": {
+    "right_adc_pin": "P0_04",
+    "right_enable_pin": "P0_31",
+    "enable_level": "high",
+    "settling_ms": 350,
+    "divider_measured": 2000,
+    "divider_total": 3000,
+    "measurement": "voltage-derived percentage, RMK existing battery curve",
+    "ble_service": "Battery Service (0x180F), Battery Level (0x2A19)"
   }
 }

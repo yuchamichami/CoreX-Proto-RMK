@@ -505,14 +505,23 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
             GattConnectionEvent::Encrypted { security_level, .. } => {
                 info!("[gatt] encrypted: {:?}", security_level);
                 set_ble_state(BleState::Connected);
+                battery_service::notify_current_battery_levels(server, conn).await;
             }
             GattConnectionEvent::Gatt { event: gatt_event } => {
                 let mut cccd_updated = false;
+                let mut battery_cccd_updated = false;
                 let result = match &gatt_event {
                     GattEvent::Read(event) => {
+                        let encrypted = conn.raw().security_level()?.encrypted();
                         if event.handle() == level.handle {
+                            battery_service::refresh_battery_levels(server);
                             let value = server.get(&level);
-                            debug!("Read GATT Event to Level: {:?}", value);
+                            info!(
+                                "BAS read handle={} encrypted={} level={:?}",
+                                event.handle(),
+                                encrypted,
+                                value
+                            );
                         } else {
                             #[cfg(feature = "split")]
                             let peripheral_level =
@@ -520,14 +529,20 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
                             #[cfg(not(feature = "split"))]
                             let peripheral_level: Option<&Characteristic<u8>> = None;
                             if let Some(peripheral_level) = peripheral_level {
+                                battery_service::refresh_battery_levels(server);
                                 let value = server.get(peripheral_level);
-                                debug!("Read GATT Event to Peripheral Level: {:?}", value);
+                                info!(
+                                    "BAS read handle={} encrypted={} level={:?}",
+                                    event.handle(),
+                                    encrypted,
+                                    value
+                                );
                             } else {
                                 debug!("Read GATT Event to Unknown: {:?}", event.handle());
                             }
                         }
 
-                        if conn.raw().security_level()?.encrypted() {
+                        if encrypted || battery_service::is_battery_read_handle(server, event.handle()) {
                             None
                         } else {
                             Some(AttErrorCode::INSUFFICIENT_ENCRYPTION)
@@ -563,22 +578,18 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
                             || event.handle() == mouse.cccd_handle.expect("No CCCD for mouse report")
                             || event.handle() == media.cccd_handle.expect("No CCCD for media report")
                             || event.handle() == system_control.cccd_handle.expect("No CCCD for system report")
-                            || event.handle() == level.cccd_handle.expect("No CCCD for battery level")
-                            || {
-                                #[cfg(feature = "split")]
-                                {
-                                    peripheral_levels.iter().any(|level| {
-                                        event.handle()
-                                            == level.cccd_handle.expect("No CCCD for peripheral battery level")
-                                    })
-                                }
-                                #[cfg(not(feature = "split"))]
-                                {
-                                    false
-                                }
-                            }
+                            || battery_service::is_battery_cccd_handle(server, event.handle())
                         {
                             cccd_updated = true;
+                            battery_cccd_updated = battery_service::is_battery_cccd_handle(server, event.handle());
+                            if battery_cccd_updated {
+                                info!(
+                                    "BAS subscription handle={} encrypted={} enabled={}",
+                                    event.handle(),
+                                    encrypted,
+                                    data.first().map(|value| value & 1 != 0).unwrap_or(false)
+                                );
+                            }
                         } else if event.handle() == hid_control_point.handle {
                             control_point_write = true;
                         } else if is_custom_message {
@@ -625,7 +636,7 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
                             }
                         }
 
-                        if encrypted {
+                        if encrypted || battery_cccd_updated {
                             None
                         } else {
                             Some(AttErrorCode::INSUFFICIENT_ENCRYPTION)
@@ -637,6 +648,7 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
 
                 // This step is also performed at drop(), but writing it explicitly is necessary
                 // in order to ensure reply is sent.
+                let accepted = result.is_none();
                 let result = if let Some(code) = result {
                     gatt_event.reject(code)
                 } else {
@@ -645,6 +657,10 @@ async fn gatt_events_task(server: &Server<'_>, conn: &GattConnection<'_, '_, Def
                 match result {
                     Ok(reply) => reply.send().await,
                     Err(e) => warn!("[gatt] error sending response: {:?}", e),
+                }
+
+                if accepted && battery_cccd_updated {
+                    battery_service::notify_current_battery_levels(server, conn).await;
                 }
 
                 // Update CCCD table after processing the event
