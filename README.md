@@ -2,12 +2,12 @@
 
 ## 1. ファームをダウンロードする
 
-- **[右用ファーム — v0.10.0](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-Right-v0.10.0.uf2)**：CoreX右・PAW3222用
-- **[左用ファーム — v0.10.0](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-Left-v0.10.0.uf2)**：純正Cornix左用
+- **[右用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Right-v0.10.1.uf2)**：CoreX右・PAW3222用
+- **[左用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Left-v0.10.1.uf2)**：純正Cornix左用
 
 **左右とも、この版を書き込みます。** 右用はCoreX基板専用です。
 
-v0.10.0は実機確認中です。[確認済みの範囲](docs/validation.md#v0100) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+v0.10.1はBLE送信出力を上げた版です。実機での確認はまだです。[確認済みの範囲](docs/validation.md#v0101) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 
 ## 2. 左右に書き込む
 
@@ -16,8 +16,8 @@ v0.10.0は実機確認中です。[確認済みの範囲](docs/validation.md#v01
 以下は、RESETを素早く2回押すとUSBドライブが出る基板向けの手順です。未書き込みのマイコンへの初回導入は含みません。
 
 1. **左だけ**をデータ通信できるUSBケーブルでPCにつなぎ、RESETを素早く2回押します。
-2. 表示されたUSBドライブに **`CoreX-Left-v0.10.0.uf2`** をコピーします。自動で再起動してドライブが消えたら、左のUSBを抜きます。
-3. **右だけ**をPCにつなぎ、同じ手順で **`CoreX-Right-v0.10.0.uf2`** をコピーします。右のUSBはそのままつないでおきます。
+2. 表示されたUSBドライブに **`CoreX-Left-v0.10.1.uf2`** をコピーします。自動で再起動してドライブが消えたら、左のUSBを抜きます。
+3. **右だけ**をPCにつなぎ、同じ手順で **`CoreX-Right-v0.10.1.uf2`** をコピーします。右のUSBはそのままつないでおきます。
 
 ドライブ名は `NO NAME`、`NRF52BOOT` など個体によって異なります。左右のファイルを取り違えないでください。[書き込みの詳細・旧版からの更新](docs/flashing.md)
 

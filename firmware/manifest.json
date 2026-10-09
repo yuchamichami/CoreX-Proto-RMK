@@ -1,6 +1,6 @@
 {
   "distribution": "CoreX PAW3222 + stock Cornix left",
-  "release": "v0.10.0",
+  "release": "v0.10.1",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
   "build_host": "x86_64-apple-darwin",
@@ -10,38 +10,38 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Both halves built from v0.10.0 source. 232 host/board/keymap tests passed, including 193 isolated RMK tests. Bundled/rebuilt hashes and storage schema match. Hardware flashing pending: macOS loginwindow denied and ejected right UF2 volume before transfer; existing firmware unchanged. Battery-only wake and current/run-time measurements pending.",
+  "validation_scope": "Both halves built from v0.10.1 source. 232 host/board/keymap tests passed, including 193 isolated RMK tests. Bundled/rebuilt hashes and storage schema 0xA805CEFB match. Both controllers explicitly request +8 dBm; 2M PHY remains disabled. Hardware flashing, actual RF/link quality, aluminum-case performance and battery-current/runtime measurements pending.",
   "images": [
     {
       "side": "right",
-      "application_version": "0.10.0",
+      "application_version": "0.10.1",
       "role": "central",
       "target": "CoreX PAW3222 only",
-      "filename": "CoreX-Right-v0.10.0.uf2",
-      "binary_bytes": 535100,
-      "uf2_bytes": 1070592,
-      "binary_sha256": "32dfaf4ba757ed43fb4e644eb1a8bd4f84f17a0f254d1f772337bb3286df9e79",
-      "uf2_sha256": "0a97c029480b80bcc03df19d9a34cd0fdf6144d30aae721194550fdb548c8863",
+      "filename": "CoreX-Right-v0.10.1.uf2",
+      "binary_bytes": 535300,
+      "uf2_bytes": 1071104,
+      "binary_sha256": "78084c91c0e6dd217934f629a90f039b75cb0274ee122f64bcfd12427bef9572",
+      "uf2_sha256": "788dc826db80ece011ec9aca37e6fffeeab512a3c1af71cd690e3874af646df9",
       "flash_start": "0x26000",
-      "flash_end_exclusive": "0xa8b00",
+      "flash_end_exclusive": "0xa8c00",
       "application_limit_exclusive": "0xb0000",
       "storage_range_exclusive": [
         "0xb0000",
         "0xd0000"
       ],
-      "source_ref": "v0.10.0",
+      "source_ref": "v0.10.1",
       "enabled_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial,host_lock"
     },
     {
       "side": "left",
-      "application_version": "0.10.0",
+      "application_version": "0.10.1",
       "role": "peripheral",
       "target": "stock Cornix left",
-      "filename": "CoreX-Left-v0.10.0.uf2",
-      "binary_bytes": 349460,
+      "filename": "CoreX-Left-v0.10.1.uf2",
+      "binary_bytes": 349580,
       "uf2_bytes": 699392,
-      "binary_sha256": "ad5059a9f551c6300326bf88e3407982acd19698da921df9949b7b049e76b338",
-      "uf2_sha256": "d4c812d9cb9668f752b8804da903bfe9af2d0ee9c03145c446e3504541e9021f",
+      "binary_sha256": "89d078c86c6739eaa381b2de142d33657d4f9634da362b565bf985983e1a865a",
+      "uf2_sha256": "f26e273e2c0b4e70b2b89abafb5b882b9b46d87b94c373868a37b9d9735898e0",
       "flash_start": "0x1000",
       "flash_end_exclusive": "0x56600",
       "application_limit_exclusive": "0xa0000",
@@ -49,7 +49,7 @@
         "0xc0000",
         "0xe0000"
       ],
-      "source_ref": "v0.10.0",
+      "source_ref": "v0.10.1",
       "enabled_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial"
     }
   ],
@@ -78,7 +78,7 @@
     "left_service_uuid": "1dad1811-b1c4-42ae-825e-f45414fe6be4",
     "left_service": "Peripheral measurements retained via custom GATT service; not a second standard BAS"
   },
-  "source_ref": "v0.10.0",
+  "source_ref": "v0.10.1",
   "vial_physical_unlock": {
     "enabled_on_right": true,
     "physical_keys": [
@@ -92,5 +92,16 @@
     "pairing_window_seconds": 60,
     "left_gesture": "Tab+T, 5s while disconnected",
     "right_action": "User7, 5s"
+  },
+  "ble_radio": {
+    "default_tx_power_dbm": 8,
+    "sides": [
+      "right",
+      "left"
+    ],
+    "scope": "controller-wide: advertising and connected transmissions",
+    "use_2m_phy": false,
+    "actual_rf_power_measured": false,
+    "aluminum_case_link_tested": false
   }
 }

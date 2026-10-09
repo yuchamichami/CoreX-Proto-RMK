@@ -93,6 +93,8 @@ _ _ _ _ _ _ No
 encoders = [["MouseWheelUp", "MouseWheelDown"], ["AudioVolUp", "AudioVolDown"]]
 [ble]
 enabled = true
+# Maximum nRF52840 TX power for advertising and connected links.
+default_tx_power = 8
 use_2m_phy = false
 [chip.nrf52840]
 dcdc_reg0 = false

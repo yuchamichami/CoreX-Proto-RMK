@@ -26,7 +26,7 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 
 ```sh
 ./build.sh right  # CoreX 右・PAW3222
-./build.sh left   # 純正 Cornix 左・peripheral、v0.10.0
+./build.sh left   # 純正 Cornix 左・peripheral
 ./build.sh both   # 両方。引数省略時も両方
 ```
 
@@ -45,7 +45,7 @@ python3 tools/verify_release.py --rebuilt  # 両方ビルドした場合
 
 配布版とのハッシュ一致は参考情報として表示し、不一致だけでは失敗にしません。配布を作成した場所で厳密に照合する場合は `--require-identical` を付けます。この指定では、保存形式を確認するビルドメタデータが見つからない場合も失敗にします。対象を片側に絞る場合は `--side right` または `--side left` を指定します。
 
-配布する左右は、ともにv0.10.0の同じソースからビルドします。リリースタグでその版のソースを固定し、左右それぞれのファイル名・ハッシュ・書き込み範囲を `firmware/manifest.json` に記録します。起動ログに左右とCoreXのバージョンが出ます。右はVialのファームウェア版照会にも同じ版を返します。
+左右は同じ版・同じソースからビルドします。リリースタグでその版のソースを固定し、左右それぞれのファイル名・ハッシュ・書き込み範囲を `firmware/manifest.json` に記録します。起動ログに左右とCoreXのバージョンが出ます。右はVialのファームウェア版照会にも同じ版を返します。
 
 **別のチェックアウト場所からのビルドは確認していますが、バイナリの完全一致は保証しません。** 同一ホスト・同一ソースでもチェックアウト場所が変わると Cargo / コンパイラのメタデータ等が変化し、生成物のハッシュが異なることを確認しています。異なるホスト、C ライブラリ、追加フラグでも変化します。公開用 UF2 の照合には同梱 `SHA256SUMS` を使い、手元でビルドした UF2 のハッシュとは区別してください。
 
@@ -67,6 +67,12 @@ python3 tools/default_keymap.py --check  # 生成物の一致を確認
 - `tools/make_uf2.py`：左右のアプリ領域を検査し、UF2を生成。
 
 左右の `Cargo.lock` を同梱し、ビルドは `--locked` で行います。キーボードのマニフェストから RMK への参照はリポジトリ内の相対パスです。公開 RMK の最新版へ自動追従しません。
+
+### BLE送信出力
+
+v0.10.1では、左右それぞれの `keyboard.toml` の `[ble]` に `default_tx_power = 8` を設定します。[nRF52840の最大送信出力](https://www.nordicsemi.com/Products/nRF52840)である `+8 dBm` を、[コントローラの送信全体の既定値](https://nrfconnectdocs.nordicsemi.com/ncs/latest/nrfxlib/doxygen/html/group__sdc_gae72e34ed7d6ecc33442223c9d8ffb56b.html)として指定します。PCとの通信と左右間の通信が対象です。
+
+2M PHY対応を有効にしない既存設定 `use_2m_phy = false` は維持します。以前の送信出力はコントローラ既定値を使っており、数値は確認していません。ケース内での通信と消費電流の実測状況は[検証状況](docs/validation.md#v0101)を参照してください。
 
 ### 電池残量の取得
 
