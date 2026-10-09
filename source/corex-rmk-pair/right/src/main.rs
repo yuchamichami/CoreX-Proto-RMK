@@ -4,12 +4,25 @@ mod paw3222;
 mod paw3222_schedule;
 mod paw_wire;
 mod pointing_mode;
+#[path = "../../shared/status_led.rs"]
+mod status_led;
 mod tuning;
 mod tuning_values;
 use rmk::macros::rmk_central;
 // PAW3222-only pointing build; J3 TrackPoint is not initialized.
 #[rmk_central]
 mod keyboard {
+    #[register_processor(poll)]
+    fn status_leds() -> crate::status_led::StatusLeds {
+        use embassy_nrf::gpio::{Level, Output, OutputDrive};
+        crate::status_led::StatusLeds::new(
+            crate::status_led::Lights::Right {
+                first: Output::new(p.P0_07, Level::Low, OutputDrive::Standard),
+                second: Output::new(p.P1_09, Level::Low, OutputDrive::Standard),
+            },
+            true,
+        )
+    }
     #[register_processor(poll)]
     async fn paw() -> crate::paw3222::Paw3222<'static> {
         use embassy_nrf::gpio::{Flex, Input, Level, Output, OutputDrive, Pull};
@@ -25,8 +38,6 @@ mod keyboard {
             },
             Input::new(p.P1_04, Pull::Up),
             Output::new(p.P1_01, Level::Low, OutputDrive::Standard),
-            Output::new(p.P0_07, Level::Low, OutputDrive::Standard),
-            Output::new(p.P1_09, Level::Low, OutputDrive::Standard),
             battery_enable,
             Input::new(p.P0_21, Pull::Up),
         )

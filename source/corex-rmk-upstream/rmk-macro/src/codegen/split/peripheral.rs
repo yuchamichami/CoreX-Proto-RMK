@@ -619,11 +619,15 @@ fn expand_split_peripheral_entry(
 
     match split_config.connection {
         SplitConnection::Ble => {
+            let rows = peripheral_config.rows as u8;
+            let cols = peripheral_config.cols as u8;
             let peripheral_run = quote! {
                 ::rmk::split::peripheral::run_rmk_split_peripheral(
                     #id,
                     ble_controller,
                     ble_addr,
+                    #rows,
+                    #cols,
                 )
             };
             // Build task list: device, processor (if any), peripheral, registered_processors, dfu

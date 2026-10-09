@@ -69,7 +69,7 @@ pub use input::{
     PointingProcessorEvent, PointingSetCpiEvent, RotaryEncoderPos,
 };
 #[cfg(all(feature = "split", feature = "_ble"))]
-pub use split::ClearPeerEvent;
+pub use split::{ClearPeerEvent, SplitPairingEvent};
 #[cfg(feature = "split")]
 pub use split::{CentralConnectedEvent, PeripheralBatteryEvent, PeripheralConnectedEvent};
 pub use state::{LayerChangeEvent, LedIndicatorEvent, SleepStateEvent, WpmUpdateEvent};

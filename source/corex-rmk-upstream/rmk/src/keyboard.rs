@@ -19,8 +19,6 @@ use usbd_hid::descriptor::{MediaKeyboardReport, SystemControlReport};
 use crate::ble::sleep::report_keyboard_activity;
 use crate::channel::send_hid_report;
 use crate::core_traits::Runnable;
-#[cfg(all(feature = "split", feature = "_ble"))]
-use crate::event::ClearPeerEvent;
 use crate::event::{
     ActionEvent, KeyboardEvent, KeyboardEventPos, ModifierEvent, SubscribableEvent, publish_event, publish_event_async,
 };
@@ -1662,8 +1660,8 @@ impl<'a> Keyboard<'a> {
                     // Previous profile
                     BLE_PROFILE_CHANNEL.send(BleProfileAction::Previous).await;
                 } else if id == NUM_BLE_PROFILE as u8 + 2 {
-                    // Clear bond on current profile
-                    BLE_PROFILE_CHANNEL.send(BleProfileAction::ClearBond).await;
+                    // Destructive action requires its dedicated key held for 5s.
+                    // A short tap or the release after a hold does nothing.
                 } else if id == NUM_BLE_PROFILE as u8 + 3 {
                     // Toggle preferred transport (USB <-> BLE);
                     // only meaningful when both transports exist in this build.
@@ -1695,16 +1693,15 @@ impl<'a> Keyboard<'a> {
             return;
         };
 
-        // Tapping a bond slot switches to it; holding it forgets the bond, switches, then re-pairs.
-        if id < NUM_BLE_PROFILE as u8 {
-            info!("Profile key held: clearing bond on profile {}", id);
-            BLE_PROFILE_CHANNEL.send(BleProfileAction::ClearSlot(id)).await;
-            BLE_PROFILE_CHANNEL.send(BleProfileAction::Switch(id)).await;
+        // Profile selection never erases a bond, even on an accidental long hold.
+        if id == NUM_BLE_PROFILE as u8 + 2 {
+            info!("Clear current PC bond after dedicated 5s hold");
+            BLE_PROFILE_CHANNEL.send(BleProfileAction::ClearBond).await;
         }
         #[cfg(feature = "split")]
         if id == NUM_BLE_PROFILE as u8 + 4 {
             info!("Clear peer");
-            publish_event(ClearPeerEvent);
+            crate::split::ble::request_pairing();
         }
         #[cfg(feature = "dongle")]
         if id == NUM_BLE_PROFILE as u8 + 5 {
@@ -1987,6 +1984,39 @@ mod test {
                 [a!(No), a!(No), a!(No), a!(No), a!(No), a!(No), a!(No), a!(No), a!(No), a!(No), k!(Left), a!(No), k!(Down), k!(Right)]
             ]),
         ]
+    }
+
+    #[cfg(feature = "_ble")]
+    #[test]
+    fn user_profile_hold_does_not_erase_and_clear_requires_five_seconds() {
+        use embassy_futures::block_on;
+        use crate::channel::BLE_PROFILE_CHANNEL;
+        use crate::ble::profile::BleProfileAction;
+        use embassy_time::MockDriver;
+        MockDriver::get().reset();
+        BLE_PROFILE_CHANNEL.clear();
+        let mut keyboard = create_test_keyboard();
+        let press = KeyboardEvent::key(0, 0, true);
+        let release = KeyboardEvent { pressed: false, ..press };
+        block_on(keyboard.process_user(0, press));
+        MockDriver::get().advance(Duration::from_secs(6));
+        block_on(keyboard.fire_user_hold());
+        assert!(BLE_PROFILE_CHANNEL.is_empty());
+        block_on(keyboard.process_user(0, release));
+        assert!(matches!(BLE_PROFILE_CHANNEL.try_receive(), Ok(BleProfileAction::Switch(0))));
+        let clear = crate::NUM_BLE_PROFILE as u8 + 2;
+        block_on(keyboard.process_user(clear, press));
+        block_on(keyboard.process_user(clear, release));
+        assert!(BLE_PROFILE_CHANNEL.is_empty());
+        block_on(keyboard.process_user(clear, press));
+        MockDriver::get().advance(Duration::from_secs(4));
+        block_on(keyboard.fire_user_hold());
+        assert!(BLE_PROFILE_CHANNEL.is_empty());
+        MockDriver::get().advance(Duration::from_secs(1));
+        block_on(keyboard.fire_user_hold());
+        assert!(matches!(BLE_PROFILE_CHANNEL.try_receive(), Ok(BleProfileAction::ClearBond)));
+        block_on(keyboard.process_user(clear, release));
+        assert!(BLE_PROFILE_CHANNEL.is_empty());
     }
 
     fn create_test_keyboard_with_config(mut config: BehaviorConfig) -> Keyboard<'static> {

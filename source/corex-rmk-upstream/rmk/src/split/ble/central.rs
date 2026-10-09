@@ -1,4 +1,5 @@
 use core::cell::RefCell;
+use core::sync::atomic::{AtomicBool, Ordering};
 
 #[cfg(feature = "subrating")]
 use bt_hci::cmd::le::LeSubrateRequest;
@@ -21,9 +22,11 @@ use crate::event::{
 };
 use crate::matrix::MatrixState;
 use crate::split::ble::PeerAddress;
-use crate::split::driver::{PeripheralManager, SplitDriverError, SplitReader, SplitWriter, set_peripheral_connected};
+use crate::split::driver::{
+    PeripheralManager, SplitDriverError, SplitReader, SplitWriter, set_peripheral_connected,
+};
 use crate::split::{PeripheralMatrixConfig, SPLIT_MESSAGE_MAX_SIZE, SplitMessage};
-use crate::storage::{StorageItem, StorageKey, StorageValue, read, store_unchecked};
+use crate::storage::{StorageItem, StorageKey, StorageValue, read, store};
 
 static PERIPHERAL_FOUND: Signal<crate::RawMutex, (u8, BdAddr)> = Signal::new();
 
@@ -36,13 +39,32 @@ enum SlotState {
     Disconnected([u8; 6]),
     /// The link is up and handed to the slot's session task.
     Connected([u8; 6]),
+    /// Discovered only during an explicit pairing window, not yet persisted.
+    Candidate([u8; 6]),
+    /// Local address is cleared; the old session is releasing and disconnecting.
+    Clearing,
 }
 
 impl SlotState {
-    fn connect_timed_out(&mut self, sleeping: bool) {
-        if !sleeping && matches!(self, Self::Disconnected(_)) {
+    fn connect_timed_out(&mut self) {
+        // A radio timeout is never permission to replace an established pair.
+        if matches!(self, Self::Candidate(_)) {
             *self = Self::NoAddr;
         }
+    }
+
+    fn clear_peer(&mut self) -> bool {
+        let live = matches!(self, Self::Connected(_) | Self::Clearing);
+        *self = if live { Self::Clearing } else { Self::NoAddr };
+        live
+    }
+
+    fn session_ended(&mut self) {
+        *self = match *self {
+            Self::Connected(addr) => Self::Disconnected(addr),
+            Self::Clearing => Self::NoAddr,
+            _ => return,
+        };
     }
 
     fn restore_saved_peer(&mut self, peer: &PeerAddress) -> bool {
@@ -54,9 +76,9 @@ impl SlotState {
         }
     }
 
-    fn adopt_discovered_peer(&mut self, address: [u8; 6], sleeping: bool) -> bool {
-        if !sleeping && matches!(self, Self::NoAddr) {
-            *self = Self::Disconnected(address);
+    fn adopt_discovered_peer(&mut self, address: [u8; 6], sleeping: bool, pairing: bool) -> bool {
+        if pairing && !sleeping && matches!(self, Self::NoAddr) {
+            *self = Self::Candidate(address);
             true
         } else {
             false
@@ -82,38 +104,62 @@ const CUSTOM_TO_PERIPHERAL_UUID: u128 = 0x5f2a7c15_9b3e_4a51_8d76_2c1e4b8a6f03;
 
 /// Scan for peripheral addresses, connect them, and hand each connection to
 /// that slot's session; sessions report back on `ended`.
-pub(crate) async fn scan_and_connect_peripherals<'a, C: Controller + ControllerCmdSync<LeSetScanParams>>(
+pub(crate) async fn scan_and_connect_peripherals<
+    'a,
+    C: Controller + ControllerCmdSync<LeSetScanParams>,
+>(
     stack: &'a Stack<'_, C, DefaultPacketPool>,
-    conns: &[Channel<NoopRawMutex, Connection<'a, DefaultPacketPool>, 1>; crate::SPLIT_PERIPHERALS_NUM],
+    conns: &[Channel<NoopRawMutex, Connection<'a, DefaultPacketPool>, 1>;
+         crate::SPLIT_PERIPHERALS_NUM],
     ended: &Channel<NoopRawMutex, usize, { crate::SPLIT_PERIPHERALS_NUM }>,
 ) {
-    // Load each peripheral's stored address first.
-    let mut peripheral_slots: [SlotState; crate::SPLIT_PERIPHERALS_NUM] = core::array::from_fn(|_| SlotState::NoAddr);
+    let mut peripheral_slots: [SlotState; crate::SPLIT_PERIPHERALS_NUM] =
+        core::array::from_fn(|_| SlotState::NoAddr);
     restore_saved_peers(&mut peripheral_slots).await;
-
+    let mut pairing = super::PairingWindow::new();
+    if peripheral_slots
+        .iter()
+        .any(|slot| matches!(slot, SlotState::NoAddr))
+    {
+        pairing.open();
+    }
+    let mut reset_requested = false;
     let mut central = stack.central();
     wait_for_stack_started().await;
     loop {
-        // Mark ended sessions `Disconnected`.
         while let Ok(id) = ended.try_receive() {
-            if let SlotState::Connected(addr) = peripheral_slots[id] {
-                peripheral_slots[id] = SlotState::Disconnected(addr);
+            peripheral_slots[id].session_ended();
+            clear_link_reset(id);
+        }
+        reset_requested |= super::PAIRING_REQUEST.try_take().is_some();
+        if reset_requested {
+            reset_requested = false;
+            PERIPHERAL_FOUND.reset();
+            if clear_saved_peers(&mut peripheral_slots).await {
+                report_activity();
+                pairing.open();
             }
         }
-
-        // Put every pending address in one accept list: the controller connects
-        // to whichever peripheral answers first, so an absent one doesn't block
-        // a present one for the whole timeout window.
-        let mut pending: heapless::Vec<(usize, [u8; 6]), { crate::SPLIT_PERIPHERALS_NUM }> = heapless::Vec::new();
+        let pairing_remaining = pairing.remaining();
+        if pairing_remaining.is_none() {
+            for slot in &mut peripheral_slots {
+                if matches!(slot, SlotState::Candidate(_)) {
+                    *slot = SlotState::NoAddr;
+                }
+            }
+        }
+        let mut pending: heapless::Vec<(usize, [u8; 6]), { crate::SPLIT_PERIPHERALS_NUM }> =
+            heapless::Vec::new();
         for (id, slot) in peripheral_slots.iter().enumerate() {
-            if let SlotState::Disconnected(addr) = slot {
+            if let SlotState::Disconnected(addr) | SlotState::Candidate(addr) = slot {
                 let _ = pending.push((id, *addr));
             }
         }
         if !pending.is_empty() {
-            // If there're `Disconnected` peripherals, connect to them first.
-            let targets: heapless::Vec<Address, { crate::SPLIT_PERIPHERALS_NUM }> =
-                pending.iter().map(|(_, addr)| Address::random(*addr)).collect();
+            let targets: heapless::Vec<Address, { crate::SPLIT_PERIPHERALS_NUM }> = pending
+                .iter()
+                .map(|(_, addr)| Address::random(*addr))
+                .collect();
             let config = ConnectConfig {
                 connect_params: default_split_conn_params(),
                 scan_config: ScanConfig {
@@ -121,92 +167,201 @@ pub(crate) async fn scan_and_connect_peripherals<'a, C: Controller + ControllerC
                     ..scan_config(SPLIT_CENTRAL_SCAN_WINDOW)
                 },
             };
-            let started_asleep = crate::state::current_sleep_state();
-            let timeout = if started_asleep {
+            let timeout = if crate::state::current_sleep_state() {
                 SLEEP_RECONNECT_WINDOW
             } else {
                 Duration::from_secs(15)
             };
-            debug!("Start connecting, {} peripheral(s) pending", pending.len());
-            let connected = match with_timeout(timeout, central.connect(&config)).await {
-                Ok(Ok(conn)) => {
+            let timeout = pairing_remaining
+                .map(|remaining| remaining.min(timeout))
+                .unwrap_or(timeout);
+            let result = select(
+                super::PAIRING_REQUEST.wait(),
+                with_timeout(timeout, central.connect(&config)),
+            )
+            .await;
+            let connected = match result {
+                Either::First(()) => {
+                    reset_requested = true;
+                    continue;
+                }
+                Either::Second(Ok(Ok(conn))) => {
                     let peer = conn.peer_address();
-                    if let Some(&(id, addr)) = pending.iter().find(|(_, addr)| Address::random(*addr) == peer) {
-                        info!("Connected to peripheral {}", id);
+                    if let Some(&(id, addr)) = pending
+                        .iter()
+                        .find(|(_, addr)| Address::random(*addr) == peer)
+                    {
+                        if matches!(peripheral_slots[id], SlotState::Candidate(_)) {
+                            if pairing.remaining().is_none()
+                                || store(StorageItem::PeerAddress(PeerAddress::new(
+                                    id as u8, true, addr,
+                                )))
+                                .await
+                                .is_err()
+                            {
+                                peripheral_slots[id] = SlotState::NoAddr;
+                                drop(conn);
+                                continue;
+                            }
+                        }
                         peripheral_slots[id] = SlotState::Connected(addr);
                         conns[id].send(conn).await;
-                    } else {
-                        warn!("Connected peer {:?} matches no pending slot", peer.addr);
                     }
                     true
                 }
-                Ok(Err(e)) => {
+                Either::Second(Ok(Err(e))) => {
                     #[cfg(feature = "defmt")]
                     let e = defmt::Debug2Format(&e);
                     error!("Connect error: {:?}", e);
                     Timer::after_millis(500).await;
                     false
                 }
-                Err(_) => {
-                    // None answered.
-                    // A wake racing the timeout must not turn a short sleep
-                    // retry into permission to forget the established peer.
-                    let keep_peer = started_asleep || crate::state::current_sleep_state();
+                Either::Second(Err(_)) => {
                     for &(id, _) in &pending {
-                        peripheral_slots[id].connect_timed_out(keep_peer);
+                        peripheral_slots[id].connect_timed_out();
                     }
-                    debug!("Connect timeout, keeping known addresses: {}", keep_peer);
                     false
                 }
             };
-            if !connected {
-                // Bounded pause, not an indefinite local-key wait: the left
-                // half can now rejoin even when nobody touches the right.
-                wait_before_sleep_retry(ended).await;
+            if !connected
+                && let Either::First(()) = select(
+                    super::PAIRING_REQUEST.wait(),
+                    wait_before_sleep_retry(ended),
+                )
+                .await
+            {
+                reset_requested = true;
             }
-        } else if peripheral_slots.iter().all(|s| matches!(s, SlotState::Connected(_))) {
-            // All peripherals are connected: wait until a session ends.
-            ended.ready_to_receive().await;
-        } else if crate::state::current_sleep_state() {
-            // An awake connect timeout may already have cleared the RAM slot.
-            // Recover its saved address before sleeping, so a left-only wake
-            // still has a known target. Explicitly cleared peers stay absent.
-            if !restore_saved_peers(&mut peripheral_slots).await {
-                wait_until_wakeup(ended).await;
+        } else if peripheral_slots
+            .iter()
+            .all(|s| matches!(s, SlotState::Connected(_)))
+        {
+            pairing.close();
+            if let Either::First(()) =
+                select(super::PAIRING_REQUEST.wait(), ended.ready_to_receive()).await
+            {
+                reset_requested = true;
             }
-        } else {
-            // Place the `NoAddr` peripherals by scanning for them.
-            info!("Start scanning peripherals");
+        } else if let Some(remaining) = pairing_remaining
+            && !crate::state::current_sleep_state()
+            && peripheral_slots
+                .iter()
+                .any(|slot| matches!(slot, SlotState::NoAddr))
+        {
+            PERIPHERAL_FOUND.reset();
             let session = start_scan(stack, SPLIT_CENTRAL_SCAN_WINDOW, &[]).await;
-            let event = with_timeout(
-                Duration::from_secs(30),
-                select3(PERIPHERAL_FOUND.wait(), ended.ready_to_receive(), wait_until_sleep()),
+            let event = select(
+                super::PAIRING_REQUEST.wait(),
+                with_timeout(
+                    remaining.min(Duration::from_secs(30)),
+                    select3(
+                        PERIPHERAL_FOUND.wait(),
+                        ended.ready_to_receive(),
+                        wait_until_sleep(),
+                    ),
+                ),
             )
             .await;
-            // Wait until the controller has confirmed the stop: it refuses an
-            // initiator until then.
             session.stop().await;
-            info!("Stop scanning");
-            if let Ok(Either3::First((id, addr))) = event {
-                // A report racing sleep must not replace the saved peer. The
-                // advertised id is untrusted, so still bounds-check the slot.
-                let addr = addr.into_inner();
-                if let Some(slot) = peripheral_slots.get_mut(id as usize)
-                    && slot.adopt_discovered_peer(addr, crate::state::current_sleep_state())
-                {
-                    info!("Scanned new peripheral {:?}", addr);
-                    store_unchecked(StorageItem::PeerAddress(PeerAddress::new(id, true, addr))).await;
+            match event {
+                Either::First(()) => reset_requested = true,
+                Either::Second(Ok(Either3::First((id, addr)))) => {
+                    if let Some(slot) = peripheral_slots.get_mut(id as usize) {
+                        slot.adopt_discovered_peer(
+                            addr.into_inner(),
+                            crate::state::current_sleep_state(),
+                            pairing.remaining().is_some(),
+                        );
+                    }
                 }
+                _ => (),
+            }
+        } else {
+            // An unpaired half with an expired window stays closed. Explicit
+            // reset still works here, and while a previous link is shutting down.
+            if let Either3::First(()) = select3(
+                super::PAIRING_REQUEST.wait(),
+                ended.ready_to_receive(),
+                async {
+                    if let Some(remaining) = pairing_remaining {
+                        Timer::after(remaining.min(Duration::from_secs(1))).await;
+                    } else {
+                        core::future::pending::<()>().await;
+                    }
+                },
+            )
+            .await
+            {
+                reset_requested = true;
             }
         }
     }
+}
+
+static LINK_RESET: [AtomicBool; crate::SPLIT_PERIPHERALS_NUM] =
+    [const { AtomicBool::new(false) }; crate::SPLIT_PERIPHERALS_NUM];
+static LINK_RESET_WAKE: [Signal<crate::RawMutex, ()>; crate::SPLIT_PERIPHERALS_NUM] =
+    [const { Signal::new() }; crate::SPLIT_PERIPHERALS_NUM];
+static LINK_RESET_DEADLINE: [Signal<crate::RawMutex, ()>; crate::SPLIT_PERIPHERALS_NUM] =
+    [const { Signal::new() }; crate::SPLIT_PERIPHERALS_NUM];
+
+fn request_link_reset(id: usize) {
+    LINK_RESET[id].store(true, Ordering::Release);
+    LINK_RESET_WAKE[id].signal(());
+    LINK_RESET_DEADLINE[id].signal(());
+}
+
+fn clear_link_reset(id: usize) {
+    LINK_RESET[id].store(false, Ordering::Release);
+    LINK_RESET_WAKE[id].reset();
+    LINK_RESET_DEADLINE[id].reset();
+}
+
+pub(crate) async fn wait_for_link_reset(id: usize) {
+    if !link_reset_requested(id) {
+        LINK_RESET_WAKE[id].wait().await;
+    }
+}
+
+pub(crate) fn link_reset_requested(id: usize) -> bool {
+    LINK_RESET[id].load(Ordering::Acquire)
+}
+
+// If discovery or a GATT write is stuck, reset must still terminate the old
+// session. The manager gets two seconds to durably clear the remote peer first.
+async fn reset_disconnect_deadline(id: usize) {
+    if !link_reset_requested(id) {
+        LINK_RESET_DEADLINE[id].wait().await;
+    }
+    Timer::after_secs(2).await;
+}
+
+async fn clear_saved_peers(slots: &mut [SlotState]) -> bool {
+    let mut cleared = false;
+    for (id, slot) in slots.iter_mut().enumerate() {
+        if store(StorageItem::PeerAddress(PeerAddress::new(
+            id as u8, false, [0; 6],
+        )))
+        .await
+        .is_ok()
+        {
+            if slot.clear_peer() {
+                request_link_reset(id);
+            }
+            cleared = true;
+        } else {
+            error!("Cannot clear split peer {}", id);
+        }
+    }
+    cleared
 }
 
 async fn restore_saved_peers(slots: &mut [SlotState]) -> bool {
     let mut restored = false;
     for (id, slot) in slots.iter_mut().enumerate() {
         if matches!(slot, SlotState::NoAddr)
-            && let Ok(Some(StorageValue::PeerAddress(peer))) = read(StorageKey::PeerAddress(id as u8)).await
+            && let Ok(Some(StorageValue::PeerAddress(peer))) =
+                read(StorageKey::PeerAddress(id as u8)).await
         {
             restored |= slot.restore_saved_peer(&peer);
         }
@@ -240,17 +395,6 @@ async fn wait_before_sleep_retry(
     }
 }
 
-async fn wait_until_wakeup(ended: &Channel<NoopRawMutex, usize, { crate::SPLIT_PERIPHERALS_NUM }>) {
-    while crate::state::current_sleep_state() {
-        if with_timeout(Duration::from_secs(1), ended.ready_to_receive())
-            .await
-            .is_ok()
-        {
-            return;
-        }
-    }
-}
-
 // When no peripheral address is saved, the central should first scan for peripheral.
 // This handler is used to handle the scan result.
 pub(crate) struct ScanHandler;
@@ -261,7 +405,10 @@ impl EventHandler for ScanHandler {
             let Some(Adv::SplitPeripheral { id }) = Adv::decode(report.data) else {
                 continue;
             };
-            info!("Found split peripheral: id={:?}, addr={:?}", id, report.addr);
+            info!(
+                "Found split peripheral: id={:?}, addr={:?}",
+                id, report.addr
+            );
             PERIPHERAL_FOUND.signal((id, report.addr));
             break;
         }
@@ -297,8 +444,11 @@ pub(crate) async fn run_peripheral_session<
             matrix_config.rows.into(),
             matrix_config.cols.into(),
         ));
-        if let Err(e) =
-            run_central_manager_task(id, stack, &conn, matrix_config, &pressed_keys).await
+        if let Either::First(Err(e)) = select(
+            run_central_manager_task(id, stack, &conn, matrix_config, &pressed_keys),
+            reset_disconnect_deadline(id),
+        )
+        .await
         {
             #[cfg(feature = "defmt")]
             let e = defmt::Debug2Format(&e);
@@ -454,7 +604,10 @@ pub(crate) mod subrating {
         }
     }
 
-    pub(crate) async fn update_subrate_factor<C: Controller + ControllerCmdAsync<LeSubrateRequest>, P: PacketPool>(
+    pub(crate) async fn update_subrate_factor<
+        C: Controller + ControllerCmdAsync<LeSubrateRequest>,
+        P: PacketPool,
+    >(
         stack: &Stack<'_, C, P>,
         params: LeSubrateRequestParams,
     ) -> bool {
@@ -468,8 +621,13 @@ pub(crate) mod subrating {
                 Err(BleHostError::BleHost(Error::Hci(error))) => {
                     // A connection runs one link-layer control procedure at a time, and
                     // a fresh one is still running its own.
-                    if error == HciError::CONTROLLER_BUSY || error == HciError::DIFFERENT_TRANSACTION_COLLISION {
-                        info!("[update_subrate_factor] controller busy, retrying: {:?}", error);
+                    if error == HciError::CONTROLLER_BUSY
+                        || error == HciError::DIFFERENT_TRANSACTION_COLLISION
+                    {
+                        info!(
+                            "[update_subrate_factor] controller busy, retrying: {:?}",
+                            error
+                        );
                         embassy_time::Timer::after_millis(100).await;
                         continue;
                     }
@@ -564,11 +722,17 @@ async fn discover_and_run_manager<C: Controller + ControllerCmdAsync<LeSetPhy>, 
         return Ok(());
     };
     let message_to_central = client
-        .characteristic_by_uuid::<GattSplitMessage>(service, &Uuid::new_long(MESSAGE_TO_CENTRAL_UUID.to_le_bytes()))
+        .characteristic_by_uuid::<GattSplitMessage>(
+            service,
+            &Uuid::new_long(MESSAGE_TO_CENTRAL_UUID.to_le_bytes()),
+        )
         .await?;
     info!("Message to central found");
     let message_to_peripheral = client
-        .characteristic_by_uuid::<GattSplitMessage>(service, &Uuid::new_long(MESSAGE_TO_PERIPHERAL_UUID.to_le_bytes()))
+        .characteristic_by_uuid::<GattSplitMessage>(
+            service,
+            &Uuid::new_long(MESSAGE_TO_PERIPHERAL_UUID.to_le_bytes()),
+        )
         .await?;
     info!("Subscribing notifications");
     let listener = client.subscribe(&message_to_central, false).await?;
@@ -579,7 +743,9 @@ async fn discover_and_run_manager<C: Controller + ControllerCmdAsync<LeSetPhy>, 
         pressed_keys,
     };
     #[cfg(not(feature = "custom_message"))]
-    PeripheralManager::new(split_ble_driver, id, matrix_config).run().await;
+    PeripheralManager::new(split_ble_driver, id, matrix_config)
+        .run()
+        .await;
     // A peripheral built without `custom_message` has no such characteristics;
     #[cfg(feature = "custom_message")]
     {
@@ -651,7 +817,13 @@ async fn discover_and_run_manager<C: Controller + ControllerCmdAsync<LeSetPhy>, 
 
 /// [`SplitReader`]/[`SplitWriter`] over the peripheral's GATT link: reads are
 /// notifications on `message_to_central`, writes go to `message_to_peripheral`.
-struct BleSplitCentralDriver<'a, 'b, 'c, C: Controller + ControllerCmdAsync<LeSetPhy>, P: PacketPool> {
+struct BleSplitCentralDriver<
+    'a,
+    'b,
+    'c,
+    C: Controller + ControllerCmdAsync<LeSetPhy>,
+    P: PacketPool,
+> {
     listener: NotificationListener<'b, { trouble_host::config::GATT_CLIENT_NOTIFICATION_MTU }>,
     message_to_peripheral: Characteristic<GattSplitMessage>,
     client: &'c GattClient<'a, C, P, 10>,
@@ -663,7 +835,8 @@ impl<'a, 'b, 'c, C: Controller + ControllerCmdAsync<LeSetPhy>, P: PacketPool> Sp
 {
     async fn read(&mut self) -> Result<SplitMessage, SplitDriverError> {
         let data = self.listener.next().await;
-        let message = postcard::from_bytes(data.as_ref()).map_err(|_| SplitDriverError::DeserializeError)?;
+        let message =
+            postcard::from_bytes(data.as_ref()).map_err(|_| SplitDriverError::DeserializeError)?;
         debug!("Received split message: {:?}", message);
 
         if let SplitMessage::Key(event) = message {
@@ -764,42 +937,84 @@ mod tests {
     use crate::test_support::test_block_on as block_on;
 
     #[test]
-    fn sleeping_timeout_keeps_the_known_peer_out_of_discovery() {
+    fn repeated_awake_or_sleeping_timeouts_keep_the_known_peer() {
         let address = [1, 2, 3, 4, 5, 6];
         let mut slot = SlotState::Disconnected(address);
         for _ in 0..3 {
-            slot.connect_timed_out(true);
+            slot.connect_timed_out();
             assert_eq!(slot, SlotState::Disconnected(address));
         }
         let mut connected = SlotState::Connected(address);
-        connected.connect_timed_out(true);
+        connected.connect_timed_out();
         assert_eq!(connected, SlotState::Connected(address));
     }
 
     #[test]
-    fn sleep_restores_a_saved_peer_after_an_awake_timeout() {
+    fn explicit_clear_does_not_require_a_live_peer() {
         let address = [1, 2, 3, 4, 5, 6];
         let mut slot = SlotState::Disconnected(address);
-        slot.connect_timed_out(false);
+        assert!(!slot.clear_peer());
         assert_eq!(slot, SlotState::NoAddr);
-        assert!(slot.restore_saved_peer(&PeerAddress::new(0, true, address)));
-        assert_eq!(slot, SlotState::Disconnected(address));
+        assert!(!slot.restore_saved_peer(&PeerAddress::new(0, false, address)));
+        assert!(!slot.adopt_discovered_peer([9; 6], false, false));
+        assert!(slot.adopt_discovered_peer([9; 6], false, true));
+        assert_eq!(slot, SlotState::Candidate([9; 6]));
 
-        let mut cleared = SlotState::NoAddr;
-        assert!(!cleared.restore_saved_peer(&PeerAddress::new(0, false, address)));
-        assert_eq!(cleared, SlotState::NoAddr, "explicit peer reset must stay reset");
-        assert!(!slot.restore_saved_peer(&PeerAddress::new(0, true, [9; 6])));
-        assert_eq!(slot, SlotState::Disconnected(address));
+        let mut live = SlotState::Connected(address);
+        assert!(live.clear_peer());
+        live.session_ended();
+        assert_eq!(
+            live,
+            SlotState::NoAddr,
+            "old session ending cannot restore a cleared address"
+        );
+    }
+
+    #[test]
+    fn clearing_offline_peer_reaches_storage_without_a_session_task() {
+        block_on(async {
+            crate::storage::clear_flash_channel();
+            let mut slots = [SlotState::Disconnected([1; 6])];
+            let cleared = select(
+                clear_saved_peers(&mut slots),
+                crate::storage::drain_flash_channel(),
+            )
+            .await;
+            assert!(matches!(cleared, Either::First(true)));
+            assert_eq!(slots[0], SlotState::NoAddr);
+            assert!(!link_reset_requested(0));
+        });
+    }
+
+    #[test]
+    fn clearing_live_peer_waits_for_its_old_session_to_end() {
+        block_on(async {
+            crate::storage::clear_flash_channel();
+            let mut slots = [SlotState::Connected([1; 6])];
+            let cleared = select(
+                clear_saved_peers(&mut slots),
+                crate::storage::drain_flash_channel(),
+            )
+            .await;
+            assert!(matches!(cleared, Either::First(true)));
+            assert_eq!(slots[0], SlotState::Clearing);
+            assert!(link_reset_requested(0));
+            assert!(!slots[0].adopt_discovered_peer([2; 6], false, true));
+            slots[0].session_ended();
+            clear_link_reset(0);
+            assert_eq!(slots[0], SlotState::NoAddr);
+            assert!(slots[0].adopt_discovered_peer([2; 6], false, true));
+        });
     }
 
     #[test]
     fn an_advertisement_racing_sleep_cannot_replace_the_saved_peer() {
         let address = [1, 2, 3, 4, 5, 6];
         let mut slot = SlotState::NoAddr;
-        assert!(!slot.adopt_discovered_peer([9; 6], true));
+        assert!(!slot.adopt_discovered_peer([9; 6], true, true));
         assert!(slot.restore_saved_peer(&PeerAddress::new(0, true, address)));
         assert_eq!(slot, SlotState::Disconnected(address));
-        assert!(!slot.adopt_discovered_peer([9; 6], false));
+        assert!(!slot.adopt_discovered_peer([9; 6], false, true));
     }
 
     #[test]

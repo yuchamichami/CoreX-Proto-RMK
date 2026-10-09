@@ -123,7 +123,7 @@ reset_timeout_on_key = true
 [event.layer_change]
 subs = 4
 [event.sleep_state]
-subs = 3
+subs = 4
 [event.pointing]
 subs = 4
 channel_size = 8
@@ -162,13 +162,7 @@ phase = "resolution"
 resolution = 4
 reverse = false
 debounce_ms = 5
-# Hold the stock left RGB power/data low until its status driver is ported.
-[[split.peripheral.output]]
-pin = "P0_13"
-initial_state_active = false
-[[split.peripheral.output]]
-pin = "P0_24"
-initial_state_active = false
+# Stock left RGB pins P0_13/P0_24 are owned by its status LED driver.
 
 # A13 ENC1; same four edges per wheel event as the verified ZMK build.
 [[split.central.input_device.encoder]]
@@ -179,3 +173,16 @@ phase = "resolution"
 resolution = 4
 reverse = false
 debounce_ms = 5
+
+# One event-driven board status controller; spare capacity covers BLE writers
+# and the peripheral battery forwarding task without changing feature flags.
+[event.connection_status_change]
+subs = 8
+[event.battery_status]
+subs = 4
+[event.peripheral_connected]
+subs = 2
+[event.central_connected]
+subs = 2
+[event.peripheral_battery]
+subs = 4

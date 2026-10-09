@@ -10,14 +10,16 @@ CoreX右基板のPAW3222トラックボールと、純正Cornixの左キーボ�
 
 ## ダウンロード
 
+v0.10.0は実機確認中です。[確認済みの範囲](docs/validation.md#v0100)を参照してください。前版は[リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)から取得できます。
+
 | 書き込む基板 | ファーム |
 | --- | --- |
-| CoreX右・PAW3222 | [右用 v0.9.7](firmware/CoreX-Right-v0.9.7.uf2) |
-| 純正Cornix左 | [左用 v0.9.0](firmware/CoreX-Left-v0.9.0.uf2) |
+| CoreX右・PAW3222 | [右用 v0.10.0](firmware/CoreX-Right-v0.10.0.uf2) |
+| 純正Cornix左 | [左用 v0.10.0](firmware/CoreX-Left-v0.10.0.uf2) |
 
-[説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/latest/download/CoreX-firmware-hand-off.zip) · [リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+[説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.0/CoreX-firmware-hand-off.zip) · [リリース一覧](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 
-この左右を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。** 純正Cornix右用のファームは、CoreX右には使えません。
+v0.10.0は**左右とも更新**してください。左右の再接続と登録処理を変更しています。**左右のUF2を取り違えないでください。** 純正Cornix右用のファームは、CoreX右には使えません。
 
 v0.9.5からの更新では、PCのBluetooth登録をやり直す必要はありません。v0.9.4以前から更新する場合は、電池残量の表示に対応するため、[更新手順](docs/flashing.md#corex-を更新する)に沿って一度だけ登録し直します。
 
@@ -48,7 +50,8 @@ Bluetoothでは、PCに **`Cornix TB`** を登録します。右側の電池残�
 - PCにつなぐのは右側です。左側にも、このリポジトリのファームが必要です。
 - 通常キーと数字・記号のFn配列は純正を基にし、トラックボール用の操作を加えています。Vialの保存ファイルは純正用と分けて管理します。
 - 右エンコーダはスクロールと中クリック、左は音量調整とミュートです。
-- **純正の接続・電池状態を示すLED表示には対応していません。** 接続はキー入力で、右の電池残量はPCのBluetooth画面で確認します。
+- 接続と電池低下を短いLED点滅で知らせます。右のLEDで左の電池低下も確認できます。[表示の意味](docs/usage.md#led表示)
+- 右親指の接続キーからPC切り替え・出力切り替えができます。接続先キーの長押しでは登録を消しません。
 
 対象は右のJ4に接続したPAW3222です。トラックポイントとタッチパッドには対応していません。純正の無線ドングルとの接続や電池持ちは未確認です。[検証状況](docs/validation.md)
 

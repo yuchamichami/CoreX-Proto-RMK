@@ -12,7 +12,7 @@ use {crate::ble::profile::BleProfileAction, rmk_types::led_indicator::LedIndicat
 
 #[cfg(all(feature = "vial", feature = "_ble"))]
 use crate::VIAL_CHANNEL_SIZE;
-use crate::hid::{KeyboardReport, Report};
+use crate::hid::Report;
 use crate::{REPORT_CHANNEL_SIZE, RawMutex};
 
 type ReportChannel = Channel<RawMutex, Report, REPORT_CHANNEL_SIZE>;
@@ -54,6 +54,9 @@ pub(crate) async fn send_hid_report(mut report: Report) {
     #[cfg(not(feature = "_no_usb"))]
     let usb_session = (transport == ConnectionType::Usb).then(crate::usb::usb_session);
 
+    #[cfg(feature = "_ble")]
+    let ble_generation = (transport == ConnectionType::Ble).then(crate::ble::report_writer::generation);
+
     loop {
         match ch.try_send(report) {
             Ok(()) => return,
@@ -62,6 +65,10 @@ pub(crate) async fn send_hid_report(mut report: Report) {
 
         poll_fn(|cx| ch.poll_ready_to_send(cx)).await;
         if crate::state::active_transport() != Some(transport) {
+            return;
+        }
+        #[cfg(feature = "_ble")]
+        if ble_generation.is_some_and(|epoch| epoch != crate::ble::report_writer::generation()) {
             return;
         }
         // A reset/re-enumeration can return to USB before this blocked sender
@@ -83,16 +90,16 @@ pub(crate) fn try_send_hid_report(report: Report) {
 }
 
 /// Drains queued reports for the previous output and schedules releases.
-/// USB also cancels an in-flight report and releases mouse/media/system controls.
+/// Both writers cancel in-flight input and release all HID controls.
 pub(crate) fn clear_and_release_report_channel(transport: ConnectionType) {
     #[cfg(not(feature = "_no_usb"))]
     if transport == ConnectionType::Usb {
         crate::usb::clear_and_release_usb_reports();
         return;
     }
-    if let Some(ch) = report_channel(transport) {
-        ch.clear();
-        let _ = ch.try_send(Report::KeyboardReport(KeyboardReport::default()));
+    #[cfg(feature = "_ble")]
+    if transport == ConnectionType::Ble {
+        crate::ble::report_writer::clear_and_release();
     }
 }
 

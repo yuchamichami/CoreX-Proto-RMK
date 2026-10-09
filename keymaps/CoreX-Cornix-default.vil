@@ -448,11 +448,11 @@
     ],
     [
       [
-        "KC_NO",
-        "KC_NO",
-        "KC_NO",
-        "KC_NO",
-        "KC_NO",
+        "USER05",
+        "USER06",
+        "USER03",
+        "USER02",
+        "USER01",
         "KC_BTN3",
         "KC_NO"
       ],
@@ -462,7 +462,7 @@
         "KC_NO",
         "KC_NO",
         "KC_NO",
-        "KC_NO",
+        "USER07",
         "KC_NO"
       ],
       [
@@ -479,7 +479,7 @@
         "KC_NO",
         "KC_NO",
         "KC_NO",
-        "KC_NO",
+        "USER00",
         "KC_NO",
         "KC_NO"
       ],

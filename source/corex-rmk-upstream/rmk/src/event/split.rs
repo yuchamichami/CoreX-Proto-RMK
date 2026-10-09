@@ -38,3 +38,12 @@ pub struct PeripheralBatteryEvent {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
 pub struct ClearPeerEvent;
+
+/// An explicit, time-limited split pairing window opened or closed.
+#[cfg(feature = "_ble")]
+#[event(channel_size = 4, pubs = 1, subs = 2)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[cfg_attr(feature = "defmt", derive(defmt::Format))]
+pub struct SplitPairingEvent {
+    pub open: bool,
+}

@@ -13,11 +13,15 @@ use crate::host::via::keycode_convert::{from_via_keycode, to_via_keycode};
 pub(crate) async fn process_vial<'a>(
     report: &mut ViaReport,
     vial_config: &VialConfig<'a>,
-    #[cfg(feature = "host_lock")] locker: &crate::host::lock::HostLock<'_>,
+    #[cfg(feature = "host_lock")] locker: &super::lock::VialLock<'_>,
     ctx: &KeyboardContext<'_>,
 ) {
     // report.output_data[0] == 0xFE -> vial commands
     let vial_command = report.output_data[1].into();
+    #[cfg(feature = "host_lock")]
+    let unlocked = locker.is_unlocked();
+    #[cfg(not(feature = "host_lock"))]
+    let unlocked = true;
     debug!("Received vial command: {:?}", vial_command);
     match vial_command {
         VialCommand::GetKeyboardId => {
@@ -58,7 +62,7 @@ pub(crate) async fn process_vial<'a>(
                 // Unlock in progress
                 report.input_data[1] = locker.is_unlocking() as u8;
                 // Unlock keys
-                for (idx, (row, col)) in vial_config.unlock_keys.iter().enumerate() {
+                for (idx, (row, col)) in vial_config.unlock_keys.iter().take(15).enumerate() {
                     report.input_data[2 + idx * 2] = *row;
                     report.input_data[3 + idx * 2] = *col;
                 }
@@ -74,17 +78,17 @@ pub(crate) async fn process_vial<'a>(
         }
         VialCommand::UnlockStart => {
             #[cfg(feature = "host_lock")]
-            locker.unlocking();
+            locker.start();
             #[cfg(not(feature = "host_lock"))]
             error!("Vial lock feature is not enabled");
         }
         VialCommand::UnlockPoll => {
             #[cfg(feature = "host_lock")]
             {
-                locker.unlocking();
+                let remaining = locker.poll();
                 report.input_data[0] = locker.is_unlocked() as u8;
                 report.input_data[1] = locker.is_unlocking() as u8;
-                report.input_data[2] = locker.check_unlock();
+                report.input_data[2] = remaining;
             }
             #[cfg(not(feature = "host_lock"))]
             error!("Vial lock feature is not enabled");
@@ -301,6 +305,14 @@ pub(crate) async fn process_vial<'a>(
 
                     let morse_idx = report.output_data[3];
 
+                    if report.output_data[4..12]
+                        .chunks_exact(2)
+                        .any(|bytes| !super::keycode_allowed(LittleEndian::read_u16(bytes), unlocked))
+                    {
+                        super::reject(report);
+                        return;
+                    }
+
                     if (morse_idx as usize) < ctx.morses_len() {
                         // Extract morse (also known as "tap dance" in vial)
                         let tap = from_via_keycode(LittleEndian::read_u16(&report.output_data[4..6]));
@@ -353,6 +365,14 @@ pub(crate) async fn process_vial<'a>(
                     use rmk_types::combo::Combo as ComboConfig;
 
                     let combo_idx = report.output_data[3];
+                    let output_offset = 4 + COMBO_MAX_LENGTH * 2;
+                    if !super::keycode_allowed(
+                        LittleEndian::read_u16(&report.output_data[output_offset..output_offset + 2]),
+                        unlocked,
+                    ) {
+                        super::reject(report);
+                        return;
+                    }
 
                     let mut actions = heapless::Vec::<KeyAction, COMBO_MAX_LENGTH>::new();
                     let mut overflow = false;
@@ -417,6 +437,10 @@ pub(crate) async fn process_vial<'a>(
                 index, clockwise, layer
             );
             let keycode = BigEndian::read_u16(&report.output_data[5..7]);
+            if !super::keycode_allowed(keycode, unlocked) {
+                super::reject(report);
+                return;
+            }
             let action = from_via_keycode(keycode);
             info!("Setting encoder action (clockwise: {}): {:?}", clockwise, action);
             let _ = ctx.set_encoder_direction(layer, index, clockwise == 1, action).await;

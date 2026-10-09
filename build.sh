@@ -36,6 +36,12 @@ mkdir -p "$COREX_ROOT/build/firmware"
 for COREX_HALF in right left; do
     if [ "$COREX_SIDE" != both ] && [ "$COREX_SIDE" != "$COREX_HALF" ]; then continue; fi
     cd "$COREX_ROOT/source/corex-rmk-pair/$COREX_HALF"
+    COREX_FIRMWARE_VERSION=$(python3 - "$COREX_ROOT/firmware/manifest.json" "$COREX_HALF" <<'PY'
+import json, sys
+print(next(i["application_version"] for i in json.load(open(sys.argv[1]))["images"] if i["side"] == sys.argv[2]))
+PY
+)
+    export COREX_FIRMWARE_VERSION
     cargo build --release --locked
     COREX_NAME=$(python3 - "$COREX_ROOT/firmware/manifest.json" "$COREX_HALF" <<'PY'
 import json, pathlib, sys

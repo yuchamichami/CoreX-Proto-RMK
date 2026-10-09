@@ -17,7 +17,7 @@ pub(crate) struct HostLock<'a> {
     /// Start (and stay) unlocked — development escape hatch.
     insecure: bool,
     /// How long an armed attempt survives without a refreshing poll. Vial
-    /// passes 100 ms; Rynk passes 500 ms to tolerate a BLE WebHID round trip.
+    /// and Rynk pass 500 ms to tolerate a BLE WebHID round trip.
     window: Duration,
     unlock_keys: &'a [(u8, u8)],
     keymap: &'a KeyMap<'a>,
@@ -74,6 +74,14 @@ impl<'a> HostLock<'a> {
 
     pub fn lock(&self) {
         self.unlocked.set(false);
+        self.unlocking.set(false);
+    }
+
+    /// Sample the physical challenge without committing an unlock. Vial uses
+    /// this to require its sustained hold instead of Rynk's single chord.
+    #[cfg(feature = "vial")]
+    pub fn all_unlock_keys_held(&self) -> bool {
+        !self.unlock_keys.is_empty() && self.remaining_held() == 0
     }
 
     /// Challenge keys not currently held — no arm, no commit.

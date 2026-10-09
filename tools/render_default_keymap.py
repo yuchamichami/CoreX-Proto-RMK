@@ -28,7 +28,7 @@ LABELS = {
     'KC_BSLASH': ['\\'], 'KC_SLASH': ['/'], 'KC_COMMA': [','], 'KC_DOT': ['.'],
     'KC_LEFT': ['←'], 'KC_RIGHT': ['→'], 'KC_UP': ['↑'], 'KC_DOWN': ['↓'],
     'KC_MUTE': ['消音'], 'KC_BTN3': ['中', 'クリック'],
-    'MO(1)': ['数字', 'Fn'], 'MO(4)': ['BT'], 'MO(6)': ['予備'],
+    'MO(1)': ['数字', 'Fn'], 'MO(4)': ['BT'], 'MO(6)': ['接続'],
     'LT3(KC_I)': ['I', '長押しScroll'],
 }
 
@@ -73,7 +73,7 @@ def make_svg():
     layer = preset['layout'][0]
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">',
            '<title>CoreX 初期配列図</title>',
-           '<desc>Cornix 左と CoreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>',
+           '<desc>Cornix 左と CoreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、接続はPC切替などのレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>',
            '<rect width="100%" height="100%" fill="#ffffff"/>',
            '<g font-family="Zen Maru Gothic">',
            svg_text(LEFT, 35, '初期配列', 25, 700, anchor='start'),
@@ -109,7 +109,7 @@ def make_svg():
     out.append(svg_text(bx, by + 6, 'トラックボール', 13))
     out.append(svg_text(LEFT, 438, '数字 / Fn：数字・記号', 17, 400, '#535b65', 'start'))
     out.append(svg_text(285, 438, 'BT：Bluetooth 設定', 17, 400, '#535b65', 'start'))
-    out.append(svg_text(535, 438, '予備：空のレイヤー6', 17, 400, '#535b65', 'start'))
+    out.append(svg_text(535, 438, '接続：PC切替・登録', 17, 400, '#535b65', 'start'))
     out.append(svg_text(LEFT, 466, 'I を長押ししながらボールを回すとスクロール', 17, 400, '#535b65', 'start'))
     out.extend(['</g>', '</svg>'])
     return '\n'.join(out) + '\n'

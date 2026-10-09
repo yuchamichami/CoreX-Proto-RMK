@@ -86,10 +86,12 @@ class DefaultKeymapTests(unittest.TestCase):
                          (5, 0), (5, 1), (6, 1), (7, 3), (7, 4), (7, 5)]:
             with self.subTest(row=row, col=col):
                 self.assertEqual(self.layers[1][row][col], 'KC_NO')
-        # Spare Fn layer has only the two encoder buttons enabled.
+        # Right Fn adds host/recovery controls; normal typing remains stock.
         enabled = {(r, c): value for r, row in enumerate(self.layers[6])
                    for c, value in enumerate(row) if value != 'KC_NO'}
-        self.assertEqual(enabled, {(0, 5): 'KC_BTN3', (6, 6): 'KC_MUTE'})
+        self.assertEqual(enabled, {(0,5):'KC_BTN3', (6,6):'KC_MUTE',
+                                  (3,4):'USER00', (0,4):'USER01', (0,3):'USER02',
+                                  (0,2):'USER03', (0,1):'USER06', (0,0):'USER05', (1,5):'USER07'})
 
     def test_trackball_layers_and_settings_keep_their_existing_numbers(self):
         self.assertEqual(self.config['behavior']['auto_mouse_layer'][0]['target_layer'], 2)
@@ -113,7 +115,7 @@ class DefaultKeymapTests(unittest.TestCase):
         # by renumbering the stock BLE layer or by confusing it with MO(7).
         reserved = {int(code[4:]) for layer in self.layers for row in layer
                     for code in row if code.startswith('USER')}
-        self.assertEqual(reserved, {0, 1, 2, 11, 17, 26})
+        self.assertEqual(reserved, {0, 1, 2, 3, 5, 6, 7, 11, 17, 26})
 
     def test_encoder_direction_and_buttons_follow_stock(self):
         for layer in self.preset['encoder_layout']:

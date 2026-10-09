@@ -29,11 +29,11 @@ use crate::ble::led::BleLedReader;
 use crate::ble::passkey::{PasskeyInputState, next_gatt_event};
 use crate::ble::profile::{BOND_SLOTS, ProfileInfo, ProfileManager, UPDATED_CCCD_TABLE, UPDATED_PROFILE};
 use crate::ble::sleep::{report_activity, request_sleep};
-use crate::channel::{BLE_REPORT_CHANNEL, LED_SIGNAL};
+use crate::channel::LED_SIGNAL;
 use crate::config::{BleBatteryConfig, DeviceConfig, RmkConfig};
 use crate::core_traits::Runnable;
 use crate::event::SubscribableEvent;
-use crate::hid::{HidWriterTrait, run_led_reader};
+use crate::hid::run_led_reader;
 #[cfg(feature = "split")]
 use crate::split::PeripheralMatrixConfig;
 #[cfg(feature = "split")]
@@ -51,6 +51,7 @@ pub(crate) mod led;
 pub(crate) mod nrf;
 pub mod passkey;
 pub(crate) mod profile;
+pub(crate) mod report_writer;
 #[cfg(any(feature = "split", feature = "dongle"))]
 pub(crate) mod scan;
 pub(crate) mod sleep;
@@ -838,6 +839,8 @@ async fn serve_keyboard_connection<
     config: &BleBatteryConfig<'a>,
     #[cfg(feature = "host")] host_service: Option<&'r crate::host::HostService<'r>>,
 ) {
+    let _report_session = report_writer::Session::new();
+    ble_server::reset_hid_cache(server);
     let mut ble_hid_server = BleHidServer::new(server, conn);
     let mut ble_led_reader = BleLedReader;
     let mut ble_battery_server = config.enabled.then(|| BleBatteryServer::new(server, conn));
@@ -888,14 +891,7 @@ async fn serve_keyboard_connection<
         }
     };
 
-    let writer_task = async {
-        loop {
-            let report = BLE_REPORT_CHANNEL.receive().await;
-            if let Err(e) = ble_hid_server.write_report(&report).await {
-                error!("Failed to send report: {:?}", e);
-            }
-        }
-    };
+    let writer_task = report_writer::run(&mut ble_hid_server);
 
     let led_task = run_led_reader(&mut ble_led_reader, ConnectionType::Ble);
 

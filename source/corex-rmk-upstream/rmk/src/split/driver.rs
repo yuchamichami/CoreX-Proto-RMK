@@ -15,7 +15,8 @@ use crate::event::DfuCmdEvent;
 #[cfg(feature = "_ble")]
 use crate::event::{BatteryStatusEvent, PeripheralBatteryEvent};
 use crate::event::{
-    KeyboardEvent, KeyboardEventPos, PeripheralConnectedEvent, SubscribableEvent, publish_event, publish_event_async,
+    KeyboardEvent, KeyboardEventPos, PeripheralConnectedEvent, SubscribableEvent, publish_event,
+    publish_event_async,
 };
 
 #[derive(Debug, Clone, Copy)]
@@ -49,13 +50,15 @@ struct PeripheralSlot {
     battery: BatteryStatus,
 }
 
-static PERIPHERAL_SLOTS: BlockingMutex<crate::RawMutex, Cell<[PeripheralSlot; crate::SPLIT_PERIPHERALS_NUM]>> =
-    BlockingMutex::new(Cell::new(
-        [PeripheralSlot {
-            connected: false,
-            battery: BatteryStatus::Unavailable,
-        }; crate::SPLIT_PERIPHERALS_NUM],
-    ));
+static PERIPHERAL_SLOTS: BlockingMutex<
+    crate::RawMutex,
+    Cell<[PeripheralSlot; crate::SPLIT_PERIPHERALS_NUM]>,
+> = BlockingMutex::new(Cell::new(
+    [PeripheralSlot {
+        connected: false,
+        battery: BatteryStatus::Unavailable,
+    }; crate::SPLIT_PERIPHERALS_NUM],
+));
 
 /// Read-modify-write peripheral `id`'s slot. Returns `false` when `id` is out
 /// of range or the slot didn't change, so callers skip publishing.
@@ -126,7 +129,55 @@ mod tests {
         set_peripheral_battery(0, status);
 
         assert_eq!(current_peripheral_battery_status(0), Some(status));
-        assert_eq!(current_peripheral_battery_status(crate::SPLIT_PERIPHERALS_NUM), None);
+        assert_eq!(
+            current_peripheral_battery_status(crate::SPLIT_PERIPHERALS_NUM),
+            None
+        );
+    }
+
+    struct ResetPeer {
+        ack: bool,
+        sent: bool,
+    }
+    impl super::SplitWriter for ResetPeer {
+        async fn write(
+            &mut self,
+            message: &super::SplitMessage,
+        ) -> Result<usize, super::SplitDriverError> {
+            assert!(matches!(message, super::SplitMessage::ClearPeer));
+            self.sent = true;
+            Ok(1)
+        }
+    }
+    impl super::SplitReader for ResetPeer {
+        async fn read(&mut self) -> Result<super::SplitMessage, super::SplitDriverError> {
+            if self.ack {
+                embassy_time::Timer::after_millis(20).await;
+                Ok(super::SplitMessage::ClearPeerAck)
+            } else {
+                core::future::pending().await
+            }
+        }
+    }
+
+    #[test]
+    fn remote_reset_waits_for_ack_but_does_not_block_on_absent_ack() {
+        crate::test_support::test_block_on(async {
+            for ack in [true, false] {
+                let mut peer = ResetPeer { ack, sent: false };
+                let started = embassy_time::Instant::now();
+                super::clear_remote_peer(&mut peer).await;
+                assert!(peer.sent);
+                let elapsed = started.elapsed();
+                if ack {
+                    assert!(elapsed >= embassy_time::Duration::from_millis(20));
+                    assert!(elapsed < embassy_time::Duration::from_millis(30));
+                } else {
+                    assert!(elapsed >= embassy_time::Duration::from_secs(1));
+                    assert!(elapsed < embassy_time::Duration::from_millis(1010));
+                }
+            }
+        });
     }
 }
 
@@ -193,13 +244,17 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
     pub(crate) async fn run(mut self) {
         use crate::event::EventSubscriber;
 
+        #[cfg(feature = "_ble")]
+        if super::ble::central::link_reset_requested(self.id) {
+            clear_remote_peer(&mut self.transceiver).await;
+            return;
+        }
+
         let mut indicator_sub = crate::event::LedIndicatorEvent::subscriber();
         let mut layer_sub = crate::event::LayerChangeEvent::subscriber();
         // Subscribe before the initial send so any change racing past the
         // snapshot is still delivered to us.
         let mut connection_sub = crate::event::ConnectionStatusChangeEvent::subscriber();
-        #[cfg(feature = "_ble")]
-        let mut clear_peer_sub = crate::event::ClearPeerEvent::subscriber();
         #[cfg(feature = "display")]
         let mut wpm_sub = crate::event::WpmUpdateEvent::subscriber();
         #[cfg(feature = "display")]
@@ -224,20 +279,18 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
         self.check_firmware_update().await;
 
         loop {
+            #[cfg(feature = "_ble")]
+            if super::ble::central::link_reset_requested(self.id) {
+                clear_remote_peer(&mut self.transceiver).await;
+                return;
+            }
             // Use select_biased_with_feature to handle feature-gated subscriber arms
             let next_event_to_peri = async {
                 crate::select_biased_with_feature! {
                     e = indicator_sub.next_event().fuse() => SplitMessage::KeyboardIndicator(e.0.into_bits()),
                     e = layer_sub.next_event().fuse() => SplitMessage::Layer(e.0),
                     e = connection_sub.next_event().fuse() => SplitMessage::ConnectionStatus(e.0),
-                    with_feature("_ble"): _ = clear_peer_sub.next_event().fuse() => {
-                        #[cfg(feature = "storage")]
-                        {
-                            use {crate::split::ble::PeerAddress, crate::storage::{StorageItem, store_unchecked}};
-                            store_unchecked(StorageItem::PeerAddress(PeerAddress::new(self.id as u8, false, [0; 6]))).await;
-                        }
-                        SplitMessage::ClearPeer
-                    },
+                    with_feature("_ble"): _ = super::ble::central::wait_for_link_reset(self.id).fuse() => SplitMessage::ClearPeer,
                     e = sleep_sub.next_event().fuse() => SplitMessage::SleepState(e.0),
                     with_feature("display"): e = wpm_sub.next_event().fuse() => SplitMessage::Wpm(e.0),
                     with_feature("display"): e = modifier_sub.next_event().fuse() => SplitMessage::Modifier(e.modifier.into_bits()),
@@ -270,6 +323,11 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
                 }
                 #[cfg(not(feature = "dfu_split"))]
                 Either::Second(msg) => {
+                    #[cfg(feature = "_ble")]
+                    if matches!(msg, SplitMessage::ClearPeer) {
+                        clear_remote_peer(&mut self.transceiver).await;
+                        return;
+                    }
                     if self.send(&msg).await.is_err() {
                         return;
                     }
@@ -285,8 +343,13 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
             SplitMessage::Key(e) => match e.pos {
                 KeyboardEventPos::Key(key_pos) => {
                     // Verify the row/col
-                    if key_pos.row >= self.matrix_config.rows || key_pos.col >= self.matrix_config.cols {
-                        error!("Invalid peripheral row/col: {} {}", key_pos.row, key_pos.col);
+                    if key_pos.row >= self.matrix_config.rows
+                        || key_pos.col >= self.matrix_config.cols
+                    {
+                        error!(
+                            "Invalid peripheral row/col: {} {}",
+                            key_pos.row, key_pos.col
+                        );
                         return;
                     }
                     publish_event_async(KeyboardEvent::key(
@@ -308,7 +371,10 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
             }
             #[cfg(feature = "dfu_split")]
             SplitMessage::FirmwareChunkAck { offset, crc: _ } => {
-                info!("dfu_split: stale chunk ack (offset {}) in event loop, ignoring", offset);
+                info!(
+                    "dfu_split: stale chunk ack (offset {}) in event loop, ignoring",
+                    offset
+                );
             }
             #[cfg(feature = "dfu_split")]
             SplitMessage::FirmwareUpdateConfirm => {
@@ -316,5 +382,26 @@ impl<T: SplitReader + SplitWriter> PeripheralManager<T> {
             }
             _ => warn!("{:?} should not come from peripheral", split_message),
         }
+    }
+}
+
+/// The lifecycle already cleared the local address, so an absent/unresponsive
+/// remote cannot prevent local recovery. A live remote confirms its own flash
+/// write before both links are dropped.
+#[cfg(feature = "_ble")]
+async fn clear_remote_peer<T: SplitReader + SplitWriter>(transceiver: &mut T) {
+    let reset = async {
+        transceiver.write(&SplitMessage::ClearPeer).await?;
+        loop {
+            if matches!(transceiver.read().await?, SplitMessage::ClearPeerAck) {
+                return Ok::<_, SplitDriverError>(());
+            }
+        }
+    };
+    if !matches!(
+        embassy_time::with_timeout(embassy_time::Duration::from_secs(1), reset).await,
+        Ok(Ok(()))
+    ) {
+        warn!("Remote split peer did not acknowledge reset; local peer is cleared");
     }
 }

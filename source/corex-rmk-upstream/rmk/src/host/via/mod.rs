@@ -1,7 +1,9 @@
-use byteorder::{BigEndian, ByteOrder, LittleEndian};
+use byteorder::{BigEndian, ByteOrder};
 use embassy_time::Instant;
 use embedded_io_async::{Read, Write};
-use rmk_types::protocol::vial::{VIA_FIRMWARE_VERSION, VIA_PROTOCOL_VERSION, ViaCommand, ViaKeyboardInfo};
+use rmk_types::action::{Action, KeyAction, KeyboardAction};
+use rmk_types::protocol::vial::VialCommand;
+use rmk_types::protocol::vial::{VIA_PROTOCOL_VERSION, ViaCommand, ViaKeyboardInfo};
 use vial::process_vial;
 
 use crate::config::{RmkConfig, VialConfig};
@@ -12,13 +14,34 @@ use crate::keymap::KeyMap;
 use crate::{MACRO_MAX_NUM, MACRO_SPACE_SIZE, boot};
 
 pub(crate) mod keycode_convert;
+#[cfg(feature = "host_lock")]
+mod lock;
+#[cfg(all(test, feature = "host_lock"))]
+mod security_tests;
 mod vial;
+
+// Match Vial's bootloader-key firewall, also covering RMK's reboot and storage
+// erase keys. Apply to every host keycode write path, including dynamic entries.
+fn keycode_allowed(keycode: u16, unlocked: bool) -> bool {
+    unlocked
+        || !matches!(
+            from_via_keycode(keycode),
+            KeyAction::Single(Action::KeyboardControl(
+                KeyboardAction::Bootloader | KeyboardAction::Reboot | KeyboardAction::ClearEeprom
+            ))
+        )
+}
+
+fn reject(report: &mut ViaReport) {
+    report.input_data.fill(0);
+    report.input_data[0] = ViaCommand::Unhandled as u8;
+}
 
 pub struct VialService<'a> {
     ctx: KeyboardContext<'a>,
     vial_config: VialConfig<'static>,
     #[cfg(feature = "host_lock")]
-    locker: crate::host::lock::HostLock<'a>,
+    locker: lock::VialLock<'a>,
 }
 
 impl<'a> VialService<'a> {
@@ -26,19 +49,59 @@ impl<'a> VialService<'a> {
         Self {
             ctx: KeyboardContext::new(keymap),
             vial_config: config.vial_config,
-            // Vial's poll cadence is ~100 ms (`VialCommand::UnlockPoll`).
             #[cfg(feature = "host_lock")]
-            locker: crate::host::lock::HostLock::new(
-                config.vial_config.unlock_keys,
-                keymap,
-                config.vial_config.insecure,
-                embassy_time::Duration::from_millis(100),
-            ),
+            locker: lock::VialLock::new(config.vial_config.unlock_keys, keymap, config.vial_config.insecure),
+        }
+    }
+
+    fn is_unlocked(&self) -> bool {
+        #[cfg(feature = "host_lock")]
+        {
+            self.locker.is_unlocked()
+        }
+        #[cfg(not(feature = "host_lock"))]
+        {
+            true
+        }
+    }
+
+    fn request_allowed(&self, request: &[u8; 32]) -> bool {
+        #[cfg(feature = "host_lock")]
+        if self.locker.is_unlocking() {
+            // Freeze configuration while the physical challenge is held. Lock
+            // remains available to cancel an attempt explicitly.
+            return request[0] == ViaCommand::Vial as u8
+                && matches!(
+                    request[1].into(),
+                    VialCommand::GetKeyboardId
+                        | VialCommand::GetSize
+                        | VialCommand::GetKeyboardDef
+                        | VialCommand::GetUnlockStatus
+                        | VialCommand::UnlockStart
+                        | VialCommand::UnlockPoll
+                        | VialCommand::Lock
+                );
+        }
+        match ViaCommand::from(request[0]) {
+            ViaCommand::DynamicKeymapMacroSetBuffer
+            | ViaCommand::DynamicKeymapMacroReset
+            | ViaCommand::EepromReset
+            | ViaCommand::BootloaderJump
+            | ViaCommand::DynamicKeymapReset => self.is_unlocked(),
+            ViaCommand::GetKeyboardValue if request[1] == ViaKeyboardInfo::SwitchMatrixState as u8 => {
+                cfg!(feature = "host_lock") && self.is_unlocked()
+            }
+            ViaCommand::Vial if request[1] == VialCommand::QmkSettingsReset as u8 => self.is_unlocked(),
+            _ => true,
         }
     }
 
     async fn process_via_packet(&self, report: &mut ViaReport) {
         let command_id = report.output_data[0];
+        if !self.request_allowed(&report.output_data) {
+            reject(report);
+            return;
+        }
 
         // Caller pre-fills `input_data` from `output_data`, so individual arms
         // only need to overwrite the bytes they actually change.
@@ -65,6 +128,7 @@ impl<'a> VialService<'a> {
                         #[cfg(feature = "host_lock")]
                         ViaKeyboardInfo::SwitchMatrixState if self.locker.is_unlocked() => {
                             let bitmap = &mut report.input_data[2..];
+                            bitmap.fill(0);
                             self.ctx.read_matrix_state(bitmap);
                             // Vial wants each row's bytes big-endian (QMK matrix_row_t order).
                             let (rows, cols, _) = self.ctx.keymap_dimensions();
@@ -77,7 +141,10 @@ impl<'a> VialService<'a> {
                             }
                         }
                         ViaKeyboardInfo::FirmwareVersion => {
-                            BigEndian::write_u32(&mut report.input_data[2..6], VIA_FIRMWARE_VERSION);
+                            BigEndian::write_u32(
+                                &mut report.input_data[2..6],
+                                env!("COREX_VIA_VERSION").parse::<u32>().unwrap_or(0),
+                            );
                         }
                         _ => (),
                     },
@@ -115,6 +182,10 @@ impl<'a> VialService<'a> {
                 let row = report.output_data[2];
                 let col = report.output_data[3];
                 let keycode = BigEndian::read_u16(&report.output_data[4..6]);
+                if !keycode_allowed(keycode, self.is_unlocked()) {
+                    reject(report);
+                    return;
+                }
                 let action = from_via_keycode(keycode);
                 info!(
                     "Setting keycode: 0x{:02X} at ({},{}), layer {} as {:?}",
@@ -212,6 +283,15 @@ impl<'a> VialService<'a> {
                 let offset = BigEndian::read_u16(&report.output_data[1..3]);
                 // size <= 28
                 let size = report.output_data[3];
+                let (rows, cols, layers) = self.ctx.keymap_dimensions();
+                if size > 28
+                    || size % 2 != 0
+                    || offset % 2 != 0
+                    || offset as usize + size as usize > rows * cols * layers * 2
+                {
+                    reject(report);
+                    return;
+                }
                 debug!("Getting keymap buffer, offset: {}, size: {}", offset, size);
                 let mut idx = 4;
                 let start = (offset / 2) as usize;
@@ -228,12 +308,29 @@ impl<'a> VialService<'a> {
                 let offset = BigEndian::read_u16(&report.output_data[1..3]);
                 // size <= 28
                 let size = report.output_data[3];
+                let (rows, cols, layers) = self.ctx.keymap_dimensions();
+                if size > 28
+                    || size % 2 != 0
+                    || offset % 2 != 0
+                    || offset as usize + size as usize > rows * cols * layers * 2
+                {
+                    reject(report);
+                    return;
+                }
+                // Validate the whole request before writing any cell. Offsets
+                // and sizes are bytes, and VIA keycodes are big endian.
+                if report.output_data[4..4 + size as usize]
+                    .chunks_exact(2)
+                    .any(|bytes| !keycode_allowed(BigEndian::read_u16(bytes), self.is_unlocked()))
+                {
+                    reject(report);
+                    return;
+                }
                 let mut idx = 4;
-                let (rows, cols, _) = self.ctx.keymap_dimensions();
-                for i in 0..(size as usize) {
-                    let via_keycode = LittleEndian::read_u16(&report.output_data[idx..idx + 2]);
+                for i in 0..(size as usize / 2) {
+                    let via_keycode = BigEndian::read_u16(&report.output_data[idx..idx + 2]);
                     let action = from_via_keycode(via_keycode);
-                    let flat_index = offset as usize + i;
+                    let flat_index = offset as usize / 2 + i;
                     let (layer, in_layer) = (flat_index / (rows * cols), flat_index % (rows * cols));
                     let _ = self
                         .ctx
@@ -303,7 +400,8 @@ mod tests {
         let mut behavior = BehaviorConfig::default();
         let positional = PositionalConfig::<1, 1>::default();
         let keymap = block_on(KeyMap::new(&mut data, &mut behavior, &positional));
-        let config = RmkConfig::default();
+        let mut config = RmkConfig::default();
+        config.vial_config.insecure = true;
         let mut service = VialService::new(&keymap, &config);
         f(&mut service)
     }

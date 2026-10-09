@@ -106,6 +106,9 @@ pub(crate) enum SplitMessage {
     /// Central → Peripheral: request system reset.
     #[cfg(feature = "dfu_split")]
     SystemReset,
+    /// Peripheral → central: the saved split peer was durably cleared.
+    #[cfg(feature = "_ble")]
+    ClearPeerAck,
 }
 
 // -----------------------------------------------------------------------
@@ -139,7 +142,9 @@ impl<'de> Deserialize<'de> for FirmwareChunkData {
         use serde::de::Error;
         let buf: &[u8] = Deserialize::deserialize(deserializer)?;
         if buf.len() > SPLIT_CHUNK_SIZE {
-            return Err(D::Error::custom("firmware chunk exceeds SPLIT_CHUNK_SIZE bytes"));
+            return Err(D::Error::custom(
+                "firmware chunk exceeds SPLIT_CHUNK_SIZE bytes",
+            ));
         }
         let mut data = [0u8; SPLIT_CHUNK_SIZE];
         data[..buf.len()].copy_from_slice(buf);

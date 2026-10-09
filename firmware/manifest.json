@@ -1,6 +1,6 @@
 {
   "distribution": "CoreX PAW3222 + stock Cornix left",
-  "release": "v0.9.7",
+  "release": "v0.10.0",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
   "build_host": "x86_64-apple-darwin",
@@ -10,43 +10,47 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Right v0.9.7 built and flashed; 177 host tests passed. Verified USB/Vial, preserved 392-key layout and settings, left v0.9.0 link, encrypted bonded host reconnection, BAS read, 5-minute idle entry with PAW motion IRQ retained, Vial access while idle, and subsequent activity wake with PAW returning awake without reinitialization. First-input delivery and battery-only wake await confirmation; power consumption not measured. Bundled left v0.9.0 unchanged.",
+  "validation_scope": "Both halves built from v0.10.0 source. 232 host/board/keymap tests passed, including 193 isolated RMK tests. Bundled/rebuilt hashes and storage schema match. Hardware flashing pending: macOS loginwindow denied and ejected right UF2 volume before transfer; existing firmware unchanged. Battery-only wake and current/run-time measurements pending.",
   "images": [
     {
       "side": "right",
-      "application_version": "0.9.7",
+      "application_version": "0.10.0",
       "role": "central",
       "target": "CoreX PAW3222 only",
-      "filename": "CoreX-Right-v0.9.7.uf2",
-      "binary_bytes": 524244,
-      "uf2_bytes": 1048576,
-      "binary_sha256": "543d98625faf42865d3d0b6cfea98096d8a58bf31e2097387521a398e92910fa",
-      "uf2_sha256": "6de8337f45f13aeb0b23adca4a30f167fe49df3ba2fdfa30256af4f38cb522da",
+      "filename": "CoreX-Right-v0.10.0.uf2",
+      "binary_bytes": 535100,
+      "uf2_bytes": 1070592,
+      "binary_sha256": "32dfaf4ba757ed43fb4e644eb1a8bd4f84f17a0f254d1f772337bb3286df9e79",
+      "uf2_sha256": "0a97c029480b80bcc03df19d9a34cd0fdf6144d30aae721194550fdb548c8863",
       "flash_start": "0x26000",
-      "flash_end_exclusive": "0xa6000",
+      "flash_end_exclusive": "0xa8b00",
       "application_limit_exclusive": "0xb0000",
       "storage_range_exclusive": [
         "0xb0000",
         "0xd0000"
-      ]
+      ],
+      "source_ref": "v0.10.0",
+      "enabled_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial,host_lock"
     },
     {
       "side": "left",
-      "application_version": "0.9.0",
+      "application_version": "0.10.0",
       "role": "peripheral",
       "target": "stock Cornix left",
-      "filename": "CoreX-Left-v0.9.0.uf2",
-      "binary_bytes": 335540,
-      "uf2_bytes": 671232,
-      "binary_sha256": "2a329e9e60e21c82124744c9173d73db2590003270f554ee8ed44d340053ec67",
-      "uf2_sha256": "0d19dbec808543e42899666fb45fc85824f81f99b3fefb5dbebce80b97aa0f8c",
+      "filename": "CoreX-Left-v0.10.0.uf2",
+      "binary_bytes": 349460,
+      "uf2_bytes": 699392,
+      "binary_sha256": "ad5059a9f551c6300326bf88e3407982acd19698da921df9949b7b049e76b338",
+      "uf2_sha256": "d4c812d9cb9668f752b8804da903bfe9af2d0ee9c03145c446e3504541e9021f",
       "flash_start": "0x1000",
-      "flash_end_exclusive": "0x52f00",
+      "flash_end_exclusive": "0x56600",
       "application_limit_exclusive": "0xa0000",
       "storage_range_exclusive": [
         "0xc0000",
         "0xe0000"
-      ]
+      ],
+      "source_ref": "v0.10.0",
+      "enabled_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial"
     }
   ],
   "default_keymap": {
@@ -73,5 +77,20 @@
     "ble_service": "One standard Battery Service (0x180F), Battery Level (0x2A19): right battery; read/notify with CCCD only",
     "left_service_uuid": "1dad1811-b1c4-42ae-825e-f45414fe6be4",
     "left_service": "Peripheral measurements retained via custom GATT service; not a second standard BAS"
+  },
+  "source_ref": "v0.10.0",
+  "vial_physical_unlock": {
+    "enabled_on_right": true,
+    "physical_keys": [
+      "Y",
+      "Backspace"
+    ],
+    "hold_seconds": 5
+  },
+  "split_pairing": {
+    "remembered_peer_only": true,
+    "pairing_window_seconds": 60,
+    "left_gesture": "Tab+T, 5s while disconnected",
+    "right_action": "User7, 5s"
   }
 }

@@ -31,7 +31,7 @@ mkdir -p "$COREX_ROOT/build/tests/ble"
 COREX_METADATA="$COREX_ROOT/build/tests/ble/test-artifacts.jsonl"
 rustup run 1.95.0 cargo test \
     --manifest-path "$COREX_ROOT/source/corex-rmk-upstream/rmk/Cargo.toml" \
-    --no-default-features --features std,log,_ble,split,vial \
+    --no-default-features --features std,log,_ble,split,vial,host_lock \
     --target "$COREX_HOST" --target-dir "$COREX_ROOT/build/tests/ble" \
     --lib --no-run --message-format=json > "$COREX_METADATA"
 python3 - "$COREX_METADATA" <<'PYTEST'
@@ -45,9 +45,9 @@ exe = executables[0]
 names = [line.removesuffix(': test') for line in
          subprocess.check_output([exe, '--list', '--format', 'terse'], text=True).splitlines()
          if line.endswith(': test')]
-prefixes = ('ble::battery_service::', 'usb::', 'ble::sleep::tests::',
-            'split::ble::central::tests::', 'keyboard::tests::',
-            'keyboard::auto_mouse_layer::', 'state::tests::',
+prefixes = ('ble::battery_service::', 'ble::report_writer::', 'ble::ble_server::tests::', 'usb::', 'ble::sleep::tests::',
+            'split::', 'keyboard::tests::',
+            'keyboard::auto_mouse_layer::', 'keyboard::test::', 'host::via::', 'host::lock::', 'state::tests::',
             'input_device::pointing::', 'keymap::')
 selected = [name for name in names if name.startswith(prefixes)]
 assert selected, 'No host regression tests selected'

@@ -1,6 +1,6 @@
 [package]
 name = "corex-pair-right"
-version = "0.1.0"
+version = "0.10.0"
 authors = ["Haobo Gu <haobogu@outlook.com>"]
 description = "CoreX pair right: right central PAW3222 trackball + stock Cornix left peripheral"
 homepage = "https://github.com/rmk-rs/rmk"
@@ -10,7 +10,7 @@ edition = "2024"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-rmk = { path = "../../corex-rmk-upstream/rmk", default-features = false, features = ["usb_log", "storage", "vial", "async_matrix", "nrf52840_ble", "adafruit_bl", "split"] }
+rmk = { path = "../../corex-rmk-upstream/rmk", default-features = false, features = ["usb_log", "storage", "vial", "host_lock", "async_matrix", "nrf52840_ble", "adafruit_bl", "split"] }
 nrf-sdc = { version = "0.4.0", features = [
     "defmt",
     "peripheral",

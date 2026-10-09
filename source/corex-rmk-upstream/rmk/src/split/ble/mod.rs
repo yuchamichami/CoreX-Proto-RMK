@@ -1,5 +1,11 @@
 pub mod central;
+pub(crate) mod input;
 pub mod peripheral;
+
+use core::sync::atomic::{AtomicBool, Ordering};
+
+use embassy_sync::signal::Signal;
+use embassy_time::{Duration, Instant};
 
 use postcard::experimental::max_size::MaxSize;
 use serde::{Deserialize, Serialize};
@@ -7,6 +13,58 @@ use trouble_host::types::gatt_traits::AsGatt;
 
 use super::SplitMessage;
 use super::driver::SplitDriverError;
+
+static PAIRING_REQUEST: Signal<crate::RawMutex, ()> = Signal::new();
+static PAIRING_OPEN: AtomicBool = AtomicBool::new(false);
+const PAIRING_DURATION: Duration = Duration::from_secs(60);
+
+/// Forget this half's saved split peer and open a 60-second pairing window.
+/// The always-running link lifecycle handles this even when the other half is absent.
+pub fn request_pairing() {
+    PAIRING_REQUEST.signal(());
+}
+
+/// Current split pairing state, also published as `SplitPairingEvent`.
+pub fn pairing_window_open() -> bool {
+    PAIRING_OPEN.load(Ordering::Acquire)
+}
+
+struct PairingWindow {
+    deadline: Option<Instant>,
+}
+
+impl PairingWindow {
+    fn new() -> Self {
+        Self { deadline: None }
+    }
+
+    fn open(&mut self) {
+        self.deadline = Some(Instant::now() + PAIRING_DURATION);
+        self.publish(true);
+    }
+
+    fn close(&mut self) {
+        self.deadline = None;
+        self.publish(false);
+    }
+
+    fn remaining(&mut self) -> Option<Duration> {
+        let deadline = self.deadline?;
+        let remaining = deadline.saturating_duration_since(Instant::now());
+        if remaining == Duration::MIN {
+            self.close();
+            None
+        } else {
+            Some(remaining)
+        }
+    }
+
+    fn publish(&self, open: bool) {
+        if PAIRING_OPEN.swap(open, Ordering::AcqRel) != open {
+            crate::event::publish_event(crate::event::SplitPairingEvent { open });
+        }
+    }
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize, MaxSize)]
 #[cfg_attr(feature = "defmt", derive(defmt::Format))]
@@ -61,5 +119,30 @@ impl AsGatt for GattSplitMessage {
 
     fn as_gatt(&self) -> &[u8] {
         &self.buf[..self.len]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::event::{EventSubscriber, SplitPairingEvent, SubscribableEvent};
+    use crate::test_support::test_block_on;
+
+    #[test]
+    fn pairing_window_closes_and_publishes_its_expiry() {
+        test_block_on(async {
+            PAIRING_OPEN.store(false, Ordering::Release);
+            let mut events = SplitPairingEvent::subscriber();
+            let mut window = PairingWindow::new();
+            window.open();
+            assert!(pairing_window_open());
+            assert!(events.next_event().await.open);
+            embassy_time::MockDriver::get().advance(PAIRING_DURATION);
+            assert!(window.remaining().is_none());
+            assert!(!pairing_window_open());
+            assert!(!events.next_event().await.open);
+            assert!(window.remaining().is_none());
+            assert!(events.try_next_message_pure().is_none());
+        });
     }
 }

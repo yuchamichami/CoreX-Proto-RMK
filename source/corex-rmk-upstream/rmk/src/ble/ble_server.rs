@@ -155,6 +155,37 @@ pub(crate) struct HidService {
     pub(crate) system_report: [u8; 1],
 }
 
+/// A host may read report values before subscribing. Do not expose the last
+/// host's pressed controls or relative movement through the shared GATT cache.
+pub(crate) fn reset_hid_cache(server: &Server<'_>) {
+    server.set(&server.hid_service.input_keyboard, &[0; 8]).unwrap();
+    server.set(&server.hid_service.mouse_report, &[0; MOUSE_REPORT_SIZE]).unwrap();
+    server.set(&server.hid_service.media_report, &[0; 2]).unwrap();
+    server.set(&server.hid_service.system_report, &[0; 1]).unwrap();
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn new_host_reads_released_controls_from_the_existing_gatt_table() {
+        let server = Server::new_default("hid-cache-test").unwrap();
+        let k = &server.hid_service.input_keyboard;
+        let m = &server.hid_service.mouse_report;
+        let c = &server.hid_service.media_report;
+        let s = &server.hid_service.system_report;
+        server.set(k, &[1; 8]).unwrap();
+        server.set(m, &[1; MOUSE_REPORT_SIZE]).unwrap();
+        server.set(c, &[1; 2]).unwrap();
+        server.set(s, &[1; 1]).unwrap();
+        reset_hid_cache(&server);
+        assert_eq!(server.get(k).unwrap(), [0; 8]);
+        assert_eq!(server.get(m).unwrap(), [0; MOUSE_REPORT_SIZE]);
+        assert_eq!(server.get(c).unwrap(), [0; 2]);
+        assert_eq!(server.get(s).unwrap(), [0; 1]);
+    }
+}
+
 pub(crate) struct BleHidServer<'stack, 'server, 'conn, P: PacketPool> {
     input_keyboard: Characteristic<[u8; 8]>,
     mouse_report: Characteristic<[u8; MOUSE_REPORT_SIZE]>,

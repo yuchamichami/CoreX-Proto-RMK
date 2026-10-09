@@ -71,6 +71,12 @@ def generate():
             layer[row][col] = code if index == 0 else 'KC_NO'
         for row, col in [(3, 6), (4, 6), (5, 6), (7, 6)]:
             layer[row][col] = 'KC_NO'
+    # Right thumb Fn (MO6) provides host controls without the left half.
+    # Keep stock typing/number layers unchanged. Erasure uses a dedicated hold.
+    for row, col, code in [(3,4,'USER00'), (0,4,'USER01'), (0,3,'USER02'),
+                           (0,2,'USER03'), (0,1,'USER06'), (0,0,'USER05'),
+                           (1,5,'USER07')]:
+        layout[6][row][col] = code
     # Vial uses [CCW,CW], and CoreX's encoder index is right first.
     encoder = [stock['encoder_layout'][0][1], stock['encoder_layout'][0][0]]
     return {
