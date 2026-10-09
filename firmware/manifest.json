@@ -10,7 +10,7 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Both halves built from v0.10.1 source. 232 host/board/keymap tests passed, including 193 isolated RMK tests. Bundled/rebuilt hashes and storage schema 0xA805CEFB match. Both controllers explicitly request +8 dBm; 2M PHY remains disabled. Hardware flashing, actual RF/link quality, aluminum-case performance and battery-current/runtime measurements pending.",
+  "validation_scope": "Both halves built and flashed from v0.10.1 source. 232 host/board/keymap tests passed; bundled/rebuilt hashes and storage schema 0xA805CEFB match. Both normal USB devices returned; right Vial version readback 0.10.1, 392 keys and native Vial settings unchanged. Left startup version was not captured. User confirmed both-side keys and right trackball with USB disconnected. Both controllers explicitly request +8 dBm; actual RF/link quality, aluminum-case comparison and current/runtime measurements remain unmeasured.",
   "images": [
     {
       "side": "right",

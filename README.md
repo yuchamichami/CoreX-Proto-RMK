@@ -7,7 +7,7 @@
 
 **左右とも、この版を書き込みます。** 右用はCoreX基板専用です。
 
-v0.10.1はBLE送信出力を上げた版です。実機での確認はまだです。[確認済みの範囲](docs/validation.md#v0101) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+v0.10.1はBLE送信出力を上げた版です。USBを抜いた状態で、左右のキー入力とトラックボールの動作を確認しています。[確認済みの範囲](docs/validation.md#v0101) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 
 ## 2. 左右に書き込む
 
