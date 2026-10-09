@@ -4,6 +4,9 @@
 //! the current IRQ *level*, and waits for LOW or the returned health deadline.
 //! Cancelling a wait for a keyboard event must not restart either deadline.
 
+/// Read at up to 125 Hz during motion; idle still waits for the MOTION signal.
+pub const ACTIVE_INTERVAL_MS: u64 = 8;
+
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Wait {
     /// Pacing applies even when IRQ stays LOW or the previous read was empty.
@@ -25,8 +28,10 @@ impl MotionSchedule {
     pub const fn new(ticks_per_second: u64) -> Self {
         assert!(ticks_per_second > 0);
         Self {
-            // Round up so a clock such as 32768 Hz never polls faster than 15 ms.
-            active_interval: ticks_per_second.saturating_mul(15).saturating_add(999) / 1000,
+            // Round up so a clock such as 32768 Hz never polls faster than 8 ms.
+            active_interval: ticks_per_second
+                .saturating_mul(ACTIVE_INTERVAL_MS)
+                .saturating_add(999) / 1000,
             awake_health_interval: ticks_per_second.saturating_mul(5),
             asleep_health_interval: ticks_per_second.saturating_mul(30),
             last_sample: 0,
@@ -96,10 +101,10 @@ mod tests {
     }
 
     #[test]
-    fn held_low_is_limited_to_one_read_each_15ms_even_for_empty_reads() {
+    fn held_low_is_limited_to_one_read_each_8ms_even_for_empty_reads() {
         let mut schedule = ready_at(0);
         let mut reads = Vec::new();
-        for now in 0..=150 {
+        for now in 0..=80 {
             match schedule.wait(now, false, true) {
                 Wait::Read => {
                     reads.push(now);
@@ -110,16 +115,16 @@ mod tests {
                 Wait::MotionOrHealth { .. } => panic!("IRQ is already LOW"),
             }
         }
-        assert_eq!(reads, (0..=150).step_by(15).collect::<Vec<_>>());
+        assert_eq!(reads, (0..=80).step_by(8).collect::<Vec<_>>());
     }
 
     #[test]
     fn low_during_pacing_is_still_read_at_the_next_slot() {
         let mut schedule = ready_at(0);
         schedule.on_sample(100);
-        assert_eq!(schedule.wait(101, false, false), Wait::Until(115));
-        assert_eq!(schedule.wait(102, false, true), Wait::Until(115));
-        assert_eq!(schedule.wait(115, false, true), Wait::Read);
+        assert_eq!(schedule.wait(101, false, false), Wait::Until(108));
+        assert_eq!(schedule.wait(102, false, true), Wait::Until(108));
+        assert_eq!(schedule.wait(108, false, true), Wait::Read);
     }
 
     #[test]
@@ -143,7 +148,7 @@ mod tests {
         schedule.on_sample(100);
         // Cancelling and re-arming the async GPIO wait must not create a fresh
         // five-second deadline each time a layer or sleep event is handled.
-        for now in (115..5100).step_by(7) {
+        for now in (108..5100).step_by(7) {
             assert_eq!(
                 schedule.wait(now, false, false),
                 Wait::MotionOrHealth { deadline: 5100 }
@@ -170,21 +175,21 @@ mod tests {
         let mut schedule = ready_at(0);
         schedule.on_sample(100);
         for sleeping in [false, true, false] {
-            assert_eq!(schedule.wait(101, sleeping, true), Wait::Until(115));
+            assert_eq!(schedule.wait(101, sleeping, true), Wait::Until(108));
         }
-        assert_eq!(schedule.wait(115, false, true), Wait::Read);
+        assert_eq!(schedule.wait(108, false, true), Wait::Read);
     }
 
     #[test]
-    fn pace_uses_clock_ticks_without_rounding_below_15ms() {
+    fn pace_uses_clock_ticks_without_rounding_below_8ms() {
         let mut schedule = MotionSchedule::new(32768);
         schedule.on_ready(1234);
         assert_eq!(schedule.wait(1234, false, true), Wait::Read);
         schedule.on_sample(1234);
-        assert_eq!(schedule.wait(1234 + 491, false, true), Wait::Until(1234 + 492));
-        assert_eq!(schedule.wait(1234 + 492, false, true), Wait::Read);
+        assert_eq!(schedule.wait(1234 + 262, false, true), Wait::Until(1234 + 263));
+        assert_eq!(schedule.wait(1234 + 263, false, true), Wait::Read);
         assert_eq!(
-            schedule.wait(1234 + 492, false, false),
+            schedule.wait(1234 + 263, false, false),
             Wait::MotionOrHealth { deadline: 1234 + 32768 * 5 }
         );
     }

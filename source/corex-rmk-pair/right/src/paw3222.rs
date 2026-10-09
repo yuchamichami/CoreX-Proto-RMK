@@ -1,5 +1,5 @@
 use crate::paw_wire::{PawWire, Wire};
-use crate::paw3222_schedule::{MotionSchedule, Wait};
+use crate::paw3222_schedule::{ACTIVE_INTERVAL_MS, MotionSchedule, Wait};
 use embassy_nrf::gpio::{Flex, Input, Output, OutputDrive, Pull};
 use embassy_time::{Duration, Instant, Timer};
 use rmk::embassy_futures::select::{Either, select};
@@ -128,7 +128,7 @@ impl<'a> Paw3222<'a> {
             }
             self.ready = true;
             self.schedule.on_ready(Instant::now().as_ticks());
-            log::info!("CoreX RMK PAW3222 J4 ready: ID=30, motion IRQ, 15ms active interval");
+            log::info!("CoreX RMK PAW3222 J4 ready: ID=30, motion IRQ, {ACTIVE_INTERVAL_MS}ms active interval");
             return;
         }
         self.schedule.on_sample(Instant::now().as_ticks());
@@ -184,7 +184,7 @@ impl<'a> Paw3222<'a> {
 
 impl PollingProcessor for Paw3222<'_> {
     fn interval(&self) -> Duration {
-        Duration::from_millis(15)
+        Duration::from_millis(ACTIVE_INTERVAL_MS)
     }
 
     async fn update(&mut self) {

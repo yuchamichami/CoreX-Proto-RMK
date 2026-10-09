@@ -1,6 +1,6 @@
 [package]
 name = "corex-pair-right"
-version = "0.10.1"
+version = "0.10.2"
 authors = ["Haobo Gu <haobogu@outlook.com>"]
 description = "CoreX pair right: right central PAW3222 trackball + stock Cornix left peripheral"
 homepage = "https://github.com/rmk-rs/rmk"

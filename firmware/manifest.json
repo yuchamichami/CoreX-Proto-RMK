@@ -1,6 +1,6 @@
 {
   "distribution": "CoreX PAW3222 + stock Cornix left",
-  "release": "v0.10.1",
+  "release": "v0.10.2",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
   "build_host": "x86_64-apple-darwin",
@@ -10,18 +10,18 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Both halves built and flashed from v0.10.1 source. 232 host/board/keymap tests passed; bundled/rebuilt hashes and storage schema 0xA805CEFB match. Both normal USB devices returned; right Vial version readback 0.10.1, 392 keys and native Vial settings unchanged. Left startup version was not captured. User confirmed both-side keys and right trackball with USB disconnected. Both controllers explicitly request +8 dBm; actual RF/link quality, aluminum-case comparison and current/runtime measurements remain unmeasured.",
+  "validation_scope": "Right PAW3222 active read interval changed from 15 ms to 8 ms. Right build/distribution hashes and storage schema 0xA805CEFB verified. 232 host/board/keymap tests passed. Left v0.10.1 unchanged. Right flashed; startup log confirms 8ms active interval and Vial returns version 0.10.2. All 392 keys and native Vial settings preserved. Split notifications, encrypted host BLE reconnection and BAS response observed. USB host arrival timing: 2088 mouse reports in a 30-second capture, median 8.0155 ms and p95 9.081833 ms including pauses. User reports slightly smoother movement. This does not measure USB bus timing or end-to-end latency; BLE-only input rate and battery consumption remain unmeasured.",
   "images": [
     {
       "side": "right",
-      "application_version": "0.10.1",
+      "application_version": "0.10.2",
       "role": "central",
       "target": "CoreX PAW3222 only",
-      "filename": "CoreX-Right-v0.10.1.uf2",
-      "binary_bytes": 535300,
+      "filename": "CoreX-Right-v0.10.2.uf2",
+      "binary_bytes": 535340,
       "uf2_bytes": 1071104,
-      "binary_sha256": "78084c91c0e6dd217934f629a90f039b75cb0274ee122f64bcfd12427bef9572",
-      "uf2_sha256": "788dc826db80ece011ec9aca37e6fffeeab512a3c1af71cd690e3874af646df9",
+      "binary_sha256": "0c09a3f82507218a522079965c5fbfd1c38319e92e7e5df47a86cf3adc9c9ff2",
+      "uf2_sha256": "0b8f4c31aa5859a63ec5e4cee796daa5c670d2d4d0ba0ccac30b8c3fd31086f1",
       "flash_start": "0x26000",
       "flash_end_exclusive": "0xa8c00",
       "application_limit_exclusive": "0xb0000",
@@ -29,7 +29,7 @@
         "0xb0000",
         "0xd0000"
       ],
-      "source_ref": "v0.10.1",
+      "source_ref": "v0.10.2",
       "enabled_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial,host_lock"
     },
     {
@@ -78,7 +78,7 @@
     "left_service_uuid": "1dad1811-b1c4-42ae-825e-f45414fe6be4",
     "left_service": "Peripheral measurements retained via custom GATT service; not a second standard BAS"
   },
-  "source_ref": "v0.10.1",
+  "source_ref": "v0.10.2",
   "vial_physical_unlock": {
     "enabled_on_right": true,
     "physical_keys": [
@@ -103,5 +103,20 @@
     "use_2m_phy": false,
     "actual_rf_power_measured": false,
     "aluminum_case_link_tested": false
+  },
+  "pointing": {
+    "active_read_interval_ms": 8,
+    "idle_wait": "MOTION GPIO low level",
+    "awake_health_interval_seconds": 5,
+    "asleep_health_interval_seconds": 30,
+    "physical_report_rate_measured": false,
+    "end_to_end_latency_measured": false,
+    "usb_host_arrival_measurement": {
+      "capture_seconds": 30,
+      "mouse_reports": 2088,
+      "median_ms": 8.0155,
+      "p95_ms": 9.081833,
+      "method": "Nonexclusive HID reads of the identified right USB mouse; host monotonic arrival timestamps, includes OS scheduling and user pauses"
+    }
   }
 }

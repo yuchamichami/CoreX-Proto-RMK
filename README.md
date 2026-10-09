@@ -2,12 +2,12 @@
 
 ## 1. ファームをダウンロードする
 
-- **[右用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Right-v0.10.1.uf2)**：CoreX右・PAW3222用
+- **[右用ファーム — v0.10.2](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.2/CoreX-Right-v0.10.2.uf2)**：CoreX右・PAW3222用
 - **[左用ファーム — v0.10.1](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Left-v0.10.1.uf2)**：純正Cornix左用
 
-**左右とも、この版を書き込みます。** 右用はCoreX基板専用です。
+**右v0.10.2と左v0.10.1を組み合わせます。v0.10.1からの更新は右だけです。** 右用はCoreX基板専用です。
 
-v0.10.1はBLE送信出力を上げた版です。USBを抜いた状態で、左右のキー入力とトラックボールの動作を確認しています。[確認済みの範囲](docs/validation.md#v0101) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
+v0.10.2は、ボール操作中の読み取り間隔を15msから8msにした版です。USBでの動作を確認しています。電池持ちは未測定です。[確認済みの範囲](docs/validation.md#v0102) · [説明書・ソースを含むZIP](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.2/CoreX-firmware-hand-off.zip) · [以前のバージョン](https://github.com/yuchamichami/CoreX-Proto-RMK/releases)
 
 **これから基板を交換する場合は、[組み立てガイド](docs/assembly.md)から進めてください。** ケースを閉じる前に、右の書き込みとトラックボールの動作を確認します。
 
@@ -17,9 +17,11 @@ v0.10.1はBLE送信出力を上げた版です。USBを抜いた状態で、左�
 
 以下は、RESETを素早く2回押すとUSBドライブが出る基板向けの手順です。未書き込みのマイコンへの初回導入は含みません。
 
+左にv0.10.1が入っている場合は、手順3の右だけを書き換えます。
+
 1. **左だけ**をデータ通信できるUSBケーブルでPCにつなぎ、RESETを素早く2回押します。
 2. 表示されたUSBドライブに **`CoreX-Left-v0.10.1.uf2`** をコピーします。自動で再起動してドライブが消えたら、左のUSBを抜きます。
-3. **右だけ**をPCにつなぎ、同じ手順で **`CoreX-Right-v0.10.1.uf2`** をコピーします。右のUSBはそのままつないでおきます。
+3. **右だけ**をPCにつなぎ、RESETを素早く2回押します。表示されたUSBドライブに **`CoreX-Right-v0.10.2.uf2`** をコピーし、右のUSBはそのままつないでおきます。
 
 ドライブ名は `NO NAME`、`NRF52BOOT` など個体によって異なります。左右のファイルを取り違えないでください。[書き込みの詳細・旧版からの更新](docs/flashing.md)
 
