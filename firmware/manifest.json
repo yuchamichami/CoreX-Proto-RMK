@@ -1,6 +1,6 @@
 {
-  "distribution": "coreX PAW3222 + stock Cornix left",
-  "release": "v0.9.3",
+  "distribution": "CoreX PAW3222 + stock Cornix left",
+  "release": "v0.9.4",
   "mcu": "nRF52840",
   "rust_toolchain": "1.95.0",
   "build_host": "x86_64-apple-darwin",
@@ -10,18 +10,18 @@
   "rmk_features": "_ble,_nrf_ble,adafruit_bl,async_matrix,host,log,nrf52840_ble,split,storage,usb_log,vial",
   "storage_schema_hash": "0xA805CEFB",
   "path_remapping": true,
-  "validation_scope": "Right v0.9.3 build, manufacturer-derived keymap comparison, offline Vial preset import, and image checks. Right v0.9.3 and its default layout have not been tested on hardware. The unchanged left v0.9.0 remapped image retains its previous validation scope.",
+  "validation_scope": "Right v0.9.4 name change build; storage schema and unchanged keymap verification. Hardware verification pending. Left v0.9.0 unchanged.",
   "images": [
     {
       "side": "right",
-      "application_version": "0.9.3",
+      "application_version": "0.9.4",
       "role": "central",
-      "target": "coreX PAW3222 only",
-      "filename": "coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2",
-      "binary_bytes": 514092,
+      "target": "CoreX PAW3222 only",
+      "filename": "CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2",
+      "binary_bytes": 514068,
       "uf2_bytes": 1028608,
-      "binary_sha256": "9fd7ea4ccbfa98397a8c74918da56dce2d2459133613d398fa9b235f2d03207e",
-      "uf2_sha256": "5a676272ced0d96786aaa62c03ff630ded78a2429dd2ce54f08cd41b016eead8",
+      "binary_sha256": "38f7a686a45d41ab5e381e68d4d6c6f693acf16c694469709db4384b570ecd93",
+      "uf2_sha256": "bedb58b5438ace70ab8d98e6031ebd6e4777ebd091d538374c539f441ccc0fdc",
       "flash_start": "0x26000",
       "flash_end_exclusive": "0xa3900",
       "application_limit_exclusive": "0xb0000",
@@ -50,10 +50,16 @@
     }
   ],
   "default_keymap": {
-    "preset": "keymaps/coreX-Cornix-default.vil",
+    "preset": "keymaps/CoreX-Cornix-default.vil",
     "manufacturer_reference_sha256": "f85dd13d58398ea53e29f3fbab88d07b1f86ba09982e7eaac5d36eb314a327ab",
     "layers": 7,
     "source_date": "2026-10-09",
     "generator": "tools/default_keymap.py"
+  },
+  "device_names": {
+    "brand": "CoreX",
+    "right_bluetooth": "Cornix TB",
+    "right_usb_product": "Cornix TB",
+    "right_usb_manufacturer": "CoreX"
   }
 }

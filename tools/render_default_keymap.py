@@ -68,17 +68,17 @@ def svg_text(x, y, value, size=24, weight=500, color='#20242a', anchor='middle')
 
 
 def make_svg():
-    preset = json.loads((ROOT / 'keymaps/coreX-Cornix-default.vil').read_text())
+    preset = json.loads((ROOT / 'keymaps/CoreX-Cornix-default.vil').read_text())
     definition = json.loads((ROOT / 'source/corex-rmk-pair/right/vial.json').read_text())
     layer = preset['layout'][0]
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{WIDTH}" height="{HEIGHT}" viewBox="0 0 {WIDTH} {HEIGHT}">',
-           '<title>coreX 初期配列図</title>',
-           '<desc>Cornix 左と coreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>',
+           '<title>CoreX 初期配列図</title>',
+           '<desc>Cornix 左と CoreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>',
            '<rect width="100%" height="100%" fill="#ffffff"/>',
            '<g font-family="Zen Maru Gothic">',
            svg_text(LEFT, 35, '初期配列', 25, 700, anchor='start'),
            svg_text(LEFT, 69, 'Cornix 左', 19, 500, '#606771', 'start'),
-           svg_text(RIGHT, 69, 'coreX 右', 19, 500, '#606771', 'start')]
+           svg_text(RIGHT, 69, 'CoreX 右', 19, 500, '#606771', 'start')]
     for matrix_row, col, p in physical_keys(definition):
         is_left = matrix_row >= 4
         origin_x = (LEFT + (p['rx'] + 8.5) * UNIT) if is_left else (RIGHT + p['rx'] * UNIT)

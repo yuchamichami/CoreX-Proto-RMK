@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate coreX defaults from the pinned manufacturer Cornix layout (no device I/O)."""
+"""Generate CoreX defaults from the pinned manufacturer Cornix layout (no device I/O)."""
 import argparse
 import copy
 import hashlib
@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REFERENCE = ROOT / 'keymaps/reference/cornix-default-keymap.vil'
 REFERENCE_SHA = 'f85dd13d58398ea53e29f3fbab88d07b1f86ba09982e7eaac5d36eb314a327ab'
 CONFIG = ROOT / 'source/corex-rmk-pair/right/keyboard.toml'
-PRESET = ROOT / 'keymaps/coreX-Cornix-default.vil'
+PRESET = ROOT / 'keymaps/CoreX-Cornix-default.vil'
 # Keep existing mouse/scroll/BLE layer numbers valid for previously saved layouts.
 LAYERS = {0: 0, 1: 1, 2: 5, 3: 4, 4: 6}
 NAMES = ['Cornix base', 'Cornix numbers', 'Mouse', 'Scroll', 'Bluetooth',
@@ -24,7 +24,7 @@ def stock_position(row, col):
     """Map by physical key position, not by coincident matrix indices."""
     if row < 4:
         return row + 4, col
-    if (row, col) == (4, 5):  # Y was moved to a spare matrix row on coreX.
+    if (row, col) == (4, 5):  # Y was moved to a spare matrix row on CoreX.
         return 3, 4
     if (row, col) == (5, 6):  # Right encoder push.
         return 0, 5
@@ -71,7 +71,7 @@ def generate():
             layer[row][col] = code if index == 0 else 'KC_NO'
         for row, col in [(3, 6), (4, 6), (5, 6), (7, 6)]:
             layer[row][col] = 'KC_NO'
-    # Vial uses [CCW,CW], and coreX's encoder index is right first.
+    # Vial uses [CCW,CW], and CoreX's encoder index is right first.
     encoder = [stock['encoder_layout'][0][1], stock['encoder_layout'][0][0]]
     return {
         'version': 1,

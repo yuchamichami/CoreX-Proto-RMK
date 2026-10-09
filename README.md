@@ -1,20 +1,20 @@
-# coreX RMK
+# CoreX RMK
 
-coreX用のRMKファームウェアです。PAW3222トラックボールを接続した右基板と、純正Cornixの左キーボードを組み合わせて使えます。キー配列とトラックボールの設定はVialで変更できます。
+CoreX用のRMKファームウェアです。PAW3222トラックボールを接続した右基板と、純正Cornixの左キーボードを組み合わせて使えます。キー配列とトラックボールの設定はVialで変更できます。
 
 [使い方](docs/usage.md) · [書き込み・更新](docs/flashing.md) · [ダウンロード](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest)
 
 ## 接続
 
-左右にcoreX用ファームウェアを書き込んだ状態で使います。純正Cornixの左を初めて使う場合は、先に[左の書き込み](docs/flashing.md)を済ませてください。
+左右にCoreX用ファームウェアを書き込んだ状態で使います。純正Cornixの左を初めて使う場合は、先に[左の書き込み](docs/flashing.md)を済ませてください。
 
 1. 左右の電源をONにします。
 2. **右側をPCにUSBでつなぎます。** 左側は右へ自動で無線接続します。
 3. 左右のキーを押し、ボールを回して動作を確認します。
 
-![Cornix左からcoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
+![Cornix左からCoreX右へ無線接続し、右からPCへUSBまたはBluetoothで接続](docs/images/connection.png)
 
-Bluetoothで使うときは、PCに `coreX Pair RMK` を登録します。[Bluetoothの接続手順](docs/usage.md#pc-と-bluetooth-接続する)
+Bluetoothで使うときは、PCに `Cornix TB` を登録します。[Bluetoothの接続手順](docs/usage.md#pc-と-bluetooth-接続する)
 
 ## トラックボールの操作
 
@@ -30,11 +30,11 @@ Bluetoothで使うときは、PCに `coreX Pair RMK` を登録します。[Bluet
 
 ## 初期配列
 
-v0.9.3では、通常のキー、数字・記号のFn配列、エンコーダを純正Cornixの位置に揃えました。Iの長押し、J・K・Lのクリック、AMLはcoreX用の操作として残しています。
+v0.9.3から、通常のキー、数字・記号のFn配列、エンコーダを純正Cornixの位置に揃えました。Iの長押し、J・K・Lのクリック、AMLはCoreX用の操作として残しています。
 
 左の親指キーは左からFn、Bluetooth、Spaceです。右はSpaceと予備レイヤーのキーです。純正の右MO(2)の位置にはトラックボールがあります。[初期配列の図](docs/usage.md#初期配列)
 
-旧版からの更新では、保存した変更と新しい初期値が混在する場合があります。配列全体を揃えるには、[初期配列ファイル](keymaps/coreX-Cornix-default.vil)をVialで読み込みます。[バックアップと適用手順](docs/flashing.md#corex-を-v093-に更新する)
+旧版からの更新では、保存した変更と新しい初期値が混在する場合があります。配列全体を揃えるには、[初期配列ファイル](keymaps/CoreX-Cornix-default.vil)をVialで読み込みます。[バックアップと適用手順](docs/flashing.md#corex-を-v094-に更新する)
 
 ## Vialで設定する
 
@@ -46,7 +46,7 @@ v0.9.3では、通常のキー、数字・記号のFn配列、エンコーダを
 
 ## 純正Cornixとの違い
 
-- PCにつなぐのは、純正Cornixでは左側、coreXでは右側です。
+- PCにつなぐのは、純正Cornixでは左側、CoreXでは右側です。
 - 左側にも、このリポジトリの左用ファームウェアが必要です。
 - 右側のPAW3222トラックボールと、感度・スクロール・AMLの設定が加わります。
 - 通常キーは純正配列を基にし、トラックボール用の操作とレイヤーを加えています。Vial保存ファイルは純正Cornix用と分けて管理してください。
@@ -58,15 +58,15 @@ v0.9.3では、通常のキー、数字・記号のFn配列、エンコーダを
 
 ## ファームウェア
 
-- [右用 v0.9.3 — coreX・PAW3222](firmware/coreX-Right-Central-PAW3222-RMK-v0.9.3.uf2)
+- [右用 v0.9.4 — CoreX・PAW3222](firmware/CoreX-Right-Central-PAW3222-RMK-v0.9.4.uf2)
 - [左用 v0.9.0 — 純正Cornix左](firmware/coreX-Cornix-StockLeft-Peripheral-RMK-v0.9.0.uf2)
-- [説明書・ソースを含むZIP](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest/download/coreX-firmware-hand-off.zip)
+- [説明書・ソースを含むZIP](https://github.com/yuchamichami/corex-rmk-firmware/releases/latest/download/CoreX-firmware-hand-off.zip)
 
-右v0.9.3と左v0.9.0を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。**
+右v0.9.4と左v0.9.0を組み合わせて使います。左v0.9.0を導入済みなら、更新は右だけです。**左右のUF2を取り違えないでください。**
 
 [書き込み・更新・純正左への復元](docs/flashing.md)
 
-**v0.9.3のUF2と新しい初期配列は、実機では未検証です。** ビルド・配列の照合と、旧版で確認した範囲は[検証状況](docs/validation.md)に記載しています。
+**v0.9.4は実機未検証です。** v0.9.3では書き込みと初期配列の読み戻しを確認しました。詳しくは[検証状況](docs/validation.md)を参照してください。
 
 ## 開発
 

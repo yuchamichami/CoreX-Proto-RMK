@@ -13,7 +13,7 @@ The four crates in `source/corex-rmk-upstream/` are a source snapshot of [rmk-rs
 
 The original [MIT](LICENSE-MIT) and [Apache-2.0](LICENSE-APACHE) license texts are included, as well as copies inside the vendor snapshot. The MIT text retains `Copyright (c) 2024 HaoboGu`.
 
-The snapshot includes these coreX changes to upstream runtime code:
+The snapshot includes these CoreX changes to upstream runtime code:
 
 - `rmk-macro/src/codegen/orchestrator.rs` and `rmk/src/lib.rs`: initialize the stored keymap before creating custom pointing processors.
 - `rmk/src/keyboard/auto_mouse_layer.rs`: runtime AML enable/disable, releasing only an automatically owned layer when disabled, and associated tests.
@@ -26,9 +26,9 @@ The unused STM32 maintenance utility `rmk-config/src/gen_usb_map.py` also accept
 
 [`paw_wire.rs`](source/corex-rmk-pair/right/src/paw_wire.rs) retains its Apache-2.0 notice:
 
-> Copyright 2024 Google LLC; modifications 2025 sekigon-gonnoc. Rust adaptation 2026 coreX prototype.
+> Copyright 2024 Google LLC; modifications 2025 sekigon-gonnoc. Rust adaptation 2026 CoreX prototype.
 
-The working protocol and register sequence derive from [sekigon-gonnoc/zmk-driver-paw3222](https://github.com/sekigon-gonnoc/zmk-driver-paw3222/tree/fc946760e7f870e512be8fce7a26cc5c004a8663), commit `fc946760e7f870e512be8fce7a26cc5c004a8663`. That driver cites Zephyr's [input_paw32xx.c](https://github.com/zephyrproject-rtos/zephyr/blob/19c6240b6865bcb28e1d786d4dcadfb3a02067a0/drivers/input/input_paw32xx.c), also Apache-2.0. The coreX Rust adaptation adds fractional cursor scaling and tests. The full Apache-2.0 text is included in [LICENSE-APACHE](LICENSE-APACHE).
+The working protocol and register sequence derive from [sekigon-gonnoc/zmk-driver-paw3222](https://github.com/sekigon-gonnoc/zmk-driver-paw3222/tree/fc946760e7f870e512be8fce7a26cc5c004a8663), commit `fc946760e7f870e512be8fce7a26cc5c004a8663`. That driver cites Zephyr's [input_paw32xx.c](https://github.com/zephyrproject-rtos/zephyr/blob/19c6240b6865bcb28e1d786d4dcadfb3a02067a0/drivers/input/input_paw32xx.c), also Apache-2.0. The CoreX Rust adaptation adds fractional cursor scaling and tests. The full Apache-2.0 text is included in [LICENSE-APACHE](LICENSE-APACHE).
 
 ## Nordic radio libraries and ARM attribution
 
@@ -49,8 +49,8 @@ Some Apache-2.0/MIT dual-licensed crate archives omit separate license files. Fo
 
 ## Cornix and Vial
 
-Cornix is the original keyboard on which the left hardware and encoder presentation are based. This repository is a coreX-specific firmware configuration, not a replacement source of official Cornix releases. Vial is a separate configuration application; it is not bundled here. Screenshots in the documentation show Vial operating with the coreX definition. The project names and UI references do not imply endorsement.
+Cornix is the original keyboard on which the left hardware and encoder presentation are based. This repository is a CoreX-specific firmware configuration, not a replacement source of official Cornix releases. Vial is a separate configuration application; it is not bundled here. Screenshots in the documentation show Vial operating with the CoreX definition. The project names and UI references do not imply endorsement.
 
 ## 初期キーマップの参照元
 
-`keymaps/reference/cornix-default-keymap.vil` は、JezailFunderが配布しているCornixの初期設定ファイルです。取得元・ハッシュ・coreXで変更した箇所は[keymaps/README.md](keymaps/README.md)に記載しています。
+`keymaps/reference/cornix-default-keymap.vil` は、JezailFunderが配布しているCornixの初期設定ファイルです。取得元・ハッシュ・CoreXで変更した箇所は[keymaps/README.md](keymaps/README.md)に記載しています。

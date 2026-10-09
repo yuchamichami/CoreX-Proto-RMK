@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1100" height="480" viewBox="0 0 1100 480">
-<title>coreX 初期配列図</title>
-<desc>Cornix 左と coreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>
+<title>CoreX 初期配列図</title>
+<desc>Cornix 左と CoreX 右の基本配列。数字/Fn は数字レイヤー、BT は Bluetooth 設定、予備は空のレイヤー6。I を長押ししながらボールを回すとスクロール。</desc>
 <rect width="100%" height="100%" fill="#ffffff"/>
 <g font-family="Zen Maru Gothic">
 <text x="35.00" y="35.00" text-anchor="start" font-size="25" font-weight="700" fill="#20242a">初期配列</text>
 <text x="35.00" y="69.00" text-anchor="start" font-size="19" font-weight="500" fill="#606771">Cornix 左</text>
-<text x="610.00" y="69.00" text-anchor="start" font-size="19" font-weight="500" fill="#606771">coreX 右</text>
+<text x="610.00" y="69.00" text-anchor="start" font-size="19" font-weight="500" fill="#606771">CoreX 右</text>
 <g transform="translate(843.390 122.000) rotate(0.0)">
 <rect x="-29.000" y="-29.000" width="58.000" height="58.000" rx="7" fill="#fafbfc" stroke="#a5acb5" stroke-width="1.3"/>
 <text x="0.00" y="1.00" text-anchor="middle" font-size="23" font-weight="500" fill="#20242a">I</text>

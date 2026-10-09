@@ -2,7 +2,7 @@
 name = "corex-pair-right"
 version = "0.1.0"
 authors = ["Haobo Gu <haobogu@outlook.com>"]
-description = "coreX pair right: right central PAW3222 trackball + stock Cornix left peripheral"
+description = "CoreX pair right: right central PAW3222 trackball + stock Cornix left peripheral"
 homepage = "https://github.com/rmk-rs/rmk"
 repository = "https://github.com/rmk-rs/rmk"
 readme = "../../README.md"

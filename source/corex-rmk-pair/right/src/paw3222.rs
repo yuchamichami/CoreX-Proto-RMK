@@ -141,7 +141,7 @@ impl<'a> Paw3222<'a> {
                 return;
             }
             self.ready = true;
-            log::info!("coreX RMK PAW3222 J4 ready: ID=30, 15ms poll, SDIO released for reads");
+            log::info!("CoreX RMK PAW3222 J4 ready: ID=30, 15ms poll, SDIO released for reads");
             return;
         }
         // Level check avoids a lost falling edge; sparse fallback also checks a stuck HIGH IRQ.

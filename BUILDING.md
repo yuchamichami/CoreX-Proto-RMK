@@ -1,6 +1,6 @@
 # ファームウェアをビルドする
 
-使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[書き込み手順](docs/flashing.md)を使ってください。右は coreX 用、左は純正 Cornix 左用です。
+使うだけならビルドは不要です。[firmware/](firmware/) の UF2 と、[書き込み手順](docs/flashing.md)を使ってください。右は CoreX 用、左は純正 Cornix 左用です。
 
 ## 必要なもの
 
@@ -25,7 +25,7 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 リポジトリのルートで実行します。
 
 ```sh
-./build.sh right  # coreX 右・PAW3222、v0.9.3
+./build.sh right  # CoreX 右・PAW3222、v0.9.4
 ./build.sh left   # 純正 Cornix 左・peripheral、v0.9.0
 ./build.sh both   # 両方。引数省略時も両方
 ```
@@ -56,7 +56,7 @@ python3 tools/default_keymap.py --check  # 生成物の一致を確認
 
 - `source/corex-rmk-pair/right/`：右の配列、Vial定義、PAW3222、感度・スクロール・AML。
 - `source/corex-rmk-pair/left/`：純正Cornix左のファームウェア。
-- `source/corex-rmk-upstream/`：RMKの4クレートとcoreX用の変更。
+- `source/corex-rmk-upstream/`：RMKの4クレートとCoreX用の変更。
 - `tools/git-metadata/git`：設定の保存形式を維持するためのビルドメタデータ固定。
 - `tools/make_uf2.py`：左右のアプリ領域を検査し、UF2を生成。
 
@@ -73,15 +73,15 @@ RMK はバージョン・コミット情報・feature・設定容量等からス
 範囲の末尾は含みません。
 
 - **右**：アプリは `0x26000..0xB0000`、設定は `0xB0000..0xD0000`。
-- **左**：アプリは `0x1000..0xA0000`、coreXの設定は `0xC0000..0xE0000`。
+- **左**：アプリは `0x1000..0xA0000`、CoreXの設定は `0xC0000..0xE0000`。
 - 確認した左右のブートローダー開始位置は `0xF4000`。
 
-左のcoreX設定領域は、確認した純正の設定領域 `0xA0000..0xC0000` と重ならない位置に置いています。純正へ戻した後も元の設定を読めるかは未確認です。復元には、別途保存した純正用のVial設定を使ってください。
+左のCoreX設定領域は、確認した純正の設定領域 `0xA0000..0xC0000` と重ならない位置に置いています。純正へ戻した後も元の設定を読めるかは未確認です。復元には、別途保存した純正用のVial設定を使ってください。
 
-UF2 はアプリのみで、ブートローダーや設定領域を含みません。右用を左へ、左用を右へ書かないでください。スキーマ互換性の維持は同じ構成を更新するためのもので、純正ファームと coreX ファームの左右混在を保証するものではありません。
+UF2 はアプリのみで、ブートローダーや設定領域を含みません。右用を左へ、左用を右へ書かないでください。スキーマ互換性の維持は同じ構成を更新するためのもので、純正ファームと CoreX ファームの左右混在を保証するものではありません。
 
 ## 公開バイナリの再現性
 
-配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。右v0.9.3は初期キーマップを変更した版で、実機での確認は未実施です。設定の保存形式は維持しています。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
+配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。右v0.9.4はBluetooth名を `Cornix TB` に変更した版です。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。設定の保存形式は維持しています。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
 
 ライセンスと派生元は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に記載しています。

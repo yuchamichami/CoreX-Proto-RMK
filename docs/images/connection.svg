@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="800" height="180" viewBox="0 0 800 180" role="img" aria-labelledby="title desc">
-  <title id="title">coreXの接続</title>
-  <desc id="desc">Cornix左からcoreX右へ無線接続。右からPCへUSBまたはBluetoothで接続する。</desc>
+  <title id="title">CoreXの接続</title>
+  <desc id="desc">Cornix左からCoreX右へ無線接続。右からPCへUSBまたはBluetoothで接続する。</desc>
   <rect width="800" height="180" fill="#ffffff"/>
   <g font-family="Zen Maru Gothic" text-anchor="middle" fill="#252525">
     <rect x="12" y="72" width="192" height="92" rx="12" fill="#ffffff" stroke="#bdbdbd" stroke-width="2"/>
@@ -8,7 +8,7 @@
     <path d="M218 118H304M293 109L304 118L293 127" fill="none" stroke="#666666" stroke-width="2.5"/>
     <text x="261" y="95" font-size="24">無線</text>
     <rect x="318" y="72" width="190" height="92" rx="12" fill="#ffffff" stroke="#bdbdbd" stroke-width="2"/>
-    <text x="413" y="129" font-size="30" font-weight="700">coreX 右</text>
+    <text x="413" y="129" font-size="30" font-weight="700">CoreX 右</text>
     <path d="M522 118H650M639 109L650 118L639 127" fill="none" stroke="#666666" stroke-width="2.5"/>
     <text x="586" y="56" font-size="24">USB または</text>
     <text x="586" y="87" font-size="24">Bluetooth</text>

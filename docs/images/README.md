@@ -28,4 +28,4 @@ python3 tools/render_connection.py --font-dir /path/to/ZenMaruGothic/fonts
 python3 tools/render_default_keymap.py --font-dir /path/to/ZenMaruGothic/fonts
 ```
 
-`keymaps/coreX-Cornix-default.vil` と右の `vial.json` から、SVGとPNGを作ります。
+`keymaps/CoreX-Cornix-default.vil` と右の `vial.json` から、SVGとPNGを作ります。

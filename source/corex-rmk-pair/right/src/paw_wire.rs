@@ -1,5 +1,5 @@
 // Copyright 2024 Google LLC; modifications 2025 sekigon-gonnoc.
-// Rust adaptation 2026 coreX prototype. SPDX-License-Identifier: Apache-2.0
+// Rust adaptation 2026 CoreX prototype. SPDX-License-Identifier: Apache-2.0
 //! PAW3222 three-wire protocol, mode 3. CS is tied LOW on the Corcell module.
 //! Register sequence follows the working zmk-driver-paw3222 (Apache-2.0).
 //! The SDIO output must be released for the entire sensor response.

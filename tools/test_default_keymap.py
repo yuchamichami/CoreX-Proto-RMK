@@ -14,7 +14,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 
-# Logical coreX coordinates from the existing Vial definition and matrix map.
+# Logical CoreX coordinates from the existing Vial definition and matrix map.
 # The Y key and encoder push are exceptions to the regular right-hand rows.
 BASE = [
     ['KC_BSPACE', 'KC_P', 'KC_O', 'LT3(KC_I)', 'KC_U', 'KC_BTN3', 'USER11'],
@@ -63,7 +63,7 @@ class DefaultKeymapTests(unittest.TestCase):
     def setUpClass(cls):
         cls.config = tomllib.loads(
             (ROOT / 'source/corex-rmk-pair/right/keyboard.toml').read_text())
-        cls.preset = json.loads((ROOT / 'keymaps/coreX-Cornix-default.vil').read_text())
+        cls.preset = json.loads((ROOT / 'keymaps/CoreX-Cornix-default.vil').read_text())
         cls.layers = cls.preset['layout']
 
     def test_base_typing_matches_known_physical_positions(self):

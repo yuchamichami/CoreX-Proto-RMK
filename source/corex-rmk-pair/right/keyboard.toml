@@ -1,9 +1,9 @@
 [keyboard]
-name = "coreX Pair"
-product_name = "coreX Pair RMK"
+name = "CoreX Pair"
+product_name = "Cornix TB"
 vendor_id = 0x4c4b
 product_id = 0x4643
-manufacturer = "coreX prototype"
+manufacturer = "CoreX"
 chip = "nrf52840"
 [layout]
 rows = 8

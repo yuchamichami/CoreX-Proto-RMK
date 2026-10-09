@@ -1,6 +1,6 @@
 # Cornix準拠の初期キーマップ
 
-[coreX-Cornix-default.vil](coreX-Cornix-default.vil)は、coreX右v0.9.3用の初期配列です。Vialの **File → Load saved layout** で読み込みます。現在の配列は、先に **Save current layout** で保存してください。
+[CoreX-Cornix-default.vil](CoreX-Cornix-default.vil)は、CoreX右v0.9.4用の初期配列です。Vialの **File → Load saved layout** で読み込みます。現在の配列は、先に **Save current layout** で保存してください。
 
 このプリセットはキーとエンコーダの割り当てを変更します。感度は2倍、Scrollは標準、AMLはONになります。マクロ・コンボ・タップダンスと、Bluetoothの登録は変更しません。
 
@@ -12,16 +12,16 @@
 - [照合用に保存した原本](reference/cornix-default-keymap.vil)
 - 原本のSHA-256：`f85dd13d58398ea53e29f3fbab88d07b1f86ba09982e7eaac5d36eb314a327ab`
 
-**原本は純正Cornix用です。coreXへ読み込むのは、上の `coreX-Cornix-default.vil` にしてください。** 左右の行列とトラボの設定欄が異なります。
+**原本は純正Cornix用です。CoreXへ読み込むのは、上の `CoreX-Cornix-default.vil` にしてください。** 左右の行列とトラボの設定欄が異なります。
 
-## coreXで加えた変更
+## CoreXで加えた変更
 
 通常キー、数字・記号、Bluetooth切替、エンコーダを、純正の物理位置に合わせています。右の内側親指キーはSpace、隣は予備レイヤーを開くキーです。以前このプロジェクトで「Space位置」と呼んでいたトラボ部分は、純正配列ではMO(2)の位置に当たります。この位置には物理キーがありません。
 
 - Iは短押しでI、長押しでボールのスクロールになります。
 - ボール操作後のJ・K・LによるクリックとAML設定を残しています。
 - Vialの感度・Scroll・AML欄を追加しています。
-- 既存設定との互換性のため、レイヤー番号を一部置き換えています。純正0→coreX 0、1→1、2→5、3→4、4→6です。coreX 2・3はトラボ用です。
+- 既存設定との互換性のため、レイヤー番号を一部置き換えています。純正0→CoreX 0、1→1、2→5、3→4、4→6です。CoreX 2・3はトラボ用です。
 - 純正の予備レイヤー5〜9は、初期配列からの入口がなく、エンコーダ以外は未割り当てのため省略しています。
 
 純正の空欄は、元どおり「何もしない」キーです。下のレイヤーのキーを使う透明キーには置き換えていません。Bluetooth用の純正レイヤー2と3は同じ内容ですが、別々に編集できるよう分けて残しています。
