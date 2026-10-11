@@ -124,7 +124,7 @@ def main():
         path = args.font_dir / ('ZenMaruGothic-' + weight + '.ttf')
         if QFontDatabase.addApplicationFont(str(path)) < 0:
             parser.error('Could not load ' + str(path))
-    images = ROOT / 'docs/images'
+    images = ROOT.parent / 'docs/images'
     svg = images / 'default-keymap.svg'
     svg.write_text(make_svg())
     renderer = QSvgRenderer(str(svg))

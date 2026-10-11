@@ -15,7 +15,7 @@
 - **左：純正 Cornix、v0.10.1**
   [CoreX-Left-v0.10.1.uf2](https://github.com/yuchamichami/CoreX-Proto-RMK/releases/download/v0.10.1/CoreX-Left-v0.10.1.uf2)
 - **CoreXの初期配列**
-  [CoreX-Cornix-default.vil](../keymaps/CoreX-Cornix-default.vil)
+  [CoreX-Cornix-default.vil](../dev/keymaps/CoreX-Cornix-default.vil)
 
 J4接続では左右ともv0.10.1を使います。上のリンクから、それぞれのファイルを保存してください。
 
@@ -75,7 +75,7 @@ v0.9.5で電池残量表示のためにBluetoothの機器情報を変更しま�
 Vialの **File → Load saved layout** で、使いたい配列を読み込みます。
 
 - **今までの配列を使う：** 更新前に保存した `.vil` を選びます。
-- **現在の初期配列に揃える：** 同梱の [CoreX-Cornix-default.vil](../keymaps/CoreX-Cornix-default.vil) を選びます。
+- **現在の初期配列に揃える：** 同梱の [CoreX-Cornix-default.vil](../dev/keymaps/CoreX-Cornix-default.vil) を選びます。
 
 初期配列ファイルは、キーとエンコーダの割り当て、感度2倍・Scroll標準・AML ONを適用します。マクロ・コンボ・タップダンスや、Bluetoothの登録は変更しません。[初期配列と接続キーの位置](usage.md#初期配列)
 
@@ -111,4 +111,4 @@ J3接続の出荷品は、右のファームを書き込み済みです。左だ
 
 ## 書き込み範囲
 
-付属の UF2 はアプリ更新用です。全消去やブートローダーの上書きは行いません。アプリと設定の保存領域、ソースから作り直すときの注意点は [BUILDING.md](../BUILDING.md)を参照してください。
+付属の UF2 はアプリ更新用です。全消去やブートローダーの上書きは行いません。アプリと設定の保存領域、ソースから作り直すときの注意点は [BUILDING.md](BUILDING.md)を参照してください。

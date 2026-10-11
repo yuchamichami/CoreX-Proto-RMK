@@ -22,4 +22,4 @@ jobs:
       - name: Install Rust
         run: rustup toolchain install 1.95.0 --profile minimal
       - name: Run checks
-        run: ./tools/test.sh
+        run: ./dev/tools/test.sh

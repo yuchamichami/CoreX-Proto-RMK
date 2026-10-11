@@ -19,7 +19,7 @@ def main():
         path = args.font_dir / ('ZenMaruGothic-' + weight + '.ttf')
         if QFontDatabase.addApplicationFont(str(path)) < 0:
             parser.error('Could not load ' + str(path))
-    images = Path(__file__).resolve().parents[1] / 'docs/images'
+    images = Path(__file__).resolve().parents[2] / 'docs/images'
     renderer = QSvgRenderer(str(images / 'connection.svg'))
     if not renderer.isValid():
         parser.error('Invalid connection.svg')

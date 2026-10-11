@@ -1,8 +1,8 @@
 # ファームウェアをビルドする
 
-使うだけならビルドは不要です。[READMEのダウンロード](README.md#1-ファームをダウンロードする)と[書き込み手順](docs/flashing.md)を使ってください。右は CoreX 用、左は純正 Cornix 左用です。
+使うだけならビルドは不要です。[READMEのダウンロード](../README.md#1-ファームをダウンロードする)と[書き込み手順](flashing.md)を使ってください。右は CoreX 用、左は純正 Cornix 左用です。
 
-利用案内の対象は左右v0.10.1です。`main`には右v0.10.2の比較試験が残っているため、利用版を再ビルドするときは[v0.10.1タグのソース](https://github.com/yuchamichami/CoreX-Proto-RMK/tree/v0.10.1)を取得してください。配布物と試験記録の一覧は[開発資料](docs/development.md)にあります。
+利用案内の対象は左右v0.10.1です。`main`には右v0.10.2の比較試験が残っているため、利用版を再ビルドするときは[v0.10.1タグのソース](https://github.com/yuchamichami/CoreX-Proto-RMK/tree/v0.10.1)を取得してください。配布物と試験記録の一覧は[開発資料](development.md)にあります。
 
 ## 必要なもの
 
@@ -24,15 +24,18 @@ macOS の C/C++ 環境は Xcode Command Line Tools、Linux ではディストリ
 
 ## ビルド
 
-リポジトリのルートで実行します。
+以下は現在の `main` のフォルダー構成です。過去のタグを使う場合は、そのタグに同梱された手順に従ってください。
+
+リポジトリのルートから `dev` に移動して実行します。
 
 ```sh
+cd dev
 ./build.sh right  # CoreX 右・PAW3222
 ./build.sh left   # 純正 Cornix 左・peripheral
 ./build.sh both   # 両方。引数省略時も両方
 ```
 
-出力先は `build/firmware/`。ファイル名は `CoreX-Right-v<版>.uf2`／`CoreX-Left-v<版>.uf2` とし、[firmware/manifest.json](firmware/manifest.json) から取得します。既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
+出力先は `dev/build/firmware/`（リポジトリのルートからの場所）。ファイル名は `CoreX-Right-v<版>.uf2`／`CoreX-Left-v<版>.uf2` とし、[firmware/manifest.json](../dev/firmware/manifest.json) から取得します。既存の配布用 `firmware/` は上書きしません。ELF と Cargo キャッシュは `build/target/` に残り、Git 対象外です。キャッシュを別の場所へ置く場合は `CARGO_TARGET_DIR` を指定できます。
 
 ```sh
 python3 tools/verify_release.py --rebuilt --side right  # 右だけビルドした場合
@@ -41,7 +44,7 @@ python3 tools/verify_release.py --rebuilt  # 両方ビルドした場合
 ./tools/test_ble.sh          # 電池・USB・スリープ・入力のホストテスト
 ```
 
-`test.sh` は実機を操作しません。BLEのテストもPC上で実行し、ホストの種類を自動判定します。RMKのモック時計と通信キューがテスト間で干渉しないよう、各テストを別プロセスで実行します。GitHub Actionsでは同じコマンドをUbuntuで実行します。初回はテスト用の依存ライブラリを取得するため、ネット接続が必要です。実機でのキー入力・電池駆動・再接続は[検証状況](docs/validation.md)に別途記録します。
+`test.sh` は実機を操作しません。BLEのテストもPC上で実行し、ホストの種類を自動判定します。RMKのモック時計と通信キューがテスト間で干渉しないよう、各テストを別プロセスで実行します。GitHub Actionsでは同じコマンドをUbuntuで実行します。初回はテスト用の依存ライブラリを取得するため、ネット接続が必要です。実機でのキー入力・電池駆動・再接続は[検証状況](validation.md)に別途記録します。
 
 `verify_release.py` は同梱 UF2 の SHA-256 と、再ビルドした UF2 のターゲット・アプリ領域・ベクタテーブル・ローカルパスの混入を検査します。Cargo メタデータがあれば設定スキーマも検査します。キャッシュを外部に置いた場合は `--target-dir <CARGO_TARGET_DIRの場所>` を指定できます。`--rebuilt` を省くと同梱 UF2 だけを検査します。
 
@@ -53,7 +56,7 @@ python3 tools/verify_release.py --rebuilt  # 両方ビルドした場合
 
 ## 初期キーマップ
 
-右の初期配列は、メーカー配布のCornix設定ファイルから生成します。原本と差分は[keymaps/README.md](keymaps/README.md)を参照してください。v0.10.0では左右の接続処理も変わるため、両側を更新します。
+右の初期配列は、メーカー配布のCornix設定ファイルから生成します。原本と差分は[keymaps/README.md](../dev/keymaps/README.md)を参照してください。v0.10.0では左右の接続処理も変わるため、両側を更新します。
 
 ```sh
 python3 tools/default_keymap.py          # 右TOMLの配列とVial用プリセットを生成
@@ -74,7 +77,7 @@ python3 tools/default_keymap.py --check  # 生成物の一致を確認
 
 v0.10.1では、左右それぞれの `keyboard.toml` の `[ble]` に `default_tx_power = 8` を設定します。[nRF52840の最大送信出力](https://www.nordicsemi.com/Products/nRF52840)である `+8 dBm` を、[コントローラの送信全体の既定値](https://nrfconnectdocs.nordicsemi.com/ncs/latest/nrfxlib/doxygen/html/group__sdc_gae72e34ed7d6ecc33442223c9d8ffb56b.html)として指定します。PCとの通信と左右間の通信が対象です。
 
-2M PHY対応を有効にしない既存設定 `use_2m_phy = false` は維持します。以前の送信出力はコントローラ既定値を使っており、数値は確認していません。ケース内での通信と消費電流の実測状況は[検証状況](docs/validation.md#v0101)を参照してください。
+2M PHY対応を有効にしない既存設定 `use_2m_phy = false` は維持します。以前の送信出力はコントローラ既定値を使っており、数値は確認していません。ケース内での通信と消費電流の実測状況は[検証状況](validation.md#v0101)を参照してください。
 
 ### 電池残量の取得
 
@@ -86,7 +89,7 @@ v0.10.1では、左右それぞれの `keyboard.toml` の `[ble]` に `default_t
 
 Battery Serviceの読み出しと通知登録は暗号化前にも受け付けます。HIDとVialのアクセス条件は変更していません。
 
-v0.9.5でGATTの構成とハンドルを変更しました。v0.9.4以前から更新したPCは一度登録をやり直します。v0.9.5以降の更新ではGATTを変更していないため、再登録は不要です。[利用者向けの更新手順](docs/flashing.md#corex-を更新する)
+v0.9.5でGATTの構成とハンドルを変更しました。v0.9.4以前から更新したPCは一度登録をやり直します。v0.9.5以降の更新ではGATTを変更していないため、再登録は不要です。[利用者向けの更新手順](flashing.md#corex-を更新する)
 
 ### スリープとPAW3222
 
@@ -104,13 +107,13 @@ USBサスペンド中の最初のレポートは復帰を待って送信しま�
 
 右をUSB接続すると、CDCシリアルポートからセンサーの認識・BLE接続・電池の通知状態を読めます。`PAW3222 J4 ready`はセンサー認識成功、`expected 30`はセンサーID不一致、`lost valid ID`は通信を失って再初期化している状態です。ログの正常表示だけで入力や残量表示の実機確認を代用しません。
 
-右v0.9.6以降では、BLEの接続用秘密情報を含む依存ライブラリのログを、文字列化する前に除外しています。v0.10.0の左右にはこの修正が入っています。旧版の右と左v0.9.0はこの修正を含まないため、公開のIssueへ未編集のログを添付しないでください。通常の問い合わせには、[報告する情報](docs/usage.md#解決しない場合)だけで十分です。
+右v0.9.6以降では、BLEの接続用秘密情報を含む依存ライブラリのログを、文字列化する前に除外しています。v0.10.0の左右にはこの修正が入っています。旧版の右と左v0.9.0はこの修正を含まないため、公開のIssueへ未編集のログを添付しないでください。通常の問い合わせには、[報告する情報](usage.md#解決しない場合)だけで十分です。
 
 ## 既存設定との互換性
 
 RMK はバージョン・コミット情報・feature・設定容量等からストレージスキーマを計算します。変更するとキーマップやペアリング情報の再初期化が起きます。この版は元の RMK コミット `8a6889854fb996be592c55075b385234133e1772` と既存 feature を保持し、スキーマを **`0xA805CEFB`** に揃えています。
 
-**直接 `cargo build` を使わず、ルートの `build.sh` を使ってください。** リポジトリを新しく commit しただけで RMK のスキーマが変わらないよう、専用の Git ラッパーを有効にします。固定するのは RMK の `git log -1 --format=%H -- .` 問い合わせだけです。それ以外の Git 操作は通常の Git に渡します。
+**直接 `cargo build` を使わず、`dev/build.sh` を使ってください。** リポジトリを新しく commit しただけで RMK のスキーマが変わらないよう、専用の Git ラッパーを有効にします。固定するのは RMK の `git log -1 --format=%H -- .` 問い合わせだけです。それ以外の Git 操作は通常の Git に渡します。
 
 ### フラッシュの割り当て
 
@@ -126,11 +129,11 @@ UF2 はアプリのみで、ブートローダーや設定領域を含みませ�
 
 ## 公開バイナリの再現性
 
-配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。Bluetooth名は `Cornix TB` です。最新の確認範囲は[検証状況](docs/validation.md)を参照してください。配布物の正しいハッシュは [firmware/SHA256SUMS](firmware/SHA256SUMS) を使用してください。
+配布用UF2は、Rustの `--remap-path-prefix` で開発PCのローカルパスを除いてビルドしています。Bluetooth名は `Cornix TB` です。最新の確認範囲は[検証状況](validation.md)を参照してください。配布物の正しいハッシュは [firmware/SHA256SUMS](../dev/firmware/SHA256SUMS) を使用してください。
 
 ライセンスと派生元は [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) に記載しています。
 
-次に検証する要件と、他のファーム・READMEから採用した考え方は[改善の優先順位](docs/design-review.md)にまとめています。
+次に検証する要件と、他のファーム・READMEから採用した考え方は[改善の優先順位](design-review.md)にまとめています。
 
 ## Vialの保護と保存形式
 

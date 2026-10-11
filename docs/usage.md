@@ -198,7 +198,7 @@ AML（Auto Mouse Layer）は、ボールを動かすと J・K・L をクリッ�
 
 CoreX 用と純正 Cornix 用の保存ファイルは、分けて管理してください。
 
-配列全体を現在の初期値に揃える場合は、[CoreX-Cornix-default.vil](../keymaps/CoreX-Cornix-default.vil) を読み込みます。キーとエンコーダの割り当てに加え、感度2倍・Scroll標準・AML ONが適用されます。マクロなどの設定は変更しません。適用前に現在の配列を保存してください。
+配列全体を現在の初期値に揃える場合は、[CoreX-Cornix-default.vil](../dev/keymaps/CoreX-Cornix-default.vil) を読み込みます。キーとエンコーダの割り当てに加え、感度2倍・Scroll標準・AML ONが適用されます。マクロなどの設定は変更しません。適用前に現在の配列を保存してください。
 
 ## 困ったとき
 

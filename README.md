@@ -88,6 +88,6 @@ PCにつなぐのはCoreX右で、左側にもこのリポジトリのファー�
 
 ## 資料
 
-[開発資料](docs/development.md) · [ライセンスと使用ライブラリ](THIRD_PARTY_NOTICES.md)
+[開発資料](docs/development.md) · [ライセンスと使用ライブラリ](docs/THIRD_PARTY_NOTICES.md)
 
 [RMK](https://github.com/rmk-rs/rmk)をベースにしています。Cornixメーカーの公式ファームウェアではありません。

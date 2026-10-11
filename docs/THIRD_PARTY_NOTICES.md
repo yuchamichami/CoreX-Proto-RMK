@@ -4,14 +4,14 @@ This repository preserves the license declarations and copyright notices already
 
 ## RMK
 
-The four crates in `source/corex-rmk-upstream/` are a source snapshot of [rmk-rs/rmk](https://github.com/rmk-rs/rmk/tree/8a6889854fb996be592c55075b385234133e1772), commit `8a6889854fb996be592c55075b385234133e1772`:
+The four crates in `dev/source/corex-rmk-upstream/` are a source snapshot of [rmk-rs/rmk](https://github.com/rmk-rs/rmk/tree/8a6889854fb996be592c55075b385234133e1772), commit `8a6889854fb996be592c55075b385234133e1772`:
 
 - `rmk` 0.9.0
 - `rmk-macro` 0.8.0
 - `rmk-config` 0.8.0
 - `rmk-types` 0.4.0
 
-The original [MIT](LICENSE-MIT) and [Apache-2.0](LICENSE-APACHE) license texts are included, as well as copies inside the vendor snapshot. The MIT text retains `Copyright (c) 2024 HaoboGu`.
+The original [MIT](../LICENSE-MIT) and [Apache-2.0](../LICENSE-APACHE) license texts are included, as well as copies inside the vendor snapshot. The MIT text retains `Copyright (c) 2024 HaoboGu`.
 
 The snapshot includes these CoreX changes to upstream runtime code:
 
@@ -30,17 +30,17 @@ Additional sleep/wake changes in v0.9.7:
 - `rmk/src/input_device/pointing.rs`: count sub-pixel movement as activity without sending an empty cursor HID report.
 - Host regression tests and `test_support.rs`: allow the CoreX runner's per-test process isolation alongside upstream's nextest runner.
 
-The repository's `tools/git-metadata/git` preserves the installed firmware's RMK commit identifier for storage compatibility. That identifier is a build-metadata compatibility value; this distribution also includes the modifications listed above. Vendored README/test configuration files are retained from the working source snapshot.
+The repository's `dev/tools/git-metadata/git` preserves the installed firmware's RMK commit identifier for storage compatibility. That identifier is a build-metadata compatibility value; this distribution also includes the modifications listed above. Vendored README/test configuration files are retained from the working source snapshot.
 
 The unused STM32 maintenance utility `rmk-config/src/gen_usb_map.py` also accepts its data directory as a command-line argument instead of a developer's hardcoded local path. This utility is not part of the nRF52840 build.
 
 ## PAW3222 wire protocol
 
-[`paw_wire.rs`](source/corex-rmk-pair/right/src/paw_wire.rs) retains its Apache-2.0 notice:
+[`paw_wire.rs`](../dev/source/corex-rmk-pair/right/src/paw_wire.rs) retains its Apache-2.0 notice:
 
 > Copyright 2024 Google LLC; modifications 2025 sekigon-gonnoc. Rust adaptation 2026 CoreX prototype.
 
-The working protocol and register sequence derive from [sekigon-gonnoc/zmk-driver-paw3222](https://github.com/sekigon-gonnoc/zmk-driver-paw3222/tree/fc946760e7f870e512be8fce7a26cc5c004a8663), commit `fc946760e7f870e512be8fce7a26cc5c004a8663`. That driver cites Zephyr's [input_paw32xx.c](https://github.com/zephyrproject-rtos/zephyr/blob/19c6240b6865bcb28e1d786d4dcadfb3a02067a0/drivers/input/input_paw32xx.c), also Apache-2.0. The CoreX Rust adaptation adds fractional cursor scaling and tests. The full Apache-2.0 text is included in [LICENSE-APACHE](LICENSE-APACHE).
+The working protocol and register sequence derive from [sekigon-gonnoc/zmk-driver-paw3222](https://github.com/sekigon-gonnoc/zmk-driver-paw3222/tree/fc946760e7f870e512be8fce7a26cc5c004a8663), commit `fc946760e7f870e512be8fce7a26cc5c004a8663`. That driver cites Zephyr's [input_paw32xx.c](https://github.com/zephyrproject-rtos/zephyr/blob/19c6240b6865bcb28e1d786d4dcadfb3a02067a0/drivers/input/input_paw32xx.c), also Apache-2.0. The CoreX Rust adaptation adds fractional cursor scaling and tests. The full Apache-2.0 text is included in [LICENSE-APACHE](../LICENSE-APACHE).
 
 ## Nordic radio libraries and ARM attribution
 
@@ -55,7 +55,7 @@ These are copied from the exact Cargo packages resolved by the lockfile, not par
 
 ## Cargo dependencies
 
-[`licenses/dependencies.json`](licenses/dependencies.json) lists the resolved dependency names, versions, declared licenses, upstream repositories, and included license files. [`licenses/dependencies/`](licenses/dependencies/) retains the notices distributed with those packages. The inventory includes build dependencies as well as runtime dependencies; inclusion in the inventory does not imply every package is linked into the UF2.
+[`licenses/dependencies.json`](licenses/dependencies.json) lists the resolved dependency names, versions, declared licenses, upstream repositories, and included license files. [`licenses/dependencies/`](licenses/dependencies) retains the notices distributed with those packages. The inventory includes build dependencies as well as runtime dependencies; inclusion in the inventory does not imply every package is linked into the UF2.
 
 Some Apache-2.0/MIT dual-licensed crate archives omit separate license files. For these, the inventory points to the included standard Apache-2.0 license text and records the upstream repository. Where upstream source provides additional attribution, that attribution remains applicable.
 
@@ -65,4 +65,4 @@ Cornix is the original keyboard on which the left hardware and encoder presentat
 
 ## 初期キーマップの参照元
 
-`keymaps/reference/cornix-default-keymap.vil` は、JezailFunderが配布しているCornixの初期設定ファイルです。取得元・ハッシュ・CoreXで変更した箇所は[keymaps/README.md](keymaps/README.md)に記載しています。
+`dev/keymaps/reference/cornix-default-keymap.vil` は、JezailFunderが配布しているCornixの初期設定ファイルです。取得元・ハッシュ・CoreXで変更した箇所は[keymaps/README.md](../dev/keymaps/README.md)に記載しています。

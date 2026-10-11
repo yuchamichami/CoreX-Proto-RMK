@@ -1,4 +1,4 @@
-source/corex-rmk-upstream/** linguist-vendored
-licenses/** linguist-vendored
-firmware/*.uf2 binary
+dev/source/corex-rmk-upstream/** linguist-vendored
+docs/licenses/** linguist-vendored
+dev/firmware/*.uf2 binary
 docs/images/*.png binary

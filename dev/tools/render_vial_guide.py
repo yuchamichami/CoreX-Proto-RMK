@@ -104,7 +104,7 @@ def save_panel(filename, title, note, content, width, height=None):
     painter.scale(2, 2)
     panel.render(painter)
     painter.end()
-    destination = root / 'docs/images' / filename
+    destination = root.parent / 'docs/images' / filename
     if not image.save(str(destination)):
         raise RuntimeError(f'Could not save {destination}')
     panel.hide()

@@ -5,9 +5,9 @@
     "license": "0BSD OR MIT OR Apache-2.0",
     "repository": "https://github.com/oyvindln/adler2",
     "license_files": [
-      "licenses/dependencies/adler2-2.0.1/LICENSE-APACHE",
-      "licenses/dependencies/adler2-2.0.1/LICENSE-0BSD",
-      "licenses/dependencies/adler2-2.0.1/LICENSE-MIT"
+      "docs/licenses/dependencies/adler2-2.0.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/adler2-2.0.1/LICENSE-0BSD",
+      "docs/licenses/dependencies/adler2-2.0.1/LICENSE-MIT"
     ]
   },
   {
@@ -16,8 +16,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/block-ciphers",
     "license_files": [
-      "licenses/dependencies/aes-0.8.4/LICENSE-APACHE",
-      "licenses/dependencies/aes-0.8.4/LICENSE-MIT"
+      "docs/licenses/dependencies/aes-0.8.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/aes-0.8.4/LICENSE-MIT"
     ]
   },
   {
@@ -26,9 +26,9 @@
     "license": "Unlicense OR MIT",
     "repository": "https://github.com/BurntSushi/aho-corasick",
     "license_files": [
-      "licenses/dependencies/aho-corasick-1.1.5/COPYING",
-      "licenses/dependencies/aho-corasick-1.1.5/UNLICENSE",
-      "licenses/dependencies/aho-corasick-1.1.5/LICENSE-MIT"
+      "docs/licenses/dependencies/aho-corasick-1.1.5/COPYING",
+      "docs/licenses/dependencies/aho-corasick-1.1.5/UNLICENSE",
+      "docs/licenses/dependencies/aho-corasick-1.1.5/LICENSE-MIT"
     ]
   },
   {
@@ -37,7 +37,7 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/andylokandy/arraydeque",
     "license_files": [
-      "licenses/dependencies/arraydeque-0.5.1/LICENSE"
+      "docs/licenses/dependencies/arraydeque-0.5.1/LICENSE"
     ]
   },
   {
@@ -46,8 +46,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/async-trait",
     "license_files": [
-      "licenses/dependencies/async-trait-0.1.92/LICENSE-APACHE",
-      "licenses/dependencies/async-trait-0.1.92/LICENSE-MIT"
+      "docs/licenses/dependencies/async-trait-0.1.92/LICENSE-APACHE",
+      "docs/licenses/dependencies/async-trait-0.1.92/LICENSE-MIT"
     ]
   },
   {
@@ -56,8 +56,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/cuviper/autocfg",
     "license_files": [
-      "licenses/dependencies/autocfg-1.5.1/LICENSE-APACHE",
-      "licenses/dependencies/autocfg-1.5.1/LICENSE-MIT"
+      "docs/licenses/dependencies/autocfg-1.5.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/autocfg-1.5.1/LICENSE-MIT"
     ]
   },
   {
@@ -66,8 +66,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://gitlab.com/tspiteri/az",
     "license_files": [
-      "licenses/dependencies/az-1.3.0/LICENSE-APACHE",
-      "licenses/dependencies/az-1.3.0/LICENSE-MIT"
+      "docs/licenses/dependencies/az-1.3.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/az-1.3.0/LICENSE-MIT"
     ]
   },
   {
@@ -76,8 +76,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/bare-metal",
     "license_files": [
-      "licenses/dependencies/bare-metal-0.2.5/LICENSE-APACHE",
-      "licenses/dependencies/bare-metal-0.2.5/LICENSE-MIT"
+      "docs/licenses/dependencies/bare-metal-0.2.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/bare-metal-0.2.5/LICENSE-MIT"
     ]
   },
   {
@@ -86,8 +86,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/formats/tree/master/base16ct",
     "license_files": [
-      "licenses/dependencies/base16ct-0.2.0/LICENSE-APACHE",
-      "licenses/dependencies/base16ct-0.2.0/LICENSE-MIT"
+      "docs/licenses/dependencies/base16ct-0.2.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/base16ct-0.2.0/LICENSE-MIT"
     ]
   },
   {
@@ -96,7 +96,7 @@
     "license": "BSD-3-Clause",
     "repository": "https://github.com/rust-lang/rust-bindgen",
     "license_files": [
-      "licenses/dependencies/bindgen-0.72.1/LICENSE"
+      "docs/licenses/dependencies/bindgen-0.72.1/LICENSE"
     ]
   },
   {
@@ -105,8 +105,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dzamlo/rust-bitfield",
     "license_files": [
-      "licenses/dependencies/bitfield-0.13.2/LICENSE-APACHE",
-      "licenses/dependencies/bitfield-0.13.2/LICENSE-MIT"
+      "docs/licenses/dependencies/bitfield-0.13.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/bitfield-0.13.2/LICENSE-MIT"
     ]
   },
   {
@@ -115,8 +115,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dzamlo/rust-bitfield",
     "license_files": [
-      "licenses/dependencies/bitfield-0.19.5/LICENSE-APACHE",
-      "licenses/dependencies/bitfield-0.19.5/LICENSE-MIT"
+      "docs/licenses/dependencies/bitfield-0.19.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/bitfield-0.19.5/LICENSE-MIT"
     ]
   },
   {
@@ -125,8 +125,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dzamlo/rust-bitfield",
     "license_files": [
-      "licenses/dependencies/bitfield-macros-0.19.5/LICENSE-APACHE",
-      "licenses/dependencies/bitfield-macros-0.19.5/LICENSE-MIT"
+      "docs/licenses/dependencies/bitfield-macros-0.19.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/bitfield-macros-0.19.5/LICENSE-MIT"
     ]
   },
   {
@@ -135,7 +135,7 @@
     "license": "MIT",
     "repository": "https://github.com/wrenger/bitfield-struct-rs.git",
     "license_files": [
-      "licenses/dependencies/bitfield-struct-0.13.0/LICENSE"
+      "docs/licenses/dependencies/bitfield-struct-0.13.0/LICENSE"
     ]
   },
   {
@@ -144,8 +144,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/bitflags/bitflags",
     "license_files": [
-      "licenses/dependencies/bitflags-1.3.2/LICENSE-APACHE",
-      "licenses/dependencies/bitflags-1.3.2/LICENSE-MIT"
+      "docs/licenses/dependencies/bitflags-1.3.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/bitflags-1.3.2/LICENSE-MIT"
     ]
   },
   {
@@ -154,8 +154,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/bitflags/bitflags",
     "license_files": [
-      "licenses/dependencies/bitflags-2.13.2/LICENSE-APACHE",
-      "licenses/dependencies/bitflags-2.13.2/LICENSE-MIT"
+      "docs/licenses/dependencies/bitflags-2.13.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/bitflags-2.13.2/LICENSE-MIT"
     ]
   },
   {
@@ -164,8 +164,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/utils",
     "license_files": [
-      "licenses/dependencies/block-buffer-0.10.4/LICENSE-APACHE",
-      "licenses/dependencies/block-buffer-0.10.4/LICENSE-MIT"
+      "docs/licenses/dependencies/block-buffer-0.10.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/block-buffer-0.10.4/LICENSE-MIT"
     ]
   },
   {
@@ -204,9 +204,9 @@
     "license": "Zlib OR Apache-2.0 OR MIT",
     "repository": "https://github.com/Lokathor/bytemuck",
     "license_files": [
-      "licenses/dependencies/bytemuck-1.25.2/LICENSE-APACHE",
-      "licenses/dependencies/bytemuck-1.25.2/LICENSE-ZLIB",
-      "licenses/dependencies/bytemuck-1.25.2/LICENSE-MIT"
+      "docs/licenses/dependencies/bytemuck-1.25.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/bytemuck-1.25.2/LICENSE-ZLIB",
+      "docs/licenses/dependencies/bytemuck-1.25.2/LICENSE-MIT"
     ]
   },
   {
@@ -215,9 +215,9 @@
     "license": "Unlicense OR MIT",
     "repository": "https://github.com/BurntSushi/byteorder",
     "license_files": [
-      "licenses/dependencies/byteorder-1.5.0/COPYING",
-      "licenses/dependencies/byteorder-1.5.0/UNLICENSE",
-      "licenses/dependencies/byteorder-1.5.0/LICENSE-MIT"
+      "docs/licenses/dependencies/byteorder-1.5.0/COPYING",
+      "docs/licenses/dependencies/byteorder-1.5.0/UNLICENSE",
+      "docs/licenses/dependencies/byteorder-1.5.0/LICENSE-MIT"
     ]
   },
   {
@@ -226,7 +226,7 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://gitlab.com/lib.rs/cargo_toml",
     "license_files": [
-      "licenses/dependencies/cargo_toml-1.0.1/LICENSE"
+      "docs/licenses/dependencies/cargo_toml-1.0.1/LICENSE"
     ]
   },
   {
@@ -235,8 +235,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/cc-rs",
     "license_files": [
-      "licenses/dependencies/cc-1.5.1/LICENSE-APACHE",
-      "licenses/dependencies/cc-1.5.1/LICENSE-MIT"
+      "docs/licenses/dependencies/cc-1.5.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/cc-1.5.1/LICENSE-MIT"
     ]
   },
   {
@@ -245,8 +245,8 @@
     "license": "Apache-2.0/MIT",
     "repository": "https://github.com/jethrogb/rust-cexpr",
     "license_files": [
-      "licenses/dependencies/cexpr-0.6.0/LICENSE-APACHE",
-      "licenses/dependencies/cexpr-0.6.0/LICENSE-MIT"
+      "docs/licenses/dependencies/cexpr-0.6.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/cexpr-0.6.0/LICENSE-MIT"
     ]
   },
   {
@@ -255,8 +255,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/cfg-if",
     "license_files": [
-      "licenses/dependencies/cfg-if-1.0.5/LICENSE-APACHE",
-      "licenses/dependencies/cfg-if-1.0.5/LICENSE-MIT"
+      "docs/licenses/dependencies/cfg-if-1.0.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/cfg-if-1.0.5/LICENSE-MIT"
     ]
   },
   {
@@ -265,8 +265,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/traits",
     "license_files": [
-      "licenses/dependencies/cipher-0.4.4/LICENSE-APACHE",
-      "licenses/dependencies/cipher-0.4.4/LICENSE-MIT"
+      "docs/licenses/dependencies/cipher-0.4.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/cipher-0.4.4/LICENSE-MIT"
     ]
   },
   {
@@ -275,7 +275,7 @@
     "license": "Apache-2.0",
     "repository": "https://github.com/KyleMayes/clang-sys",
     "license_files": [
-      "licenses/dependencies/clang-sys-1.9.1/LICENSE.txt"
+      "docs/licenses/dependencies/clang-sys-1.9.1/LICENSE.txt"
     ]
   },
   {
@@ -284,8 +284,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/MACs",
     "license_files": [
-      "licenses/dependencies/cmac-0.7.2/LICENSE-APACHE",
-      "licenses/dependencies/cmac-0.7.2/LICENSE-MIT"
+      "docs/licenses/dependencies/cmac-0.7.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/cmac-0.7.2/LICENSE-MIT"
     ]
   },
   {
@@ -294,8 +294,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/jamesmunns/cobs.rs",
     "license_files": [
-      "licenses/dependencies/cobs-0.3.0/LICENSE-APACHE",
-      "licenses/dependencies/cobs-0.3.0/LICENSE-MIT"
+      "docs/licenses/dependencies/cobs-0.3.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/cobs-0.3.0/LICENSE-MIT"
     ]
   },
   {
@@ -304,8 +304,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-cli/config-rs",
     "license_files": [
-      "licenses/dependencies/config-0.15.27/LICENSE-APACHE",
-      "licenses/dependencies/config-0.15.27/LICENSE-MIT"
+      "docs/licenses/dependencies/config-0.15.27/LICENSE-APACHE",
+      "docs/licenses/dependencies/config-0.15.27/LICENSE-MIT"
     ]
   },
   {
@@ -314,7 +314,7 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/Eolu/const-gen",
     "license_files": [
-      "licenses/dependencies/const-gen-1.6.10/LICENSE"
+      "docs/licenses/dependencies/const-gen-1.6.10/LICENSE"
     ]
   },
   {
@@ -333,8 +333,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/formats/tree/master/const-oid",
     "license_files": [
-      "licenses/dependencies/const-oid-0.9.6/LICENSE-APACHE",
-      "licenses/dependencies/const-oid-0.9.6/LICENSE-MIT"
+      "docs/licenses/dependencies/const-oid-0.9.6/LICENSE-APACHE",
+      "docs/licenses/dependencies/const-oid-0.9.6/LICENSE-MIT"
     ]
   },
   {
@@ -343,8 +343,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/tkaitchuck/constrandom",
     "license_files": [
-      "licenses/dependencies/const-random-0.1.18/LICENSE-APACHE",
-      "licenses/dependencies/const-random-0.1.18/LICENSE-MIT"
+      "docs/licenses/dependencies/const-random-0.1.18/LICENSE-APACHE",
+      "docs/licenses/dependencies/const-random-0.1.18/LICENSE-MIT"
     ]
   },
   {
@@ -353,8 +353,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/tkaitchuck/constrandom",
     "license_files": [
-      "licenses/dependencies/const-random-macro-0.1.16/LICENSE-APACHE",
-      "licenses/dependencies/const-random-macro-0.1.16/LICENSE-MIT"
+      "docs/licenses/dependencies/const-random-macro-0.1.16/LICENSE-APACHE",
+      "docs/licenses/dependencies/const-random-macro-0.1.16/LICENSE-MIT"
     ]
   },
   {
@@ -363,7 +363,7 @@
     "license": "MIT",
     "repository": "https://github.com/rutrum/convert-case",
     "license_files": [
-      "licenses/dependencies/convert_case-0.6.0/LICENSE"
+      "docs/licenses/dependencies/convert_case-0.6.0/LICENSE"
     ]
   },
   {
@@ -372,7 +372,7 @@
     "license": "MIT",
     "repository": "https://github.com/rutrum/convert-case",
     "license_files": [
-      "licenses/dependencies/convert_case-0.8.0/LICENSE"
+      "docs/licenses/dependencies/convert_case-0.8.0/LICENSE"
     ]
   },
   {
@@ -381,7 +381,7 @@
     "license": "MIT",
     "repository": "https://github.com/hawkw/mycelium",
     "license_files": [
-      "licenses/dependencies/cordyceps-0.3.5/LICENSE"
+      "docs/licenses/dependencies/cordyceps-0.3.5/LICENSE"
     ]
   },
   {
@@ -430,8 +430,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/critical-section",
     "license_files": [
-      "licenses/dependencies/critical-section-1.2.0/LICENSE-APACHE",
-      "licenses/dependencies/critical-section-1.2.0/LICENSE-MIT"
+      "docs/licenses/dependencies/critical-section-1.2.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/critical-section-1.2.0/LICENSE-MIT"
     ]
   },
   {
@@ -440,7 +440,7 @@
     "license": "MIT",
     "repository": "https://github.com/eira-fransham/crunchy",
     "license_files": [
-      "licenses/dependencies/crunchy-0.2.4/LICENSE"
+      "docs/licenses/dependencies/crunchy-0.2.4/LICENSE"
     ]
   },
   {
@@ -449,8 +449,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/crypto-bigint",
     "license_files": [
-      "licenses/dependencies/crypto-bigint-0.5.5/LICENSE-APACHE",
-      "licenses/dependencies/crypto-bigint-0.5.5/LICENSE-MIT"
+      "docs/licenses/dependencies/crypto-bigint-0.5.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/crypto-bigint-0.5.5/LICENSE-MIT"
     ]
   },
   {
@@ -459,8 +459,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/traits",
     "license_files": [
-      "licenses/dependencies/crypto-common-0.1.7/LICENSE-APACHE",
-      "licenses/dependencies/crypto-common-0.1.7/LICENSE-MIT"
+      "docs/licenses/dependencies/crypto-common-0.1.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/crypto-common-0.1.7/LICENSE-MIT"
     ]
   },
   {
@@ -469,8 +469,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/cty",
     "license_files": [
-      "licenses/dependencies/cty-0.2.2/LICENSE-APACHE",
-      "licenses/dependencies/cty-0.2.2/LICENSE-MIT"
+      "docs/licenses/dependencies/cty-0.2.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/cty-0.2.2/LICENSE-MIT"
     ]
   },
   {
@@ -479,7 +479,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling-0.20.11/LICENSE"
+      "docs/licenses/dependencies/darling-0.20.11/LICENSE"
     ]
   },
   {
@@ -488,7 +488,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling-0.24.1/LICENSE"
+      "docs/licenses/dependencies/darling-0.24.1/LICENSE"
     ]
   },
   {
@@ -497,7 +497,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling_core-0.20.11/LICENSE"
+      "docs/licenses/dependencies/darling_core-0.20.11/LICENSE"
     ]
   },
   {
@@ -506,7 +506,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling_core-0.24.1/LICENSE"
+      "docs/licenses/dependencies/darling_core-0.24.1/LICENSE"
     ]
   },
   {
@@ -515,7 +515,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling_macro-0.20.11/LICENSE"
+      "docs/licenses/dependencies/darling_macro-0.20.11/LICENSE"
     ]
   },
   {
@@ -524,7 +524,7 @@
     "license": "MIT",
     "repository": "https://github.com/TedDriggs/darling",
     "license_files": [
-      "licenses/dependencies/darling_macro-0.24.1/LICENSE"
+      "docs/licenses/dependencies/darling_macro-0.24.1/LICENSE"
     ]
   },
   {
@@ -533,8 +533,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/utils",
     "license_files": [
-      "licenses/dependencies/dbl-0.3.2/LICENSE-APACHE",
-      "licenses/dependencies/dbl-0.3.2/LICENSE-MIT"
+      "docs/licenses/dependencies/dbl-0.3.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/dbl-0.3.2/LICENSE-MIT"
     ]
   },
   {
@@ -553,8 +553,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/knurling-rs/defmt",
     "license_files": [
-      "licenses/dependencies/defmt-1.1.1/LICENSE-APACHE",
-      "licenses/dependencies/defmt-1.1.1/LICENSE-MIT"
+      "docs/licenses/dependencies/defmt-1.1.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/defmt-1.1.1/LICENSE-MIT"
     ]
   },
   {
@@ -563,8 +563,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/knurling-rs/defmt",
     "license_files": [
-      "licenses/dependencies/defmt-macros-1.1.1/LICENSE-APACHE",
-      "licenses/dependencies/defmt-macros-1.1.1/LICENSE-MIT"
+      "docs/licenses/dependencies/defmt-macros-1.1.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/defmt-macros-1.1.1/LICENSE-MIT"
     ]
   },
   {
@@ -593,8 +593,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/formats/tree/master/der",
     "license_files": [
-      "licenses/dependencies/der-0.7.10/LICENSE-APACHE",
-      "licenses/dependencies/der-0.7.10/LICENSE-MIT"
+      "docs/licenses/dependencies/der-0.7.10/LICENSE-APACHE",
+      "docs/licenses/dependencies/der-0.7.10/LICENSE-MIT"
     ]
   },
   {
@@ -603,8 +603,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/traits",
     "license_files": [
-      "licenses/dependencies/digest-0.10.7/LICENSE-APACHE",
-      "licenses/dependencies/digest-0.10.7/LICENSE-MIT"
+      "docs/licenses/dependencies/digest-0.10.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/digest-0.10.7/LICENSE-MIT"
     ]
   },
   {
@@ -613,8 +613,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/sgodwincs/dlv-list-rs",
     "license_files": [
-      "licenses/dependencies/dlv-list-0.5.2/LICENSE-APACHE",
-      "licenses/dependencies/dlv-list-0.5.2/LICENSE-MIT"
+      "docs/licenses/dependencies/dlv-list-0.5.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/dlv-list-0.5.2/LICENSE-MIT"
     ]
   },
   {
@@ -623,8 +623,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/slint-ui/document-features",
     "license_files": [
-      "licenses/dependencies/document-features-0.2.12/LICENSE-APACHE",
-      "licenses/dependencies/document-features-0.2.12/LICENSE-MIT"
+      "docs/licenses/dependencies/document-features-0.2.12/LICENSE-APACHE",
+      "docs/licenses/dependencies/document-features-0.2.12/LICENSE-MIT"
     ]
   },
   {
@@ -633,7 +633,7 @@
     "license": "BSD-3-Clause",
     "repository": "https://github.com/Techie-Pi/doxygen-rs/",
     "license_files": [
-      "licenses/dependencies/doxygen-rs-0.4.2/LICENSE"
+      "docs/licenses/dependencies/doxygen-rs-0.4.2/LICENSE"
     ]
   },
   {
@@ -642,8 +642,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rayon-rs/either",
     "license_files": [
-      "licenses/dependencies/either-1.18.0/LICENSE-APACHE",
-      "licenses/dependencies/either-1.18.0/LICENSE-MIT"
+      "docs/licenses/dependencies/either-1.18.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/either-1.18.0/LICENSE-MIT"
     ]
   },
   {
@@ -652,8 +652,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/traits/tree/master/elliptic-curve",
     "license_files": [
-      "licenses/dependencies/elliptic-curve-0.13.8/LICENSE-APACHE",
-      "licenses/dependencies/elliptic-curve-0.13.8/LICENSE-MIT"
+      "docs/licenses/dependencies/elliptic-curve-0.13.8/LICENSE-APACHE",
+      "docs/licenses/dependencies/elliptic-curve-0.13.8/LICENSE-MIT"
     ]
   },
   {
@@ -842,8 +842,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-hal-0.2.7/LICENSE-APACHE",
-      "licenses/dependencies/embedded-hal-0.2.7/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-hal-0.2.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-hal-0.2.7/LICENSE-MIT"
     ]
   },
   {
@@ -852,8 +852,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-hal-1.0.0/LICENSE-APACHE",
-      "licenses/dependencies/embedded-hal-1.0.0/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-hal-1.0.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-hal-1.0.0/LICENSE-MIT"
     ]
   },
   {
@@ -862,8 +862,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-hal-async-1.0.0/LICENSE-APACHE",
-      "licenses/dependencies/embedded-hal-async-1.0.0/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-hal-async-1.0.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-hal-async-1.0.0/LICENSE-MIT"
     ]
   },
   {
@@ -872,8 +872,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/embassy-rs/embedded-io",
     "license_files": [
-      "licenses/dependencies/embedded-io-0.4.0/LICENSE-APACHE",
-      "licenses/dependencies/embedded-io-0.4.0/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-io-0.4.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-io-0.4.0/LICENSE-MIT"
     ]
   },
   {
@@ -882,8 +882,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-io-0.6.1/LICENSE-APACHE",
-      "licenses/dependencies/embedded-io-0.6.1/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-io-0.6.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-io-0.6.1/LICENSE-MIT"
     ]
   },
   {
@@ -892,8 +892,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-io-0.7.1/LICENSE-APACHE",
-      "licenses/dependencies/embedded-io-0.7.1/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-io-0.7.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-io-0.7.1/LICENSE-MIT"
     ]
   },
   {
@@ -902,8 +902,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-io-async-0.6.1/LICENSE-APACHE",
-      "licenses/dependencies/embedded-io-async-0.6.1/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-io-async-0.6.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-io-async-0.6.1/LICENSE-MIT"
     ]
   },
   {
@@ -912,8 +912,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/embedded-hal",
     "license_files": [
-      "licenses/dependencies/embedded-io-async-0.7.0/LICENSE-APACHE",
-      "licenses/dependencies/embedded-io-async-0.7.0/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-io-async-0.7.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-io-async-0.7.0/LICENSE-MIT"
     ]
   },
   {
@@ -932,8 +932,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded-community/embedded-storage",
     "license_files": [
-      "licenses/dependencies/embedded-storage-async-0.4.2/LICENSE-APACHE",
-      "licenses/dependencies/embedded-storage-async-0.4.2/LICENSE-MIT"
+      "docs/licenses/dependencies/embedded-storage-async-0.4.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/embedded-storage-async-0.4.2/LICENSE-MIT"
     ]
   },
   {
@@ -942,8 +942,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/tormol/encode_unicode",
     "license_files": [
-      "licenses/dependencies/encode_unicode-0.3.6/LICENSE-APACHE",
-      "licenses/dependencies/encode_unicode-0.3.6/LICENSE-MIT"
+      "docs/licenses/dependencies/encode_unicode-0.3.6/LICENSE-APACHE",
+      "docs/licenses/dependencies/encode_unicode-0.3.6/LICENSE-MIT"
     ]
   },
   {
@@ -952,10 +952,10 @@
     "license": "(Apache-2.0 OR MIT) AND BSD-3-Clause",
     "repository": "https://github.com/hsivonen/encoding_rs",
     "license_files": [
-      "licenses/dependencies/encoding_rs-0.8.42/LICENSE-APACHE",
-      "licenses/dependencies/encoding_rs-0.8.42/LICENSE-WHATWG",
-      "licenses/dependencies/encoding_rs-0.8.42/COPYRIGHT",
-      "licenses/dependencies/encoding_rs-0.8.42/LICENSE-MIT"
+      "docs/licenses/dependencies/encoding_rs-0.8.42/LICENSE-APACHE",
+      "docs/licenses/dependencies/encoding_rs-0.8.42/LICENSE-WHATWG",
+      "docs/licenses/dependencies/encoding_rs-0.8.42/COPYRIGHT",
+      "docs/licenses/dependencies/encoding_rs-0.8.42/LICENSE-MIT"
     ]
   },
   {
@@ -964,8 +964,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/indexmap-rs/equivalent",
     "license_files": [
-      "licenses/dependencies/equivalent-1.0.2/LICENSE-APACHE",
-      "licenses/dependencies/equivalent-1.0.2/LICENSE-MIT"
+      "docs/licenses/dependencies/equivalent-1.0.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/equivalent-1.0.2/LICENSE-MIT"
     ]
   },
   {
@@ -974,8 +974,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/erased-serde",
     "license_files": [
-      "licenses/dependencies/erased-serde-0.4.10/LICENSE-APACHE",
-      "licenses/dependencies/erased-serde-0.4.10/LICENSE-MIT"
+      "docs/licenses/dependencies/erased-serde-0.4.10/LICENSE-APACHE",
+      "docs/licenses/dependencies/erased-serde-0.4.10/LICENSE-MIT"
     ]
   },
   {
@@ -984,8 +984,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/zkcrypto/ff",
     "license_files": [
-      "licenses/dependencies/ff-0.13.1/LICENSE-APACHE",
-      "licenses/dependencies/ff-0.13.1/LICENSE-MIT"
+      "docs/licenses/dependencies/ff-0.13.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/ff-0.13.1/LICENSE-MIT"
     ]
   },
   {
@@ -994,8 +994,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/cc-rs",
     "license_files": [
-      "licenses/dependencies/find-msvc-tools-0.1.14/LICENSE-APACHE",
-      "licenses/dependencies/find-msvc-tools-0.1.14/LICENSE-MIT"
+      "docs/licenses/dependencies/find-msvc-tools-0.1.14/LICENSE-APACHE",
+      "docs/licenses/dependencies/find-msvc-tools-0.1.14/LICENSE-MIT"
     ]
   },
   {
@@ -1004,8 +1004,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://gitlab.com/tspiteri/fixed",
     "license_files": [
-      "licenses/dependencies/fixed-1.31.0/LICENSE-APACHE",
-      "licenses/dependencies/fixed-1.31.0/LICENSE-MIT"
+      "docs/licenses/dependencies/fixed-1.31.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/fixed-1.31.0/LICENSE-MIT"
     ]
   },
   {
@@ -1014,8 +1014,8 @@
     "license": "Apache-2.0 / MIT",
     "repository": "https://github.com/servo/rust-fnv",
     "license_files": [
-      "licenses/dependencies/fnv-1.0.7/LICENSE-APACHE",
-      "licenses/dependencies/fnv-1.0.7/LICENSE-MIT"
+      "docs/licenses/dependencies/fnv-1.0.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/fnv-1.0.7/LICENSE-MIT"
     ]
   },
   {
@@ -1024,7 +1024,7 @@
     "license": "Zlib",
     "repository": "https://github.com/orlp/foldhash",
     "license_files": [
-      "licenses/dependencies/foldhash-0.2.0/LICENSE"
+      "docs/licenses/dependencies/foldhash-0.2.0/LICENSE"
     ]
   },
   {
@@ -1033,8 +1033,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1043,8 +1043,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-channel-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-channel-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-channel-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-channel-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1053,8 +1053,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-core-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-core-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-core-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-core-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1063,8 +1063,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/Matthias247/futures-intrusive",
     "license_files": [
-      "licenses/dependencies/futures-intrusive-0.5.0/LICENSE-APACHE",
-      "licenses/dependencies/futures-intrusive-0.5.0/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-intrusive-0.5.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-intrusive-0.5.0/LICENSE-MIT"
     ]
   },
   {
@@ -1073,8 +1073,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-io-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-io-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-io-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-io-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1083,8 +1083,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-macro-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-macro-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-macro-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-macro-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1093,8 +1093,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-sink-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-sink-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-sink-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-sink-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1103,8 +1103,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-task-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-task-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-task-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-task-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1113,8 +1113,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/futures-rs",
     "license_files": [
-      "licenses/dependencies/futures-util-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/futures-util-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/futures-util-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/futures-util-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1123,7 +1123,7 @@
     "license": "MIT",
     "repository": "https://github.com/fizyk20/generic-array.git",
     "license_files": [
-      "licenses/dependencies/generic-array-0.14.7/LICENSE"
+      "docs/licenses/dependencies/generic-array-0.14.7/LICENSE"
     ]
   },
   {
@@ -1132,8 +1132,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/getrandom",
     "license_files": [
-      "licenses/dependencies/getrandom-0.2.17/LICENSE-APACHE",
-      "licenses/dependencies/getrandom-0.2.17/LICENSE-MIT"
+      "docs/licenses/dependencies/getrandom-0.2.17/LICENSE-APACHE",
+      "docs/licenses/dependencies/getrandom-0.2.17/LICENSE-MIT"
     ]
   },
   {
@@ -1142,8 +1142,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/glob",
     "license_files": [
-      "licenses/dependencies/glob-0.3.4/LICENSE-APACHE",
-      "licenses/dependencies/glob-0.3.4/LICENSE-MIT"
+      "docs/licenses/dependencies/glob-0.3.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/glob-0.3.4/LICENSE-MIT"
     ]
   },
   {
@@ -1152,9 +1152,9 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/zkcrypto/group",
     "license_files": [
-      "licenses/dependencies/group-0.13.0/LICENSE-APACHE",
-      "licenses/dependencies/group-0.13.0/COPYRIGHT",
-      "licenses/dependencies/group-0.13.0/LICENSE-MIT"
+      "docs/licenses/dependencies/group-0.13.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/group-0.13.0/COPYRIGHT",
+      "docs/licenses/dependencies/group-0.13.0/LICENSE-MIT"
     ]
   },
   {
@@ -1163,8 +1163,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/VoidStarKat/half-rs",
     "license_files": [
-      "licenses/dependencies/half-2.7.1/LICENSE-APACHE",
-      "licenses/dependencies/half-2.7.1/LICENSE-MIT"
+      "docs/licenses/dependencies/half-2.7.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/half-2.7.1/LICENSE-MIT"
     ]
   },
   {
@@ -1173,8 +1173,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/hash32",
     "license_files": [
-      "licenses/dependencies/hash32-0.2.1/LICENSE-APACHE",
-      "licenses/dependencies/hash32-0.2.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hash32-0.2.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hash32-0.2.1/LICENSE-MIT"
     ]
   },
   {
@@ -1183,8 +1183,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/hash32",
     "license_files": [
-      "licenses/dependencies/hash32-0.3.1/LICENSE-APACHE",
-      "licenses/dependencies/hash32-0.3.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hash32-0.3.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hash32-0.3.1/LICENSE-MIT"
     ]
   },
   {
@@ -1193,8 +1193,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/hashbrown",
     "license_files": [
-      "licenses/dependencies/hashbrown-0.14.5/LICENSE-APACHE",
-      "licenses/dependencies/hashbrown-0.14.5/LICENSE-MIT"
+      "docs/licenses/dependencies/hashbrown-0.14.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/hashbrown-0.14.5/LICENSE-MIT"
     ]
   },
   {
@@ -1203,8 +1203,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/hashbrown",
     "license_files": [
-      "licenses/dependencies/hashbrown-0.16.1/LICENSE-APACHE",
-      "licenses/dependencies/hashbrown-0.16.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hashbrown-0.16.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hashbrown-0.16.1/LICENSE-MIT"
     ]
   },
   {
@@ -1213,8 +1213,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/hashbrown",
     "license_files": [
-      "licenses/dependencies/hashbrown-0.17.1/LICENSE-APACHE",
-      "licenses/dependencies/hashbrown-0.17.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hashbrown-0.17.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hashbrown-0.17.1/LICENSE-MIT"
     ]
   },
   {
@@ -1223,8 +1223,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/djc/hashlink",
     "license_files": [
-      "licenses/dependencies/hashlink-0.11.1/LICENSE-APACHE",
-      "licenses/dependencies/hashlink-0.11.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hashlink-0.11.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hashlink-0.11.1/LICENSE-MIT"
     ]
   },
   {
@@ -1233,8 +1233,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/heapless",
     "license_files": [
-      "licenses/dependencies/heapless-0.7.17/LICENSE-APACHE",
-      "licenses/dependencies/heapless-0.7.17/LICENSE-MIT"
+      "docs/licenses/dependencies/heapless-0.7.17/LICENSE-APACHE",
+      "docs/licenses/dependencies/heapless-0.7.17/LICENSE-MIT"
     ]
   },
   {
@@ -1243,8 +1243,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/heapless",
     "license_files": [
-      "licenses/dependencies/heapless-0.8.0/LICENSE-APACHE",
-      "licenses/dependencies/heapless-0.8.0/LICENSE-MIT"
+      "docs/licenses/dependencies/heapless-0.8.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/heapless-0.8.0/LICENSE-MIT"
     ]
   },
   {
@@ -1253,8 +1253,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/heapless",
     "license_files": [
-      "licenses/dependencies/heapless-0.9.3/LICENSE-APACHE",
-      "licenses/dependencies/heapless-0.9.3/LICENSE-MIT"
+      "docs/licenses/dependencies/heapless-0.9.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/heapless-0.9.3/LICENSE-MIT"
     ]
   },
   {
@@ -1263,8 +1263,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/withoutboats/heck",
     "license_files": [
-      "licenses/dependencies/heck-0.5.0/LICENSE-APACHE",
-      "licenses/dependencies/heck-0.5.0/LICENSE-MIT"
+      "docs/licenses/dependencies/heck-0.5.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/heck-0.5.0/LICENSE-MIT"
     ]
   },
   {
@@ -1273,8 +1273,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/KDFs/",
     "license_files": [
-      "licenses/dependencies/hkdf-0.12.4/LICENSE-APACHE",
-      "licenses/dependencies/hkdf-0.12.4/LICENSE-MIT"
+      "docs/licenses/dependencies/hkdf-0.12.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/hkdf-0.12.4/LICENSE-MIT"
     ]
   },
   {
@@ -1283,8 +1283,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/MACs",
     "license_files": [
-      "licenses/dependencies/hmac-0.12.1/LICENSE-APACHE",
-      "licenses/dependencies/hmac-0.12.1/LICENSE-MIT"
+      "docs/licenses/dependencies/hmac-0.12.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/hmac-0.12.1/LICENSE-MIT"
     ]
   },
   {
@@ -1293,7 +1293,7 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/TedDriggs/ident_case",
     "license_files": [
-      "licenses/dependencies/ident_case-1.0.1/LICENSE"
+      "docs/licenses/dependencies/ident_case-1.0.1/LICENSE"
     ]
   },
   {
@@ -1302,8 +1302,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/indexmap-rs/indexmap",
     "license_files": [
-      "licenses/dependencies/indexmap-2.14.2/LICENSE-APACHE",
-      "licenses/dependencies/indexmap-2.14.2/LICENSE-MIT"
+      "docs/licenses/dependencies/indexmap-2.14.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/indexmap-2.14.2/LICENSE-MIT"
     ]
   },
   {
@@ -1312,8 +1312,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/RustCrypto/utils",
     "license_files": [
-      "licenses/dependencies/inout-0.1.4/LICENSE-APACHE",
-      "licenses/dependencies/inout-0.1.4/LICENSE-MIT"
+      "docs/licenses/dependencies/inout-0.1.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/inout-0.1.4/LICENSE-MIT"
     ]
   },
   {
@@ -1322,8 +1322,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-itertools/itertools",
     "license_files": [
-      "licenses/dependencies/itertools-0.13.0/LICENSE-APACHE",
-      "licenses/dependencies/itertools-0.13.0/LICENSE-MIT"
+      "docs/licenses/dependencies/itertools-0.13.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/itertools-0.13.0/LICENSE-MIT"
     ]
   },
   {
@@ -1332,8 +1332,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/itoa",
     "license_files": [
-      "licenses/dependencies/itoa-1.0.18/LICENSE-APACHE",
-      "licenses/dependencies/itoa-1.0.18/LICENSE-MIT"
+      "docs/licenses/dependencies/itoa-1.0.18/LICENSE-APACHE",
+      "docs/licenses/dependencies/itoa-1.0.18/LICENSE-MIT"
     ]
   },
   {
@@ -1342,8 +1342,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/maciejhirsz/json-rust",
     "license_files": [
-      "licenses/dependencies/json-0.12.4/LICENSE-APACHE",
-      "licenses/dependencies/json-0.12.4/LICENSE-MIT"
+      "docs/licenses/dependencies/json-0.12.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/json-0.12.4/LICENSE-MIT"
     ]
   },
   {
@@ -1352,7 +1352,7 @@
     "license": "MIT",
     "repository": "https://github.com/callum-oakley/json5-rs",
     "license_files": [
-      "licenses/dependencies/json5-1.3.1/LICENSE"
+      "docs/licenses/dependencies/json5-1.3.1/LICENSE"
     ]
   },
   {
@@ -1361,8 +1361,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/libc",
     "license_files": [
-      "licenses/dependencies/libc-0.2.189/LICENSE-APACHE",
-      "licenses/dependencies/libc-0.2.189/LICENSE-MIT"
+      "docs/licenses/dependencies/libc-0.2.189/LICENSE-APACHE",
+      "docs/licenses/dependencies/libc-0.2.189/LICENSE-MIT"
     ]
   },
   {
@@ -1371,7 +1371,7 @@
     "license": "ISC",
     "repository": "https://github.com/nagisa/rust_libloading/",
     "license_files": [
-      "licenses/dependencies/libloading-0.8.9/LICENSE"
+      "docs/licenses/dependencies/libloading-0.8.9/LICENSE"
     ]
   },
   {
@@ -1380,8 +1380,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/LukasKalbertodt/litrs",
     "license_files": [
-      "licenses/dependencies/litrs-1.0.0/LICENSE-APACHE",
-      "licenses/dependencies/litrs-1.0.0/LICENSE-MIT"
+      "docs/licenses/dependencies/litrs-1.0.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/litrs-1.0.0/LICENSE-MIT"
     ]
   },
   {
@@ -1390,8 +1390,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/Amanieu/parking_lot",
     "license_files": [
-      "licenses/dependencies/lock_api-0.4.14/LICENSE-APACHE",
-      "licenses/dependencies/lock_api-0.4.14/LICENSE-MIT"
+      "docs/licenses/dependencies/lock_api-0.4.14/LICENSE-APACHE",
+      "docs/licenses/dependencies/lock_api-0.4.14/LICENSE-MIT"
     ]
   },
   {
@@ -1400,8 +1400,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/log",
     "license_files": [
-      "licenses/dependencies/log-0.4.34/LICENSE-APACHE",
-      "licenses/dependencies/log-0.4.34/LICENSE-MIT"
+      "docs/licenses/dependencies/log-0.4.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/log-0.4.34/LICENSE-MIT"
     ]
   },
   {
@@ -1410,8 +1410,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/alexcrichton/xz2-rs",
     "license_files": [
-      "licenses/dependencies/lzma-sys-0.1.20/LICENSE-APACHE",
-      "licenses/dependencies/lzma-sys-0.1.20/LICENSE-MIT"
+      "docs/licenses/dependencies/lzma-sys-0.1.20/LICENSE-APACHE",
+      "docs/licenses/dependencies/lzma-sys-0.1.20/LICENSE-MIT"
     ]
   },
   {
@@ -1420,9 +1420,9 @@
     "license": "Unlicense OR MIT",
     "repository": "https://github.com/BurntSushi/memchr",
     "license_files": [
-      "licenses/dependencies/memchr-2.8.3/COPYING",
-      "licenses/dependencies/memchr-2.8.3/UNLICENSE",
-      "licenses/dependencies/memchr-2.8.3/LICENSE-MIT"
+      "docs/licenses/dependencies/memchr-2.8.3/COPYING",
+      "docs/licenses/dependencies/memchr-2.8.3/UNLICENSE",
+      "docs/licenses/dependencies/memchr-2.8.3/LICENSE-MIT"
     ]
   },
   {
@@ -1431,9 +1431,9 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/Alexhuszagh/minimal-lexical",
     "license_files": [
-      "licenses/dependencies/minimal-lexical-0.2.1/LICENSE.md",
-      "licenses/dependencies/minimal-lexical-0.2.1/LICENSE-APACHE",
-      "licenses/dependencies/minimal-lexical-0.2.1/LICENSE-MIT"
+      "docs/licenses/dependencies/minimal-lexical-0.2.1/LICENSE.md",
+      "docs/licenses/dependencies/minimal-lexical-0.2.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/minimal-lexical-0.2.1/LICENSE-MIT"
     ]
   },
   {
@@ -1442,10 +1442,10 @@
     "license": "MIT OR Zlib OR Apache-2.0",
     "repository": "https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide",
     "license_files": [
-      "licenses/dependencies/miniz_oxide-0.9.1/LICENSE-MIT.md",
-      "licenses/dependencies/miniz_oxide-0.9.1/LICENSE-ZLIB.md",
-      "licenses/dependencies/miniz_oxide-0.9.1/LICENSE",
-      "licenses/dependencies/miniz_oxide-0.9.1/LICENSE-APACHE.md"
+      "docs/licenses/dependencies/miniz_oxide-0.9.1/LICENSE-MIT.md",
+      "docs/licenses/dependencies/miniz_oxide-0.9.1/LICENSE-ZLIB.md",
+      "docs/licenses/dependencies/miniz_oxide-0.9.1/LICENSE",
+      "docs/licenses/dependencies/miniz_oxide-0.9.1/LICENSE-APACHE.md"
     ]
   },
   {
@@ -1454,9 +1454,9 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/hsivonen/multiversion_no_op",
     "license_files": [
-      "licenses/dependencies/multiversion_no_op-1.0.0/LICENSE-APACHE",
-      "licenses/dependencies/multiversion_no_op-1.0.0/COPYRIGHT",
-      "licenses/dependencies/multiversion_no_op-1.0.0/LICENSE-MIT"
+      "docs/licenses/dependencies/multiversion_no_op-1.0.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/multiversion_no_op-1.0.0/COPYRIGHT",
+      "docs/licenses/dependencies/multiversion_no_op-1.0.0/LICENSE-MIT"
     ]
   },
   {
@@ -1465,8 +1465,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/nb",
     "license_files": [
-      "licenses/dependencies/nb-0.1.3/LICENSE-APACHE",
-      "licenses/dependencies/nb-0.1.3/LICENSE-MIT"
+      "docs/licenses/dependencies/nb-0.1.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/nb-0.1.3/LICENSE-MIT"
     ]
   },
   {
@@ -1475,8 +1475,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/nb",
     "license_files": [
-      "licenses/dependencies/nb-1.1.0/LICENSE-APACHE",
-      "licenses/dependencies/nb-1.1.0/LICENSE-MIT"
+      "docs/licenses/dependencies/nb-1.1.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/nb-1.1.0/LICENSE-MIT"
     ]
   },
   {
@@ -1485,7 +1485,7 @@
     "license": "MIT",
     "repository": "https://github.com/Geal/nom",
     "license_files": [
-      "licenses/dependencies/nom-7.1.3/LICENSE"
+      "docs/licenses/dependencies/nom-7.1.3/LICENSE"
     ]
   },
   {
@@ -1494,8 +1494,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/alexmoon/nrf-sdc",
     "license_files": [
-      "licenses/dependencies/nrf-mpsl-0.4.0/LICENSE-APACHE",
-      "licenses/dependencies/nrf-mpsl-0.4.0/LICENSE-MIT"
+      "docs/licenses/dependencies/nrf-mpsl-0.4.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/nrf-mpsl-0.4.0/LICENSE-MIT"
     ]
   },
   {
@@ -1504,7 +1504,7 @@
     "license": "LicenseRef-Nordic-5-Clause",
     "repository": "https://github.com/alexmoon/nrf-sdc",
     "license_files": [
-      "licenses/dependencies/nrf-mpsl-sys-0.3.0/third_party/nordic/nrfxlib/LICENSE"
+      "docs/licenses/dependencies/nrf-mpsl-sys-0.3.0/third_party/nordic/nrfxlib/LICENSE"
     ]
   },
   {
@@ -1513,9 +1513,9 @@
     "license": "BSD-3-Clause",
     "repository": "https://github.com/embassy-rs/nrf-pac",
     "license_files": [
-      "licenses/dependencies/nrf-pac-0.4.0/LICENSE-BSD-3-CLAUSE.txt"
+      "docs/licenses/dependencies/nrf-pac-0.4.0/LICENSE-BSD-3-CLAUSE.txt"
     ],
-    "provenance_file": "licenses/dependencies/nrf-pac-0.4.0/PROVENANCE.txt"
+    "provenance_file": "docs/licenses/dependencies/nrf-pac-0.4.0/PROVENANCE.txt"
   },
   {
     "name": "nrf-sdc",
@@ -1523,8 +1523,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/alexmoon/nrf-sdc",
     "license_files": [
-      "licenses/dependencies/nrf-sdc-0.4.0/LICENSE-APACHE",
-      "licenses/dependencies/nrf-sdc-0.4.0/LICENSE-MIT"
+      "docs/licenses/dependencies/nrf-sdc-0.4.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/nrf-sdc-0.4.0/LICENSE-MIT"
     ]
   },
   {
@@ -1533,7 +1533,7 @@
     "license": "LicenseRef-Nordic-5-Clause",
     "repository": "https://github.com/alexmoon/nrf-sdc",
     "license_files": [
-      "licenses/dependencies/nrf-sdc-sys-0.3.0/third_party/nordic/nrfxlib/LICENSE"
+      "docs/licenses/dependencies/nrf-sdc-sys-0.3.0/third_party/nordic/nrfxlib/LICENSE"
     ]
   },
   {
@@ -1542,8 +1542,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-num/num-traits",
     "license_files": [
-      "licenses/dependencies/num-traits-0.2.19/LICENSE-APACHE",
-      "licenses/dependencies/num-traits-0.2.19/LICENSE-MIT"
+      "docs/licenses/dependencies/num-traits-0.2.19/LICENSE-APACHE",
+      "docs/licenses/dependencies/num-traits-0.2.19/LICENSE-MIT"
     ]
   },
   {
@@ -1552,8 +1552,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/matklad/once_cell",
     "license_files": [
-      "licenses/dependencies/once_cell-1.21.4/LICENSE-APACHE",
-      "licenses/dependencies/once_cell-1.21.4/LICENSE-MIT"
+      "docs/licenses/dependencies/once_cell-1.21.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/once_cell-1.21.4/LICENSE-MIT"
     ]
   },
   {
@@ -1562,7 +1562,7 @@
     "license": "MIT",
     "repository": "https://github.com/sgodwincs/ordered-multimap-rs",
     "license_files": [
-      "licenses/dependencies/ordered-multimap-0.7.3/LICENSE"
+      "docs/licenses/dependencies/ordered-multimap-0.7.3/LICENSE"
     ]
   },
   {
@@ -1571,8 +1571,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/elliptic-curves/tree/master/p256",
     "license_files": [
-      "licenses/dependencies/p256-0.13.2/LICENSE-APACHE",
-      "licenses/dependencies/p256-0.13.2/LICENSE-MIT"
+      "docs/licenses/dependencies/p256-0.13.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/p256-0.13.2/LICENSE-MIT"
     ]
   },
   {
@@ -1581,9 +1581,9 @@
     "license": "MIT",
     "repository": "https://github.com/ycrypto/p256-cortex-m4",
     "license_files": [
-      "licenses/dependencies/p256-cortex-m4-0.1.0-alpha.6/LICENSE-MIT.txt"
+      "docs/licenses/dependencies/p256-cortex-m4-0.1.0-alpha.6/LICENSE-MIT.txt"
     ],
-    "provenance_file": "licenses/dependencies/p256-cortex-m4-0.1.0-alpha.6/PROVENANCE.txt"
+    "provenance_file": "docs/licenses/dependencies/p256-cortex-m4-0.1.0-alpha.6/PROVENANCE.txt"
   },
   {
     "name": "p256-cortex-m4-sys",
@@ -1591,9 +1591,9 @@
     "license": "MIT",
     "repository": "https://github.com/ycrypto/p256-cortex-m4-sys",
     "license_files": [
-      "licenses/dependencies/p256-cortex-m4-sys-0.1.0/LICENSE-MIT.txt"
+      "docs/licenses/dependencies/p256-cortex-m4-sys-0.1.0/LICENSE-MIT.txt"
     ],
-    "provenance_file": "licenses/dependencies/p256-cortex-m4-sys-0.1.0/PROVENANCE.txt"
+    "provenance_file": "docs/licenses/dependencies/p256-cortex-m4-sys-0.1.0/PROVENANCE.txt"
   },
   {
     "name": "panic-probe",
@@ -1611,8 +1611,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/paste",
     "license_files": [
-      "licenses/dependencies/paste-1.0.15/LICENSE-APACHE",
-      "licenses/dependencies/paste-1.0.15/LICENSE-MIT"
+      "docs/licenses/dependencies/paste-1.0.15/LICENSE-APACHE",
+      "docs/licenses/dependencies/paste-1.0.15/LICENSE-MIT"
     ]
   },
   {
@@ -1621,8 +1621,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/Manishearth/pathdiff",
     "license_files": [
-      "licenses/dependencies/pathdiff-0.2.3/LICENSE-APACHE",
-      "licenses/dependencies/pathdiff-0.2.3/LICENSE-MIT"
+      "docs/licenses/dependencies/pathdiff-0.2.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/pathdiff-0.2.3/LICENSE-MIT"
     ]
   },
   {
@@ -1631,8 +1631,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/pest-parser/pest",
     "license_files": [
-      "licenses/dependencies/pest-2.9.2/LICENSE-APACHE",
-      "licenses/dependencies/pest-2.9.2/LICENSE-MIT"
+      "docs/licenses/dependencies/pest-2.9.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/pest-2.9.2/LICENSE-MIT"
     ]
   },
   {
@@ -1641,8 +1641,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/pest-parser/pest",
     "license_files": [
-      "licenses/dependencies/pest_derive-2.9.2/LICENSE-APACHE",
-      "licenses/dependencies/pest_derive-2.9.2/LICENSE-MIT"
+      "docs/licenses/dependencies/pest_derive-2.9.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/pest_derive-2.9.2/LICENSE-MIT"
     ]
   },
   {
@@ -1651,8 +1651,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/pest-parser/pest",
     "license_files": [
-      "licenses/dependencies/pest_generator-2.9.2/LICENSE-APACHE",
-      "licenses/dependencies/pest_generator-2.9.2/LICENSE-MIT"
+      "docs/licenses/dependencies/pest_generator-2.9.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/pest_generator-2.9.2/LICENSE-MIT"
     ]
   },
   {
@@ -1661,8 +1661,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/pest-parser/pest",
     "license_files": [
-      "licenses/dependencies/pest_meta-2.9.2/LICENSE-APACHE",
-      "licenses/dependencies/pest_meta-2.9.2/LICENSE-MIT"
+      "docs/licenses/dependencies/pest_meta-2.9.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/pest_meta-2.9.2/LICENSE-MIT"
     ]
   },
   {
@@ -1671,7 +1671,7 @@
     "license": "MIT",
     "repository": "https://github.com/rust-phf/rust-phf",
     "license_files": [
-      "licenses/dependencies/phf-0.11.3/LICENSE"
+      "docs/licenses/dependencies/phf-0.11.3/LICENSE"
     ]
   },
   {
@@ -1680,7 +1680,7 @@
     "license": "MIT",
     "repository": "https://github.com/rust-phf/rust-phf",
     "license_files": [
-      "licenses/dependencies/phf_generator-0.11.3/LICENSE"
+      "docs/licenses/dependencies/phf_generator-0.11.3/LICENSE"
     ]
   },
   {
@@ -1689,7 +1689,7 @@
     "license": "MIT",
     "repository": "https://github.com/rust-phf/rust-phf",
     "license_files": [
-      "licenses/dependencies/phf_macros-0.11.3/LICENSE"
+      "docs/licenses/dependencies/phf_macros-0.11.3/LICENSE"
     ]
   },
   {
@@ -1698,7 +1698,7 @@
     "license": "MIT",
     "repository": "https://github.com/rust-phf/rust-phf",
     "license_files": [
-      "licenses/dependencies/phf_shared-0.11.3/LICENSE"
+      "docs/licenses/dependencies/phf_shared-0.11.3/LICENSE"
     ]
   },
   {
@@ -1707,8 +1707,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/taiki-e/pin-project-lite",
     "license_files": [
-      "licenses/dependencies/pin-project-lite-0.2.17/LICENSE-APACHE",
-      "licenses/dependencies/pin-project-lite-0.2.17/LICENSE-MIT"
+      "docs/licenses/dependencies/pin-project-lite-0.2.17/LICENSE-APACHE",
+      "docs/licenses/dependencies/pin-project-lite-0.2.17/LICENSE-MIT"
     ]
   },
   {
@@ -1717,8 +1717,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/pkg-config-rs",
     "license_files": [
-      "licenses/dependencies/pkg-config-0.3.34/LICENSE-APACHE",
-      "licenses/dependencies/pkg-config-0.3.34/LICENSE-MIT"
+      "docs/licenses/dependencies/pkg-config-0.3.34/LICENSE-APACHE",
+      "docs/licenses/dependencies/pkg-config-0.3.34/LICENSE-MIT"
     ]
   },
   {
@@ -1727,8 +1727,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/taiki-e/portable-atomic",
     "license_files": [
-      "licenses/dependencies/portable-atomic-1.15.0/LICENSE-APACHE",
-      "licenses/dependencies/portable-atomic-1.15.0/LICENSE-MIT"
+      "docs/licenses/dependencies/portable-atomic-1.15.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/portable-atomic-1.15.0/LICENSE-MIT"
     ]
   },
   {
@@ -1737,8 +1737,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/jamesmunns/postcard",
     "license_files": [
-      "licenses/dependencies/postcard-1.1.3/LICENSE-APACHE",
-      "licenses/dependencies/postcard-1.1.3/LICENSE-MIT"
+      "docs/licenses/dependencies/postcard-1.1.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/postcard-1.1.3/LICENSE-MIT"
     ]
   },
   {
@@ -1747,8 +1747,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/jamesmunns/postcard",
     "license_files": [
-      "licenses/dependencies/postcard-derive-0.2.2/LICENSE-APACHE",
-      "licenses/dependencies/postcard-derive-0.2.2/LICENSE-MIT"
+      "docs/licenses/dependencies/postcard-derive-0.2.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/postcard-derive-0.2.2/LICENSE-MIT"
     ]
   },
   {
@@ -1757,8 +1757,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/cryptocorrosion/cryptocorrosion",
     "license_files": [
-      "licenses/dependencies/ppv-lite86-0.2.21/LICENSE-APACHE",
-      "licenses/dependencies/ppv-lite86-0.2.21/LICENSE-MIT"
+      "docs/licenses/dependencies/ppv-lite86-0.2.21/LICENSE-APACHE",
+      "docs/licenses/dependencies/ppv-lite86-0.2.21/LICENSE-MIT"
     ]
   },
   {
@@ -1767,8 +1767,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/prettyplease",
     "license_files": [
-      "licenses/dependencies/prettyplease-0.2.37/LICENSE-APACHE",
-      "licenses/dependencies/prettyplease-0.2.37/LICENSE-MIT"
+      "docs/licenses/dependencies/prettyplease-0.2.37/LICENSE-APACHE",
+      "docs/licenses/dependencies/prettyplease-0.2.37/LICENSE-MIT"
     ]
   },
   {
@@ -1777,8 +1777,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/elliptic-curves/tree/master/primeorder",
     "license_files": [
-      "licenses/dependencies/primeorder-0.13.6/LICENSE-APACHE",
-      "licenses/dependencies/primeorder-0.13.6/LICENSE-MIT"
+      "docs/licenses/dependencies/primeorder-0.13.6/LICENSE-APACHE",
+      "docs/licenses/dependencies/primeorder-0.13.6/LICENSE-MIT"
     ]
   },
   {
@@ -1787,8 +1787,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/proc-macro2",
     "license_files": [
-      "licenses/dependencies/proc-macro2-1.0.107/LICENSE-APACHE",
-      "licenses/dependencies/proc-macro2-1.0.107/LICENSE-MIT"
+      "docs/licenses/dependencies/proc-macro2-1.0.107/LICENSE-APACHE",
+      "docs/licenses/dependencies/proc-macro2-1.0.107/LICENSE-MIT"
     ]
   },
   {
@@ -1797,8 +1797,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/quote",
     "license_files": [
-      "licenses/dependencies/quote-1.0.47/LICENSE-APACHE",
-      "licenses/dependencies/quote-1.0.47/LICENSE-MIT"
+      "docs/licenses/dependencies/quote-1.0.47/LICENSE-APACHE",
+      "docs/licenses/dependencies/quote-1.0.47/LICENSE-MIT"
     ]
   },
   {
@@ -1807,9 +1807,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/rand",
     "license_files": [
-      "licenses/dependencies/rand-0.8.8/LICENSE-APACHE",
-      "licenses/dependencies/rand-0.8.8/COPYRIGHT",
-      "licenses/dependencies/rand-0.8.8/LICENSE-MIT"
+      "docs/licenses/dependencies/rand-0.8.8/LICENSE-APACHE",
+      "docs/licenses/dependencies/rand-0.8.8/COPYRIGHT",
+      "docs/licenses/dependencies/rand-0.8.8/LICENSE-MIT"
     ]
   },
   {
@@ -1818,9 +1818,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/rand",
     "license_files": [
-      "licenses/dependencies/rand_chacha-0.3.1/LICENSE-APACHE",
-      "licenses/dependencies/rand_chacha-0.3.1/COPYRIGHT",
-      "licenses/dependencies/rand_chacha-0.3.1/LICENSE-MIT"
+      "docs/licenses/dependencies/rand_chacha-0.3.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/rand_chacha-0.3.1/COPYRIGHT",
+      "docs/licenses/dependencies/rand_chacha-0.3.1/LICENSE-MIT"
     ]
   },
   {
@@ -1829,9 +1829,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/rand_core",
     "license_files": [
-      "licenses/dependencies/rand_core-0.10.1/LICENSE-APACHE",
-      "licenses/dependencies/rand_core-0.10.1/COPYRIGHT",
-      "licenses/dependencies/rand_core-0.10.1/LICENSE-MIT"
+      "docs/licenses/dependencies/rand_core-0.10.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/rand_core-0.10.1/COPYRIGHT",
+      "docs/licenses/dependencies/rand_core-0.10.1/LICENSE-MIT"
     ]
   },
   {
@@ -1840,9 +1840,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/rand",
     "license_files": [
-      "licenses/dependencies/rand_core-0.6.4/LICENSE-APACHE",
-      "licenses/dependencies/rand_core-0.6.4/COPYRIGHT",
-      "licenses/dependencies/rand_core-0.6.4/LICENSE-MIT"
+      "docs/licenses/dependencies/rand_core-0.6.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/rand_core-0.6.4/COPYRIGHT",
+      "docs/licenses/dependencies/rand_core-0.6.4/LICENSE-MIT"
     ]
   },
   {
@@ -1851,9 +1851,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-random/rand",
     "license_files": [
-      "licenses/dependencies/rand_core-0.9.5/LICENSE-APACHE",
-      "licenses/dependencies/rand_core-0.9.5/COPYRIGHT",
-      "licenses/dependencies/rand_core-0.9.5/LICENSE-MIT"
+      "docs/licenses/dependencies/rand_core-0.9.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/rand_core-0.9.5/COPYRIGHT",
+      "docs/licenses/dependencies/rand_core-0.9.5/LICENSE-MIT"
     ]
   },
   {
@@ -1862,8 +1862,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/regex",
     "license_files": [
-      "licenses/dependencies/regex-1.13.1/LICENSE-APACHE",
-      "licenses/dependencies/regex-1.13.1/LICENSE-MIT"
+      "docs/licenses/dependencies/regex-1.13.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/regex-1.13.1/LICENSE-MIT"
     ]
   },
   {
@@ -1872,8 +1872,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/regex",
     "license_files": [
-      "licenses/dependencies/regex-automata-0.4.18/LICENSE-APACHE",
-      "licenses/dependencies/regex-automata-0.4.18/LICENSE-MIT"
+      "docs/licenses/dependencies/regex-automata-0.4.18/LICENSE-APACHE",
+      "docs/licenses/dependencies/regex-automata-0.4.18/LICENSE-MIT"
     ]
   },
   {
@@ -1882,8 +1882,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-lang/regex",
     "license_files": [
-      "licenses/dependencies/regex-syntax-0.8.11/LICENSE-APACHE",
-      "licenses/dependencies/regex-syntax-0.8.11/LICENSE-MIT"
+      "docs/licenses/dependencies/regex-syntax-0.8.11/LICENSE-APACHE",
+      "docs/licenses/dependencies/regex-syntax-0.8.11/LICENSE-MIT"
     ]
   },
   {
@@ -1892,8 +1892,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/ron-rs/ron",
     "license_files": [
-      "licenses/dependencies/ron-0.12.2/LICENSE-APACHE",
-      "licenses/dependencies/ron-0.12.2/LICENSE-MIT"
+      "docs/licenses/dependencies/ron-0.12.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/ron-0.12.2/LICENSE-MIT"
     ]
   },
   {
@@ -1902,7 +1902,7 @@
     "license": "MIT",
     "repository": "https://github.com/zonyitoo/rust-ini",
     "license_files": [
-      "licenses/dependencies/rust-ini-0.21.3/LICENSE"
+      "docs/licenses/dependencies/rust-ini-0.21.3/LICENSE"
     ]
   },
   {
@@ -1911,8 +1911,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/rust-lang/rustc-hash",
     "license_files": [
-      "licenses/dependencies/rustc-hash-2.1.3/LICENSE-APACHE",
-      "licenses/dependencies/rustc-hash-2.1.3/LICENSE-MIT"
+      "docs/licenses/dependencies/rustc-hash-2.1.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/rustc-hash-2.1.3/LICENSE-MIT"
     ]
   },
   {
@@ -1921,8 +1921,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/Kimundi/rustc-version-rs",
     "license_files": [
-      "licenses/dependencies/rustc_version-0.2.3/LICENSE-APACHE",
-      "licenses/dependencies/rustc_version-0.2.3/LICENSE-MIT"
+      "docs/licenses/dependencies/rustc_version-0.2.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/rustc_version-0.2.3/LICENSE-MIT"
     ]
   },
   {
@@ -1931,8 +1931,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/djc/rustc-version-rs",
     "license_files": [
-      "licenses/dependencies/rustc_version-0.4.1/LICENSE-APACHE",
-      "licenses/dependencies/rustc_version-0.4.1/LICENSE-MIT"
+      "docs/licenses/dependencies/rustc_version-0.4.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/rustc_version-0.4.1/LICENSE-MIT"
     ]
   },
   {
@@ -1941,8 +1941,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/rustversion",
     "license_files": [
-      "licenses/dependencies/rustversion-1.0.23/LICENSE-APACHE",
-      "licenses/dependencies/rustversion-1.0.23/LICENSE-MIT"
+      "docs/licenses/dependencies/rustversion-1.0.23/LICENSE-APACHE",
+      "docs/licenses/dependencies/rustversion-1.0.23/LICENSE-MIT"
     ]
   },
   {
@@ -1951,8 +1951,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/bluss/scopeguard",
     "license_files": [
-      "licenses/dependencies/scopeguard-1.2.0/LICENSE-APACHE",
-      "licenses/dependencies/scopeguard-1.2.0/LICENSE-MIT"
+      "docs/licenses/dependencies/scopeguard-1.2.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/scopeguard-1.2.0/LICENSE-MIT"
     ]
   },
   {
@@ -1961,8 +1961,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/formats/tree/master/sec1",
     "license_files": [
-      "licenses/dependencies/sec1-0.7.3/LICENSE-APACHE",
-      "licenses/dependencies/sec1-0.7.3/LICENSE-MIT"
+      "docs/licenses/dependencies/sec1-0.7.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/sec1-0.7.3/LICENSE-MIT"
     ]
   },
   {
@@ -1971,8 +1971,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/steveklabnik/semver",
     "license_files": [
-      "licenses/dependencies/semver-0.9.0/LICENSE-APACHE",
-      "licenses/dependencies/semver-0.9.0/LICENSE-MIT"
+      "docs/licenses/dependencies/semver-0.9.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/semver-0.9.0/LICENSE-MIT"
     ]
   },
   {
@@ -1981,8 +1981,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/semver",
     "license_files": [
-      "licenses/dependencies/semver-1.0.28/LICENSE-APACHE",
-      "licenses/dependencies/semver-1.0.28/LICENSE-MIT"
+      "docs/licenses/dependencies/semver-1.0.28/LICENSE-APACHE",
+      "docs/licenses/dependencies/semver-1.0.28/LICENSE-MIT"
     ]
   },
   {
@@ -1991,8 +1991,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/steveklabnik/semver-parser",
     "license_files": [
-      "licenses/dependencies/semver-parser-0.7.0/LICENSE-APACHE",
-      "licenses/dependencies/semver-parser-0.7.0/LICENSE-MIT"
+      "docs/licenses/dependencies/semver-parser-0.7.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/semver-parser-0.7.0/LICENSE-MIT"
     ]
   },
   {
@@ -2011,8 +2011,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/serde-rs/serde",
     "license_files": [
-      "licenses/dependencies/serde-1.0.229/LICENSE-APACHE",
-      "licenses/dependencies/serde-1.0.229/LICENSE-MIT"
+      "docs/licenses/dependencies/serde-1.0.229/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde-1.0.229/LICENSE-MIT"
     ]
   },
   {
@@ -2021,8 +2021,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/bytedream/serde-inline-default",
     "license_files": [
-      "licenses/dependencies/serde-inline-default-1.0.2/LICENSE-APACHE",
-      "licenses/dependencies/serde-inline-default-1.0.2/LICENSE-MIT"
+      "docs/licenses/dependencies/serde-inline-default-1.0.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde-inline-default-1.0.2/LICENSE-MIT"
     ]
   },
   {
@@ -2031,8 +2031,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/serde-untagged",
     "license_files": [
-      "licenses/dependencies/serde-untagged-0.1.9/LICENSE-APACHE",
-      "licenses/dependencies/serde-untagged-0.1.9/LICENSE-MIT"
+      "docs/licenses/dependencies/serde-untagged-0.1.9/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde-untagged-0.1.9/LICENSE-MIT"
     ]
   },
   {
@@ -2041,8 +2041,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/serde-rs/serde",
     "license_files": [
-      "licenses/dependencies/serde_core-1.0.229/LICENSE-APACHE",
-      "licenses/dependencies/serde_core-1.0.229/LICENSE-MIT"
+      "docs/licenses/dependencies/serde_core-1.0.229/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde_core-1.0.229/LICENSE-MIT"
     ]
   },
   {
@@ -2051,8 +2051,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/serde-rs/serde",
     "license_files": [
-      "licenses/dependencies/serde_derive-1.0.229/LICENSE-APACHE",
-      "licenses/dependencies/serde_derive-1.0.229/LICENSE-MIT"
+      "docs/licenses/dependencies/serde_derive-1.0.229/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde_derive-1.0.229/LICENSE-MIT"
     ]
   },
   {
@@ -2061,8 +2061,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/serde-rs/json",
     "license_files": [
-      "licenses/dependencies/serde_json-1.0.151/LICENSE-APACHE",
-      "licenses/dependencies/serde_json-1.0.151/LICENSE-MIT"
+      "docs/licenses/dependencies/serde_json-1.0.151/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde_json-1.0.151/LICENSE-MIT"
     ]
   },
   {
@@ -2071,8 +2071,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/toml-rs/toml",
     "license_files": [
-      "licenses/dependencies/serde_spanned-1.1.1/LICENSE-APACHE",
-      "licenses/dependencies/serde_spanned-1.1.1/LICENSE-MIT"
+      "docs/licenses/dependencies/serde_spanned-1.1.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/serde_spanned-1.1.1/LICENSE-MIT"
     ]
   },
   {
@@ -2081,8 +2081,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/comex/rust-shlex",
     "license_files": [
-      "licenses/dependencies/shlex-1.3.0/LICENSE-APACHE",
-      "licenses/dependencies/shlex-1.3.0/LICENSE-MIT"
+      "docs/licenses/dependencies/shlex-1.3.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/shlex-1.3.0/LICENSE-MIT"
     ]
   },
   {
@@ -2091,8 +2091,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/comex/rust-shlex",
     "license_files": [
-      "licenses/dependencies/shlex-2.0.1/LICENSE-APACHE",
-      "licenses/dependencies/shlex-2.0.1/LICENSE-MIT"
+      "docs/licenses/dependencies/shlex-2.0.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/shlex-2.0.1/LICENSE-MIT"
     ]
   },
   {
@@ -2101,9 +2101,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/jedisct1/rust-siphash",
     "license_files": [
-      "licenses/dependencies/siphasher-1.0.4/LICENSE-APACHE",
-      "licenses/dependencies/siphasher-1.0.4/COPYING",
-      "licenses/dependencies/siphasher-1.0.4/LICENSE-MIT"
+      "docs/licenses/dependencies/siphasher-1.0.4/LICENSE-APACHE",
+      "docs/licenses/dependencies/siphasher-1.0.4/COPYING",
+      "docs/licenses/dependencies/siphasher-1.0.4/LICENSE-MIT"
     ]
   },
   {
@@ -2112,7 +2112,7 @@
     "license": "MIT",
     "repository": "https://github.com/tokio-rs/slab",
     "license_files": [
-      "licenses/dependencies/slab-0.4.12/LICENSE"
+      "docs/licenses/dependencies/slab-0.4.12/LICENSE"
     ]
   },
   {
@@ -2121,8 +2121,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://gitlab.com/robigalia/ssmarshal",
     "license_files": [
-      "licenses/dependencies/ssmarshal-1.0.0/LICENSE-APACHE",
-      "licenses/dependencies/ssmarshal-1.0.0/LICENSE-MIT"
+      "docs/licenses/dependencies/ssmarshal-1.0.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/ssmarshal-1.0.0/LICENSE-MIT"
     ]
   },
   {
@@ -2131,8 +2131,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/storyyeller/stable_deref_trait",
     "license_files": [
-      "licenses/dependencies/stable_deref_trait-1.2.1/LICENSE-APACHE",
-      "licenses/dependencies/stable_deref_trait-1.2.1/LICENSE-MIT"
+      "docs/licenses/dependencies/stable_deref_trait-1.2.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/stable_deref_trait-1.2.1/LICENSE-MIT"
     ]
   },
   {
@@ -2141,8 +2141,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/embassy-rs/static-cell",
     "license_files": [
-      "licenses/dependencies/static_cell-2.1.1/LICENSE-APACHE",
-      "licenses/dependencies/static_cell-2.1.1/LICENSE-MIT"
+      "docs/licenses/dependencies/static_cell-2.1.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/static_cell-2.1.1/LICENSE-MIT"
     ]
   },
   {
@@ -2151,7 +2151,7 @@
     "license": "MIT",
     "repository": "https://github.com/rapidfuzz/strsim-rs",
     "license_files": [
-      "licenses/dependencies/strsim-0.11.1/LICENSE"
+      "docs/licenses/dependencies/strsim-0.11.1/LICENSE"
     ]
   },
   {
@@ -2160,7 +2160,7 @@
     "license": "MIT",
     "repository": "https://github.com/Peternator7/strum",
     "license_files": [
-      "licenses/dependencies/strum-0.28.0/LICENSE"
+      "docs/licenses/dependencies/strum-0.28.0/LICENSE"
     ]
   },
   {
@@ -2169,7 +2169,7 @@
     "license": "MIT",
     "repository": "https://github.com/Peternator7/strum",
     "license_files": [
-      "licenses/dependencies/strum_macros-0.28.0/LICENSE"
+      "docs/licenses/dependencies/strum_macros-0.28.0/LICENSE"
     ]
   },
   {
@@ -2178,7 +2178,7 @@
     "license": "BSD-3-Clause",
     "repository": "https://github.com/dalek-cryptography/subtle",
     "license_files": [
-      "licenses/dependencies/subtle-2.6.1/LICENSE"
+      "docs/licenses/dependencies/subtle-2.6.1/LICENSE"
     ]
   },
   {
@@ -2187,8 +2187,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/syn",
     "license_files": [
-      "licenses/dependencies/syn-1.0.109/LICENSE-APACHE",
-      "licenses/dependencies/syn-1.0.109/LICENSE-MIT"
+      "docs/licenses/dependencies/syn-1.0.109/LICENSE-APACHE",
+      "docs/licenses/dependencies/syn-1.0.109/LICENSE-MIT"
     ]
   },
   {
@@ -2197,8 +2197,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/syn",
     "license_files": [
-      "licenses/dependencies/syn-2.0.119/LICENSE-APACHE",
-      "licenses/dependencies/syn-2.0.119/LICENSE-MIT"
+      "docs/licenses/dependencies/syn-2.0.119/LICENSE-APACHE",
+      "docs/licenses/dependencies/syn-2.0.119/LICENSE-MIT"
     ]
   },
   {
@@ -2207,8 +2207,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/syn",
     "license_files": [
-      "licenses/dependencies/syn-3.0.6/LICENSE-APACHE",
-      "licenses/dependencies/syn-3.0.6/LICENSE-MIT"
+      "docs/licenses/dependencies/syn-3.0.6/LICENSE-APACHE",
+      "docs/licenses/dependencies/syn-3.0.6/LICENSE-MIT"
     ]
   },
   {
@@ -2217,8 +2217,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/thiserror",
     "license_files": [
-      "licenses/dependencies/thiserror-2.0.21/LICENSE-APACHE",
-      "licenses/dependencies/thiserror-2.0.21/LICENSE-MIT"
+      "docs/licenses/dependencies/thiserror-2.0.21/LICENSE-APACHE",
+      "docs/licenses/dependencies/thiserror-2.0.21/LICENSE-MIT"
     ]
   },
   {
@@ -2227,8 +2227,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/thiserror",
     "license_files": [
-      "licenses/dependencies/thiserror-impl-2.0.21/LICENSE-APACHE",
-      "licenses/dependencies/thiserror-impl-2.0.21/LICENSE-MIT"
+      "docs/licenses/dependencies/thiserror-impl-2.0.21/LICENSE-APACHE",
+      "docs/licenses/dependencies/thiserror-impl-2.0.21/LICENSE-MIT"
     ]
   },
   {
@@ -2237,7 +2237,7 @@
     "license": "CC0-1.0",
     "repository": null,
     "license_files": [
-      "licenses/dependencies/tiny-keccak-2.0.2/LICENSE"
+      "docs/licenses/dependencies/tiny-keccak-2.0.2/LICENSE"
     ]
   },
   {
@@ -2246,8 +2246,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/toml-rs/toml",
     "license_files": [
-      "licenses/dependencies/toml-1.1.6+spec-1.1.0/LICENSE-APACHE",
-      "licenses/dependencies/toml-1.1.6+spec-1.1.0/LICENSE-MIT"
+      "docs/licenses/dependencies/toml-1.1.6+spec-1.1.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/toml-1.1.6+spec-1.1.0/LICENSE-MIT"
     ]
   },
   {
@@ -2256,8 +2256,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/toml-rs/toml",
     "license_files": [
-      "licenses/dependencies/toml_datetime-1.1.1+spec-1.1.0/LICENSE-APACHE",
-      "licenses/dependencies/toml_datetime-1.1.1+spec-1.1.0/LICENSE-MIT"
+      "docs/licenses/dependencies/toml_datetime-1.1.1+spec-1.1.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/toml_datetime-1.1.1+spec-1.1.0/LICENSE-MIT"
     ]
   },
   {
@@ -2266,8 +2266,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/toml-rs/toml",
     "license_files": [
-      "licenses/dependencies/toml_parser-1.1.3+spec-1.1.0/LICENSE-APACHE",
-      "licenses/dependencies/toml_parser-1.1.3+spec-1.1.0/LICENSE-MIT"
+      "docs/licenses/dependencies/toml_parser-1.1.3+spec-1.1.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/toml_parser-1.1.3+spec-1.1.0/LICENSE-MIT"
     ]
   },
   {
@@ -2276,8 +2276,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/toml-rs/toml",
     "license_files": [
-      "licenses/dependencies/toml_writer-1.1.2+spec-1.1.0/LICENSE-APACHE",
-      "licenses/dependencies/toml_writer-1.1.2+spec-1.1.0/LICENSE-MIT"
+      "docs/licenses/dependencies/toml_writer-1.1.2+spec-1.1.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/toml_writer-1.1.2+spec-1.1.0/LICENSE-MIT"
     ]
   },
   {
@@ -2306,8 +2306,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/dtolnay/typeid",
     "license_files": [
-      "licenses/dependencies/typeid-1.0.3/LICENSE-APACHE",
-      "licenses/dependencies/typeid-1.0.3/LICENSE-MIT"
+      "docs/licenses/dependencies/typeid-1.0.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/typeid-1.0.3/LICENSE-MIT"
     ]
   },
   {
@@ -2316,9 +2316,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/paholg/typenum",
     "license_files": [
-      "licenses/dependencies/typenum-1.20.1/LICENSE-APACHE",
-      "licenses/dependencies/typenum-1.20.1/LICENSE",
-      "licenses/dependencies/typenum-1.20.1/LICENSE-MIT"
+      "docs/licenses/dependencies/typenum-1.20.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/typenum-1.20.1/LICENSE",
+      "docs/licenses/dependencies/typenum-1.20.1/LICENSE-MIT"
     ]
   },
   {
@@ -2327,8 +2327,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/BurntSushi/ucd-generate",
     "license_files": [
-      "licenses/dependencies/ucd-trie-0.1.7/LICENSE-APACHE",
-      "licenses/dependencies/ucd-trie-0.1.7/LICENSE-MIT"
+      "docs/licenses/dependencies/ucd-trie-0.1.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/ucd-trie-0.1.7/LICENSE-MIT"
     ]
   },
   {
@@ -2337,9 +2337,9 @@
     "license": "(MIT OR Apache-2.0) AND Unicode-3.0",
     "repository": "https://github.com/dtolnay/unicode-ident",
     "license_files": [
-      "licenses/dependencies/unicode-ident-1.0.26/LICENSE-UNICODE",
-      "licenses/dependencies/unicode-ident-1.0.26/LICENSE-APACHE",
-      "licenses/dependencies/unicode-ident-1.0.26/LICENSE-MIT"
+      "docs/licenses/dependencies/unicode-ident-1.0.26/LICENSE-UNICODE",
+      "docs/licenses/dependencies/unicode-ident-1.0.26/LICENSE-APACHE",
+      "docs/licenses/dependencies/unicode-ident-1.0.26/LICENSE-MIT"
     ]
   },
   {
@@ -2348,9 +2348,9 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/unicode-rs/unicode-segmentation",
     "license_files": [
-      "licenses/dependencies/unicode-segmentation-1.13.3/LICENSE-APACHE",
-      "licenses/dependencies/unicode-segmentation-1.13.3/COPYRIGHT",
-      "licenses/dependencies/unicode-segmentation-1.13.3/LICENSE-MIT"
+      "docs/licenses/dependencies/unicode-segmentation-1.13.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/unicode-segmentation-1.13.3/COPYRIGHT",
+      "docs/licenses/dependencies/unicode-segmentation-1.13.3/LICENSE-MIT"
     ]
   },
   {
@@ -2359,7 +2359,7 @@
     "license": "MIT",
     "repository": "https://github.com/rust-embedded-community/usb-device",
     "license_files": [
-      "licenses/dependencies/usb-device-0.3.2/LICENSE"
+      "docs/licenses/dependencies/usb-device-0.3.2/LICENSE"
     ]
   },
   {
@@ -2368,7 +2368,7 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/twitchyliquid64/usbd-hid",
     "license_files": [
-      "licenses/dependencies/usbd-hid-0.10.2/LICENSE"
+      "docs/licenses/dependencies/usbd-hid-0.10.2/LICENSE"
     ]
   },
   {
@@ -2397,8 +2397,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/uuid-rs/uuid",
     "license_files": [
-      "licenses/dependencies/uuid-1.26.1/LICENSE-APACHE",
-      "licenses/dependencies/uuid-1.26.1/LICENSE-MIT"
+      "docs/licenses/dependencies/uuid-1.26.1/LICENSE-APACHE",
+      "docs/licenses/dependencies/uuid-1.26.1/LICENSE-MIT"
     ]
   },
   {
@@ -2407,8 +2407,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/japaric/vcell",
     "license_files": [
-      "licenses/dependencies/vcell-0.1.3/LICENSE-APACHE",
-      "licenses/dependencies/vcell-0.1.3/LICENSE-MIT"
+      "docs/licenses/dependencies/vcell-0.1.3/LICENSE-APACHE",
+      "docs/licenses/dependencies/vcell-0.1.3/LICENSE-MIT"
     ]
   },
   {
@@ -2417,8 +2417,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/SergioBenitez/version_check",
     "license_files": [
-      "licenses/dependencies/version_check-0.9.5/LICENSE-APACHE",
-      "licenses/dependencies/version_check-0.9.5/LICENSE-MIT"
+      "docs/licenses/dependencies/version_check-0.9.5/LICENSE-APACHE",
+      "docs/licenses/dependencies/version_check-0.9.5/LICENSE-MIT"
     ]
   },
   {
@@ -2427,9 +2427,9 @@
     "license": "MIT",
     "repository": "https://github.com/reem/rust-void.git",
     "license_files": [
-      "licenses/dependencies/void-1.0.2/LICENSE-MIT"
+      "docs/licenses/dependencies/void-1.0.2/LICENSE-MIT"
     ],
-    "provenance_file": "licenses/dependencies/void-1.0.2/PROVENANCE.txt"
+    "provenance_file": "docs/licenses/dependencies/void-1.0.2/PROVENANCE.txt"
   },
   {
     "name": "volatile-register",
@@ -2437,8 +2437,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/rust-embedded/volatile-register",
     "license_files": [
-      "licenses/dependencies/volatile-register-0.2.2/LICENSE-APACHE",
-      "licenses/dependencies/volatile-register-0.2.2/LICENSE-MIT"
+      "docs/licenses/dependencies/volatile-register-0.2.2/LICENSE-APACHE",
+      "docs/licenses/dependencies/volatile-register-0.2.2/LICENSE-MIT"
     ]
   },
   {
@@ -2447,7 +2447,7 @@
     "license": "MIT",
     "repository": "https://github.com/winnow-rs/winnow",
     "license_files": [
-      "licenses/dependencies/winnow-0.7.15/LICENSE-MIT"
+      "docs/licenses/dependencies/winnow-0.7.15/LICENSE-MIT"
     ]
   },
   {
@@ -2456,7 +2456,7 @@
     "license": "MIT",
     "repository": "https://github.com/winnow-rs/winnow",
     "license_files": [
-      "licenses/dependencies/winnow-1.0.4/LICENSE-MIT"
+      "docs/licenses/dependencies/winnow-1.0.4/LICENSE-MIT"
     ]
   },
   {
@@ -2465,8 +2465,8 @@
     "license": "MIT/Apache-2.0",
     "repository": "https://github.com/alexcrichton/xz2-rs",
     "license_files": [
-      "licenses/dependencies/xz2-0.1.7/LICENSE-APACHE",
-      "licenses/dependencies/xz2-0.1.7/LICENSE-MIT"
+      "docs/licenses/dependencies/xz2-0.1.7/LICENSE-APACHE",
+      "docs/licenses/dependencies/xz2-0.1.7/LICENSE-MIT"
     ]
   },
   {
@@ -2475,8 +2475,8 @@
     "license": "MIT OR Apache-2.0",
     "repository": "https://github.com/Ethiraric/yaml-rust2",
     "license_files": [
-      "licenses/dependencies/yaml-rust2-0.11.1/MIT-LICENSE",
-      "licenses/dependencies/yaml-rust2-0.11.1/Apache-LICENSE"
+      "docs/licenses/dependencies/yaml-rust2-0.11.1/MIT-LICENSE",
+      "docs/licenses/dependencies/yaml-rust2-0.11.1/Apache-LICENSE"
     ]
   },
   {
@@ -2485,9 +2485,9 @@
     "license": "BSD-2-Clause OR Apache-2.0 OR MIT",
     "repository": "https://github.com/google/zerocopy",
     "license_files": [
-      "licenses/dependencies/zerocopy-0.8.59/LICENSE-APACHE",
-      "licenses/dependencies/zerocopy-0.8.59/LICENSE-BSD",
-      "licenses/dependencies/zerocopy-0.8.59/LICENSE-MIT"
+      "docs/licenses/dependencies/zerocopy-0.8.59/LICENSE-APACHE",
+      "docs/licenses/dependencies/zerocopy-0.8.59/LICENSE-BSD",
+      "docs/licenses/dependencies/zerocopy-0.8.59/LICENSE-MIT"
     ]
   },
   {
@@ -2496,9 +2496,9 @@
     "license": "BSD-2-Clause OR Apache-2.0 OR MIT",
     "repository": "https://github.com/google/zerocopy",
     "license_files": [
-      "licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-APACHE",
-      "licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-BSD",
-      "licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-MIT"
+      "docs/licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-APACHE",
+      "docs/licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-BSD",
+      "docs/licenses/dependencies/zerocopy-derive-0.8.59/LICENSE-MIT"
     ]
   },
   {
@@ -2507,8 +2507,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/utils",
     "license_files": [
-      "licenses/dependencies/zeroize-1.9.0/LICENSE-APACHE",
-      "licenses/dependencies/zeroize-1.9.0/LICENSE-MIT"
+      "docs/licenses/dependencies/zeroize-1.9.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/zeroize-1.9.0/LICENSE-MIT"
     ]
   },
   {
@@ -2517,8 +2517,8 @@
     "license": "Apache-2.0 OR MIT",
     "repository": "https://github.com/RustCrypto/utils",
     "license_files": [
-      "licenses/dependencies/zeroize_derive-1.5.0/LICENSE-APACHE",
-      "licenses/dependencies/zeroize_derive-1.5.0/LICENSE-MIT"
+      "docs/licenses/dependencies/zeroize_derive-1.5.0/LICENSE-APACHE",
+      "docs/licenses/dependencies/zeroize_derive-1.5.0/LICENSE-MIT"
     ]
   },
   {
@@ -2527,7 +2527,7 @@
     "license": "MIT",
     "repository": "https://github.com/dtolnay/zmij",
     "license_files": [
-      "licenses/dependencies/zmij-1.0.23/LICENSE-MIT"
+      "docs/licenses/dependencies/zmij-1.0.23/LICENSE-MIT"
     ]
   }
 ]

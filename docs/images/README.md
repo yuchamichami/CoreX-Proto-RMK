@@ -15,7 +15,7 @@ Vialの2枚は実機のスクリーンショットではありません。現在
 `connection.svg`を編集します。PyQt5とZen Maru GothicのRegular／Medium／Boldを用意し、リポジトリのルートで実行します。
 
 ```sh
-python3 tools/render_connection.py --font-dir /path/to/ZenMaruGothic/fonts
+python3 dev/tools/render_connection.py --font-dir /path/to/ZenMaruGothic/fonts
 ```
 
 `connection.png`が更新されます。PyQt5とフォントは図の作成に使います。ファームウェアのビルドには不要です。
@@ -25,17 +25,17 @@ python3 tools/render_connection.py --font-dir /path/to/ZenMaruGothic/fonts
 初期配列を生成した後、次を実行します。
 
 ```sh
-python3 tools/render_default_keymap.py --font-dir /path/to/ZenMaruGothic/fonts
+python3 dev/tools/render_default_keymap.py --font-dir /path/to/ZenMaruGothic/fonts
 ```
 
-`keymaps/CoreX-Cornix-default.vil` と右の `vial.json` から、SVGとPNGを作ります。
+`dev/keymaps/CoreX-Cornix-default.vil` と右の `vial.json` から、SVGとPNGを作ります。
 
 ## Vialの説明図を更新する
 
 PyQt5、Zen Maru GothicのRegular／Medium／Boldと、[Vial GUIのソース](https://github.com/vial-kb/vial-gui)を用意します。Vial GUIはコミット `aef8222a2d0429a183b2ed692d5f9efcfd383f08` で描画を確認しています。
 
 ```sh
-python3 tools/render_vial_guide.py \
+python3 dev/tools/render_vial_guide.py \
   --vial-source /path/to/vial-gui \
   --font-dir /path/to/ZenMaruGothic/fonts
 ```
