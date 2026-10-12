@@ -5,6 +5,7 @@
 - `connection.svg`：編集用の接続図。
 - `connection.png`：READMEに表示する接続図。
 - `default-keymap.svg`／`default-keymap.png`：初期配列ファイルから描いた配列図。実機の画面ではありません。
+- `pairing-right.svg`／`pairing-left.svg`：左右のペアリング情報をリセットするときに押すキーの位置。初期配列図に操作対象を強調した説明図です。
 - `vial-overview.png`：Vialの描画部品を使ったLayer 0の説明図。配布する初期配列を表示します。
 - `vial-user-settings.png`：VialのUserタブを使った設定の説明図。感度1.5倍の選択肢に、説明用の枠を付けています。
 
